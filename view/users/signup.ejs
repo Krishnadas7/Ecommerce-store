@@ -1,0 +1,68 @@
+<%-include('../layouts/header.ejs')%>
+   <div class="signup-page">
+<section class="vh-100 bg-image">
+  <div class="mask d-flex align-items-center h-100 gradient-custom-3">
+    <div class="container h-100 " >
+      <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col-12 col-md-9 col-lg-7 col-xl-6 ">
+          <div class="card border-0 shadow-lg ">
+            <div class="card-body ">
+              <h4 class="text-uppercase text-success text-center">Create Your Seller Account</h4>
+              
+
+              <form  action="/signup"  method="post" >
+
+                <div class="form-outline mb-3 px-5">
+                    <label class="form-label text-success" for="form3Example1cg">Full Name</label>
+                  <input type="text" id="" class="form-control form-control-md " name="name" />
+                  
+                </div>
+                   <div class="form-outline mb-3 px-5">
+                    <label class="form-label text-success" for="form3Example3cg">Your Email</label>
+                  <input name="email" type="email" id="" class="form-control form-control-md" />
+                 
+                </div>
+                <div class="form-outline mb-3 px-5">
+                    <label class="form-label text-success" for="form3Example4cg">Enter your Mobile</label>
+                    <input name="mobile" type="tel" id="" class="form-control form-control-md" />
+                   
+                  </div>
+
+                <div class="form-outline mb-3 px-5">
+                    <label class="form-label text-success" for="form3Example4cg">Password</label>
+                  <input name="password" type="password" id="password" class="form-control form-control-md" />
+                 
+                </div>
+
+                <div class="form-outline mb-3 px-5">
+                  <label class="form-label text-success" for="form3Example4cg">Confirm Password</label>
+                <input name="confirmpassword" type="password" id="" class="form-control form-control-md" />
+               
+              </div>
+
+                <div class="d-flex justify-content-center px-5">
+                  <button type="submit"
+                    class="btn btn-primary text-success btn-block btn-md gradient-custom-4 text-body">Create Account</button>
+                </div>
+
+                <p class="text-center text-muted mt-3 mb-0">Have already an account? <a href="/login"
+                    class="fw-bold text-body"><u>Login here</u></a></p>
+
+              </form>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+</div>
+
+
+
+
+
+<%-include('../layouts/footer.ejs')%>

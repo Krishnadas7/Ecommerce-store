@@ -18,10 +18,23 @@ const userSchema=new mongoose.Schema({
         required:true
     },
     
-    is_verified:{
-        type:Number,
+    isverified:{
+        type:Boolean,
+        default:0
+    },
+    createdAt: {
+        type: Date,
+        default: Date.now,
+      },
+      isListed:{
+        type:Boolean,
         default:0
     }
+    // ,
+    // is_admin:{
+    //     type:Number,
+    //     default:0
+    // }
 })
 
 module.exports=mongoose.model('User',userSchema)

@@ -1,0 +1,96 @@
+<%-include('../admin/adminhomeLayouts/admin-header.ejs')%>
+<%-include('../admin/adminhomeLayouts/admin-sidebar.ejs')%>
+<%-include('../admin/adminhomeLayouts/admin-navbar.ejs')%>
+
+
+
+      <!-- usermanagement -->
+      <div class="main-panel">
+        <div class="content-wrapper">
+          
+          <div class="row ">
+            <div class="col-12 grid-margin">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title">Usrer details</h4>
+
+                  
+                  <div class="table-responsive">
+                    <ul class="navbar-nav  w-100">
+                      <li class="nav-item w-100">
+                        <form class="nav-link mt-2 mt-md-0 d-none d-lg-flex search">
+                          <input type="text" class="form-control" placeholder="Search user">
+                        </form>
+                      </li>
+                    </ul>
+
+                    <table class="table">
+                      <thead>
+
+
+                        <th> No </th>
+                        <th> Username </th>
+                        <th> Email </th>
+                        <th> Mobile </th>
+                        <th>Date</th>
+                        <th> Block/Unblock</th>
+
+                        </tr>
+                      </thead>
+                      <tbody>
+                        
+
+                        <% if (user.length> 0) {
+                          for (let i = 0; i < user.length; i++) { %>
+
+                            <tr>
+                              <td>
+                                <%= i + 1 %>
+                              </td>
+                              <td>
+                                <%= user[i].name %>
+                              </td>
+                              <td>
+                                <%= user[i].email %>
+                              </td>
+                              <td>
+                                <%= user[i].mobile %>
+                              </td>
+                              <td>
+                                <%= user[i].createdAt %>
+                              </td>
+                              <%
+                              if(user[i].isListed===true){
+                                %>
+                              <td><a class="btn btn-danger" href="/admin/block-unblock?id=<%=user[i]._id%>">Block</a></td>
+                            <% 
+                            }else{
+                              %>
+                                <td><a class="btn btn-success" href="/admin/block-unblock?id=<%=user[i]._id%>">Unblock</a></td>
+                             <%
+                              }
+                              %>
+                            </tr>
+
+                            <% } } else { %>
+                              <tr>
+                                <td>Users Not Found</td>
+                              </tr>
+                              <% } %>
+
+
+
+
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+      <%-include('../admin/adminhomeLayouts/admin-footer.ejs')%>

@@ -1,0 +1,48 @@
+<%-include('../users/layouts/header.ejs')%>
+
+<section class="vh-100 gradient-custom">
+  <div class="container py-1 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+        <div class="login-page border-0 shadow-lg card " >
+          <div class="card-body p-5 text-center">
+
+            <div class="mb-md-5 mt-md-4">
+             
+
+              <h2 class="fw-bold mb-2 text-uppercase">OTP VERIFICATION</h2>
+                
+              <p id="password-error" class="text-danger"></p>
+
+              <%
+              if(typeof message!=='undefined'){
+                %>
+                <!-- <div class="alert alert-success"> -->
+                <p style="color: green;" ><%= message%></p>
+              <!-- </div> -->
+                <%
+              }
+              %>
+
+           <form action="/otp-verification" method="post">
+              
+
+              <div class="form-outline form-white ">
+                 
+                <input type="tel" name="otp" id="otp-verification" class="form-control form-control-lg" />
+                <button class="btn btn-primary btn-lg mt-4 " type="submit">SUBMIT OTP</button>
+              </div>
+             
+
+            </div>
+          </form>
+            
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<%-include('../users/layouts/footer.ejs')%>

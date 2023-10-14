@@ -1,0 +1,7 @@
+.container{
+    background: rgb(115,215,187);
+background: linear-gradient(90deg, rgba(115,215,187,1) 35%, rgba(74,222,210,1) 100%);
+}
+/* .login-letters{
+    color: rgb(255, 255, 255);
+} */

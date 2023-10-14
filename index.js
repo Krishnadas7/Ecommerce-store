@@ -1,12 +1,24 @@
 const mongoose=require('mongoose')
 const express=require('express')
 const app=express()
+const path=require('path')
 
 mongoose.connect('mongodb://127.0.0.1:27017/ecommerce');
+ 
 
+
+app.use('/public',express.static(path.join(__dirname,'public')))
   
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.use((req, res, next) => {
+    res.locals.req = req;
+    next();
+  });
+
+// app.set('view engine','ejs')
+// app.set('views','./view/users')
 
 
 // for user route
@@ -14,8 +26,8 @@ const userRouter=require('./routes/userRouter')
 app.use('/',userRouter)
 
 // for admin Route
-// const adminRouter=require('./routes/adminRouter')
-// adminRouter.use('/admin',adminRouter)
+const adminRouter=require('./routes/adminRouter')
+app.use('/admin',adminRouter)
 
 const PORT=process.env.PORT||3000
 app.listen(PORT,()=>{

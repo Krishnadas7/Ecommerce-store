@@ -1,0 +1,63 @@
+<%-include('../admin/adminhomeLayouts/admin-header.ejs')%>
+<%-include('../admin/adminhomeLayouts/admin-sidebar.ejs')%>
+<%-include('../admin/adminhomeLayouts/admin-navbar.ejs')%>
+
+
+<div class="main-panel">
+    <div class="content-wrapper">
+  
+  <div class="col-12 grid-margin stretch-card">
+      <div class="card">
+          <div class="card-body">
+              <h4 class="card-title">EDIT PRODUCT</h4>
+              <!-- <p class="card-description"> Basic form elements </p> -->  
+              <hr class="white-line">
+              <form class="forms-sample" action="/admin/edit-product" enctype="multipart/form-data" method="post">
+
+                <input type="hidden" name="id" value="<%=product._id%>">
+    
+                  <div class="form-group  row">
+                      <div class="col-12 col-md-9 mt-2">
+                         
+                          <input type="text" class="form-control  text-light mb-3 " name="name" value="<%=product.name%>"
+                              id="exampleInputName1" placeholder="product name" required>
+  
+                              <input type="text" class="form-control  text-light mb-3 " name="category" value="<%=product.category%>"
+                              id="exampleInputName1" placeholder="category" required>
+  
+                              <input type="text" class="form-control  text-light mb-3 " name="description" value="<%=product.description%>"
+                              id="exampleInputName1" placeholder="description" required>
+  
+  
+                              <input type="text" class="form-control  text-light mb-3 " name="price" value="<%=product.price%>"
+                              id="exampleInputName1" placeholder="price" required>
+  
+                              <input type="text" class="form-control  text-light mb-3 " name="stock" value="<%=product.stock%>"
+                              id="exampleInputName1" placeholder="stock" required>
+                                 
+                              <!-- <input type="file" class="font-weight-bold form-control  text-light mb-3 " name="" 
+                              id="exampleInputName1"  placeholder="choosefile...." required> -->
+                              <label class="upload__btn ms-3" >
+                                <p>Upload images</p>
+                                <input type="file" id="formFile" name="image"
+                                multiple data-max_length="20" class="upload__inputfile">
+                              </label>
+                              
+                          <button type="submit" class="btn btn-lg btn-inverse-primary mr-2 mt-2">ADD</button>
+                      </div>
+    
+                  </div>
+    
+              </form>
+    
+          </div>
+      </div>
+    </div>
+  
+    
+  
+  </div>
+  </div>
+
+
+<%-include('../admin/adminhomeLayouts/admin-footer.ejs')%>

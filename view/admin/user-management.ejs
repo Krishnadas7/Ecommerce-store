@@ -56,9 +56,11 @@
                               <td>
                                 <%= user[i].mobile %>
                               </td>
-                              <td>
+                              <!-- <td>
                                 <%= user[i].createdAt %>
-                              </td>
+
+                              </td> -->
+                              <td> <%= new Date(user[i].createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })%> </td>
                               <%
                               if(user[i].isListed===true){
                                 %>

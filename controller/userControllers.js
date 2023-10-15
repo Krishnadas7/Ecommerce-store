@@ -3,6 +3,8 @@ const bcrypt = require('bcrypt')
 const User = require('../model/userModel')
 const nodemailer = require("nodemailer")
 const otpGenerator = require("otp-generator");
+const randomstring=require('randomstring')
+const config=require('../config/config')
 
 
 const securePassword = async (password) => {
@@ -27,8 +29,8 @@ const sendVerifyMail = async (name, email, otp)=> {
             secure: false,
             requireTLS: true,
             auth: {
-                user: "skrishnadas38@gmail.com",
-                pass: "fchb mtlq sjwa siiq"
+                user: config.userEmail,
+                pass: config.userPassword
             }
         });
         const mailoptions = {
@@ -40,6 +42,39 @@ const sendVerifyMail = async (name, email, otp)=> {
             '<h3>Hello, <b>'+ name + '</b>Thank you for joining us. Your OTP is : </h3>' +
             '<div style="vertical-align: center;"><h1 style="color: blue;">' + otp + '</h1></div>' +
             '</div>'       
+        }
+
+        transporter.sendMail(mailoptions, (error, info) => {
+            if (error) {
+                console.log(error)
+            } else {
+                console.log("Email has been send",info.response);
+            }
+        })
+    } catch (error) {
+        console.log("error",error.message);
+    }
+}
+
+
+// reset password sendmail
+const sendResetPasswordMail = async (name, email, token)=> {
+    try {
+            const transporter = nodemailer.createTransport({
+            host: 'smtp.gmail.com',
+            port: 587,
+            secure: false,
+            requireTLS: true,
+            auth: {
+                user: config.userEmail,
+                pass: config.userPassword
+            }
+        });
+        const mailoptions = {
+            from:config.userEmail,
+            to:email,
+            subject:"For reset password",
+            html :   '<p>Hii '+name+', please click here to  <a href="http://127.0.0.1:3000/reset-password?token='+token+'"> Reset  </a> your password'     
         }
 
         transporter.sendMail(mailoptions, (error, info) => {
@@ -115,6 +150,7 @@ const insertUser = async (req, res)=>{
     }
 }
 
+
 const loadLogin = async (req, res) => {
     try {
         res.render('login')
@@ -144,7 +180,7 @@ const verifyOTP = async (req,res)=>{
                 email: req.session.email,
                 mobile: req.session.mobile,
                 password: req.session.password,
-                is_verified:1
+                isverified:1
             });
             const result = await user.save();
             res.redirect("/login")
@@ -168,14 +204,24 @@ const loginVerify = async (req, res) => {
         const userData = await User.findOne({ email: email })
         console.log("userdata " + userData);
         if (userData) {
+
+            if(userData.isListed==true){
             const passwordMatch = await bcrypt.compare(password, userData.password)
             if (passwordMatch) {
-                console.log('password matched');
-                res.redirect('/')
+                if(userData.isverified===false){
+                       res.render('login',{message:"please verify your email"})
+                }else{
+                    console.log('password matched');
+                    res.redirect('/')
+                }
+                
             } else {
                 console.log('password is not matched');
                 res.render('login', { message: "password is incorrect" })
             }
+        }else{
+            res.render('login',{message:'incorrect details'})
+        }
         } else {
             console.log('email is not matched');
             res.render('login', { message: "incorrect your email address" })
@@ -194,6 +240,66 @@ const loadHome = async (req, res) => {
     }
 }
 
+// forgot password
+
+const forgotLoad=async (req,res)=>{
+    try {
+        res.render('forgot')
+    } catch (error) {
+       console.log(error); 
+    }
+}
+
+const forgotPassword=async (req,res)=>{
+    try {
+        const email=req.body.email
+        const userData=await User.findOne({email:email})
+        if (userData) {
+           
+            if(userData.isverified===0){
+                res.render('forgot',{message:"Please verify your email"})
+            }else{
+                const randomString=randomstring.generate()
+                const updatedData=await User.updateOne({email:email},{$set:{token:randomString}})
+                sendResetPasswordMail(userData.name,userData.email,randomString)
+                res.render('forgot',{message:"Please check your mail to reset your password"})
+            }
+        }else{
+            res.render('forgot',{message:"Please enter correct email"})
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
+const resetLoad=async (req,res)=>{
+    try {
+        const token=req.query.token
+        console.log(token);
+        const tokenData=await User.findOne({token:token})
+        if(tokenData){
+          res.render('reset-password',{user_id:tokenData._id})
+        }else{
+            res.render('404',{message:'token invalid'})
+        }
+        
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+const resetPassword=async (req,res)=>{
+    try {
+        const password=req.body.password
+        const user_id=req.body.user_id
+        const spassword=await securePassword(password)
+        const updatedData=await User.findByIdAndUpdate({_id:user_id},{$set:{password:spassword,token:''}})
+         
+        res.redirect('/login')
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 
 module.exports = {
     loadSignup,
@@ -202,5 +308,9 @@ module.exports = {
     loginVerify,
     loadHome,
     verifyOTP,
-    showverifyOTPPage
+    showverifyOTPPage,
+    forgotLoad,
+    forgotPassword,
+    resetLoad,
+    resetPassword
 }

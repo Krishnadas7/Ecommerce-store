@@ -1,4 +1,4 @@
-const { findById } = require('../model/adminModel');
+const { findById, findByIdAndUpdate } = require('../model/adminModel');
 const Product = require('../model/productModel')
 
 const { ObjectId } = require("mongodb")
@@ -95,11 +95,30 @@ const updateProduct = async (req, res) => {
         console.log(error);
     }
 }
+   const listUnlist=async (req,res)=>{
+    try {
+       
+         const id=req.query.id
+        const product=await Product.findById({_id:id})
+
+        if(product.blocked===true){
+            const list=await Product.findByIdAndUpdate({_id:id},{$set:{blocked:false}})
+        }else{
+            const list=await Product.findByIdAndUpdate({_id:id},{$set:{blocked:true}})  
+        }
+        res.redirect('/admin/view-products')
+        
+    } catch (error) {
+        console.log();
+    }
+   }
+
 module.exports = {
     loadProduct,
     loadAddproduct,
     addProduct,
     editProduct,
-    updateProduct
+    updateProduct,
+    listUnlist
 
 }

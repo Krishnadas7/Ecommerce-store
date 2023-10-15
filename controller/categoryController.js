@@ -1,19 +1,19 @@
 const Category=require('../model/categoryModel')
 const mongoose=require('mongoose')
-const postCategory=async (req,res)=>{
-    try {
-        const category=await Category({
-            categoryname:req.body.categoryname,
-            isListed:true
-        })
+// const postCategory=async (req,res)=>{
+//     try {
+//         const category=await Category({
+//             categoryname:req.body.categoryname,
+//             isListed:true
+//         })
          
-        const result=await category.save()
+//         const result=await category.save()
 
-          res.redirect('/admin/addcategory')
-    } catch (error) {
-        console.log(error);
-    }
-}
+//           res.redirect('/admin/addcategory')
+//     } catch (error) {
+//         console.log(error);
+//     }
+// }
 
 const loadCategory=async (req,res)=>{
     try {
@@ -55,6 +55,25 @@ const updateCategory=async (req,res)=>{
         console.log(error);
         }
 }
+const postCategory=async (req,res)=>{
+    try {
+        const id=req.body.id
+        const categoryname=req.body.categoryname
+        const already=await Category.findOne({categoryname:{$regex:categoryname,'$options':'i'}})
+        if(already){
+            res.render('add-Category',{message : "Category Already Created"})
+        }else{
+         const data=new Category({
+            categoryname:categoryname,
+            isListed:true
+         })
+         const result=await data.save()
+         res.redirect('/admin/viewcategory')
+        }
+    } catch (error) {
+        console.log(error);
+    }
+}
 
 
 
@@ -65,7 +84,7 @@ const listUnlist=async(req,res)=>{
         console.log(id);
         
         const category=await Category.findById({_id:id})
-        if (category.isListed==true) {
+        if (category.isListed===true) {
             const List=await Category.findByIdAndUpdate({_id:id},{$set:{isListed:false}})
         }else{
             const List=await Category.findByIdAndUpdate({_id:id},{$set:{isListed:true}})

@@ -12,7 +12,7 @@
                 <div class="card-body">
 
                   <h4 class="card-title">All Products</h4>
-                              <a class="btn btn-primary font-weight-bold" href="/admin/add-product">+ ADD</a>
+                              <a class="btn btn-primary font-weight-bold" style="margin-left: 91%;" href="/admin/add-product">+ ADD</a>
                   <div class="table-responsive">
 
                     <table class="table">
@@ -22,6 +22,7 @@
 
                           <th> No </th>
                           <th> Product image </th>
+                          <th> Product image2</th>
                           <th> Product name </th>
                           <th> description </th>
                           <th> Price </th>
@@ -47,8 +48,18 @@
                           <td><%=product[i].price%></td>
                           <td><%=product[i].category%></td>
                           <td><%=product[i].stock%></td>
+
                           <td><a class="btn btn-danger" href="/admin/edit-product?id=<%=  product[i]._id %>">Edit</a></td>
-                           <td><a class="btn btn-danger" href="">List</a></td>
+                         <%
+                             if(product[i].blocked===true){
+                              %>
+                              <td><a  class="btn btn-success" href="/admin/blockunblock?id=<%=  product[i]._id %>">List</a></td>
+                          <%   }else{  %>
+                              <td><a class="btn btn-danger" href="/admin/blockunblock?id=<%=  product[i]._id %>">Unlist</a></td>
+                         <%    }  %>
+                          
+
+
                         </tr>
                         <%
                       }

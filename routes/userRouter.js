@@ -24,7 +24,10 @@ userRouter.get('/signup',userControllers.loadSignup)
 userRouter.post('/signup',userControllers.insertUser)
 userRouter.get('/login',userControllers.loadLogin)
 userRouter.post('/login',userControllers.loginVerify)
-
+userRouter.get('/forgot-password',userControllers.forgotLoad)
+userRouter.post('/forgot-password',userControllers.forgotPassword)
+userRouter.get('/reset-password',userControllers.resetLoad)
+userRouter.post('/reset-password',userControllers.resetPassword)
 // otp verification
 
 userRouter.get('/otp-verification',userControllers.showverifyOTPPage)

@@ -17,6 +17,15 @@ app.use((req, res, next) => {
     next();
   });
 
+  
+const disable = (req, res, next) => {
+  res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+  res.setHeader('Pragma', 'no-cache');
+  res.setHeader('Expires', '1');
+  next();
+}
+app.use(disable);
+
 // app.set('view engine','ejs')
 // app.set('views','./view/users')
 

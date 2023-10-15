@@ -31,6 +31,9 @@
                  
                 <input type="tel" name="otp" id="otp-verification" class="form-control form-control-lg" />
                 <button class="btn btn-primary btn-lg mt-4 " type="submit">SUBMIT OTP</button>
+                
+                <p class="text-primary mt-3">Time left: <span id="timer">30</span> seconds</p>
+                <button class="btn btn-dander" id="resendButton" onclick="resendOTP()">Resend OTP</button>
               </div>
              
 
@@ -44,5 +47,40 @@
     </div>
   </div>
 </section>
+<script>
+  let countdown = 30; // Initial countdown value in seconds
+  let timerElement = document.getElementById('timer');
+  let resendButton = document.getElementById('resendButton');
+  let countdownInterval;
+
+  // Function to update the countdown timer
+  function updateTimer() {
+      timerElement.textContent = countdown + ' seconds';
+      countdown--;
+      resendButton.disabled = true;
+      if (countdown < 0) {
+          clearInterval(countdownInterval);
+          timerElement.textContent = '0 seconds';
+          resendButton.disabled = false;
+      }
+  }
+
+  // Function to resend OTP
+  function resendOTP() {
+      // Simulate OTP resend logic here
+      // For example, you can make an API call to send a new OTP
+
+      // Reset the timer
+      countdown = 30;
+      timerElement.textContent = countdown + ' seconds';
+      resendButton.disabled = true;
+
+      // Start the countdown again
+      countdownInterval = setInterval(updateTimer, 1000);
+  }
+
+  // Initial countdown start
+  countdownInterval = setInterval(updateTimer, 1000);
+</script>
 
 <%-include('../users/layouts/footer.ejs')%>

@@ -22,6 +22,10 @@ const userSchema=new mongoose.Schema({
         type:Boolean,
         default:0
     },
+    token:{
+     type:String,
+     default:''
+    },
     createdAt: {
         type: Date,
         default: Date.now,
@@ -29,12 +33,17 @@ const userSchema=new mongoose.Schema({
       isListed:{
         type:Boolean,
         default:0
+    },
+},
+    {
+        timestamps:true
     }
+
     // ,
     // is_admin:{
     //     type:Number,
-    //     default:0
+  //     default:0
     // }
-})
+)
 
 module.exports=mongoose.model('User',userSchema)

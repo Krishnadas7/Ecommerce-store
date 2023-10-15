@@ -17,7 +17,8 @@ const loginVerify=async (req,res)=>{
          if(adminData){
             const passwordMatch=await bcrypt.compare(password,adminData.password)
             if(passwordMatch){
-                res.render('admin-homepage')
+                req.session.Admin=true
+                res.redirect('/admin/homepage')
             }else{
                 res.render('admin-login',{message:"password was incorrect"})
             }
@@ -46,9 +47,19 @@ const loadaddCategory=(req,res)=>{
         console.log(error);
     }
 }
+const logOut=async (req,res)=>{
+    try {
+        req.session.Admin=false
+        res.redirect('/admin')
+    } catch (error) {
+        console.log(error);
+    }
+}
 module.exports={
     loadLogin,
     loginVerify,
     loadHomepage,
-    loadaddCategory
+    loadaddCategory,
+    logOut
+
 }

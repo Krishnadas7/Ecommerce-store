@@ -4,6 +4,19 @@ const adminControllers=require('../controller/adminControllers')
 const category=require('../controller/categoryController')
 const userManagement=require('../controller/userManagement')
 const productManagement=require('../controller/productManagement')
+const adminAuth=require('../middlewares/adminAuth')
+
+const session=require('express-session')
+const config=require('../config/config')
+adminRouter.use(session({
+  secret:config.sessionSecret,
+  resave:false,
+  saveUninitialized:true
+}))
+
+adminRouter.set('view engine','ejs')
+adminRouter.set('views','./view/admin')
+
  const multer=require('multer')
  const path = require('path')
 const storage = multer.diskStorage({
@@ -35,46 +48,44 @@ const upload = multer({
   },
 });
  
-adminRouter.set('view engine','ejs')
-adminRouter.set('views','./view/admin')
 
 
-adminRouter.get('/',adminControllers.loadLogin)
-adminRouter.post('/login',adminControllers.loginVerify)
-adminRouter.get('/homepage',adminControllers.loadHomepage)
+adminRouter.get('/',adminAuth.isLogout,adminControllers.loadLogin)
+adminRouter.post('/',adminAuth.isLogout,adminControllers.loginVerify)
+adminRouter.get('/homepage',adminAuth.isLogin,adminControllers.loadHomepage)
 
 // load category
 
-adminRouter.get('/viewcategory',category.loadCategory)
+adminRouter.get('/viewcategory',adminAuth.isLogin,category.loadCategory)
 
 
 // Add category
 
-adminRouter.get('/addcategory',adminControllers.loadaddCategory)
+adminRouter.get('/addcategory',adminAuth.isLogin,adminControllers.loadaddCategory)
 // post add category
-adminRouter.post('/addcategory',category.postCategory)
+adminRouter.post('/addcategory',adminAuth.isLogin,category.postCategory)
 
 // edit category
 
-adminRouter.get('/edit-category',category.editCategory)
+adminRouter.get('/edit-category',adminAuth.isLogin,category.editCategory)
 
 // update category
-adminRouter.post('/edit-category',category.updateCategory)
+adminRouter.post('/edit-category',adminAuth.isLogin,category.updateCategory)
 
 // list and unlist
-adminRouter.get('/list-unlist',category.listUnlist)
+adminRouter.get('/list-unlist',adminAuth.isLogin,category.listUnlist)
 
 // load usermanagement
-adminRouter.get('/user-management',userManagement.loadUsermanagement)
+adminRouter.get('/user-management',adminAuth.isLogin,userManagement.loadUsermanagement)
 
 // user block and unblock
-adminRouter.get('/block-unblock',userManagement.blockUnblock)
+adminRouter.get('/block-unblock',adminAuth.isLogin,userManagement.blockUnblock)
 
 // view produtcts
-adminRouter.get('/view-products',productManagement.loadProduct)
+adminRouter.get('/view-products',adminAuth.isLogin,productManagement.loadProduct)
 
 //load add product
-adminRouter.get('/add-product',productManagement.loadAddproduct)
+adminRouter.get('/add-product',adminAuth.isLogin,productManagement.loadAddproduct)
 
 // add product
 adminRouter.post('/add-product',upload.array("image",2),productManagement.addProduct)
@@ -85,6 +96,11 @@ adminRouter.get('/edit-product',upload.array("image",2),productManagement.editPr
 // post edit product
 adminRouter.post('/edit-product',upload.array("image",2),productManagement.updateProduct)
 
+// product list and unlist
+adminRouter.get('/blockunblock',adminAuth.isLogin,productManagement.listUnlist)
+
+// logout
+adminRouter.get('/logout',adminControllers.logOut)
    
 
 

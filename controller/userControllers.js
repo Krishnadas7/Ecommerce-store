@@ -90,6 +90,41 @@ const sendResetPasswordMail = async (name, email, token)=> {
 }
 
 
+//resend OTP
+const resendOtp = (req, res)=>{
+    try{
+        const currentTime = Date.now()/1000;
+        console.log("current",currentTime)
+        if (req.session.otp.expire != null) {
+             if(currentTime > req.session.otp.expire){
+                console.log("expire",req.session.otp.expire);
+                const newDigit = otpGenerator.generate(6, { 
+                    digits: true,
+                    alphabets: false, 
+                    specialChars: false, 
+                    upperCaseAlphabets: false,
+                    lowerCaseAlphabets: false 
+                });
+                req.session.otp.code = newDigit;
+                const newExpiry=currentTime+30
+                console.log(newExpiry);
+                req.session.otp.expire=newExpiry
+                sendVerifyMail(req.session.name, req.session.email, req.session.otp.code);
+                res.render("otp-verification",{message: `New OTP send to ${req.session.email}`});
+             }else{
+                res.render("otp-verification",{message: `OTP send to ${req.session.email}, resend after 30 second`});
+             }
+        }
+        else{
+            res.send("Already registered")
+        }
+    }
+    catch(error){
+        console.log(error.message);
+    }
+}
+
+
 
 
 const loadSignup = async (req, res) => {
@@ -172,8 +207,9 @@ const showverifyOTPPage = async (req, res) => {
 const verifyOTP = async (req,res)=>{
     
     try {
-        if(req.body.otp === req.session.otp.code){
-            console.log(req.session.otp.code);
+        const currentTime=Date.now()/1000
+        if(req.body.otp === req.session.otp.code && currentTime<=req.session.otp.expire){
+            console.log(req.session.otp.code );
             console.log("verify otp");
             const user = await User({
                 name: req.session.name,
@@ -309,6 +345,7 @@ module.exports = {
     loadHome,
     verifyOTP,
     showverifyOTPPage,
+    resendOtp,
     forgotLoad,
     forgotPassword,
     resetLoad,

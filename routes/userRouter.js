@@ -33,6 +33,8 @@ userRouter.post('/reset-password',userControllers.resetPassword)
 userRouter.get('/otp-verification',userControllers.showverifyOTPPage)
 userRouter.post('/otp-verification',userControllers.verifyOTP)
 
+userRouter.get('/resend-otp',userControllers.resendOtp)
+
 // homepage rendering
 userRouter.get('/',userControllers.loadHome)
 

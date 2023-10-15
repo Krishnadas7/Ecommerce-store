@@ -5,7 +5,7 @@ const path=require('path')
 
 mongoose.connect('mongodb://127.0.0.1:27017/ecommerce');
  
-
+ 
 
 app.use('/public',express.static(path.join(__dirname,'public')))
   
@@ -15,14 +15,14 @@ app.use(express.urlencoded({ extended: true }));
 app.use((req, res, next) => {
     res.locals.req = req;
     next();
-  });
+  });   
 
   
 const disable = (req, res, next) => {
   res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
   res.setHeader('Pragma', 'no-cache');
   res.setHeader('Expires', '1');
-  next();
+  next(); 
 }
 app.use(disable);
 

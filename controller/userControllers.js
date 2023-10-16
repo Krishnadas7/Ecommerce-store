@@ -243,7 +243,9 @@ const loginVerify = async (req, res) => {
 
             if(userData.isListed==true){
             const passwordMatch = await bcrypt.compare(password, userData.password)
+            console.log('match');
             if (passwordMatch) {
+                console.log('matched');
                 if(userData.isverified===false){
                        res.render('login',{message:"please verify your email"})
                 }else{

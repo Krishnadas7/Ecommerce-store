@@ -1,7 +1,162 @@
-.container{
+/* .container{
     background: rgb(115,215,187);
 background: linear-gradient(90deg, rgba(115,215,187,1) 35%, rgba(74,222,210,1) 100%);
-}
+} */
 /* .login-letters{
     color: rgb(255, 255, 255);
+} */
+
+.logout-icon{
+    width: 23px;
+    height: 22px;
+}
+.login-icon{
+    width: 27px;
+    height: 28px;
+}
+.user-login-button{
+    background-color: transparent;
+}
+.show>.btn-secondary.dropdown-toggle {
+    background-color: transparent;
+    background-image: none;
+    border-color: transparent;
+}
+.btn-secondary {
+    color: #fff;
+    background-color: transparent;
+    border-color: transparent;
+}
+.btn-secondary.active, .btn-secondary:active, .show>.btn-secondary.dropdown-toggle {
+    background-color: transparent;
+    background-image: none;
+    border-color:transparent;
+}
+
+
+.btn-secondary.active, .btn-secondary:active, .show>.btn-secondary.dropdown-toggle {
+    background-color: transparent;
+    background-image: none;
+    border-color: transparent;
+}
+.show>.btn-secondary.dropdown-toggle {
+    background-color: transparent;
+    background-image: none;
+    border-color: transparent;
+}
+.btn-secondary.active, .btn-secondary:active, .show>.btn-secondary.dropdown-toggle {
+    background-color: transparent;
+    background-image: none;
+    border-color: transparent;
+}
+.btn-secondary:hover {
+    color: #fff;
+    background-color: transparent;
+    border-color:transparent;
+}
+.prev-slick3 {
+    left: -118px;
+}
+.next-slick3 {
+    right: 122px;
+}
+.dropdown-item {
+    display: block;
+    /* width: 100%; */
+    padding: 0.25rem 1.5rem;
+    clear: both;
+    font-weight: 400;
+    color: #212529;
+    text-align: inherit;
+    white-space: nowrap;
+    background: 0 0;
+    border: 0;
+}
+.btn-secondary:hover {
+    color: #fff;
+    /* background-color: #727b84; */
+    /* border-color: #6c757d; */
+}
+
+
+.btn-secondary:hover {
+    color: #fff;
+    /* background-color: #727b84; */
+    /* border-color: #6c757d; */
+}
+.btn-secondary:hover {
+    color: #fff;
+    background-color: transparent;
+    border-color: transparent;
+}
+.btn-secondary.active, .btn-secondary:active, .show>.btn-secondary.dropdown-toggle {
+    background-color: transparent;
+    background-image: none;
+    border-color: transparent;
+}
+.btn-secondary.active, .btn-secondary:active, .show>.btn-secondary.dropdown-toggle {
+    background-color: transparent;
+    background-image: none;
+    border-color: transparent;
+}
+.btn-secondary.active, .btn-secondary:active, .show>.btn-secondary.dropdown-toggle {
+    background-color: transparent;
+    background-image: none;
+    border-color: transparent;
+}
+.btn-secondary.active, .btn-secondary:active, .show>.btn-secondary.dropdown-toggle {
+    /* background-color: #727b84; */
+    background-image: none;
+    /* border-color: #6c757d; */
+}
+.btn-secondary.focus, .btn-secondary:focus {
+    /* box-shadow: 0 0 0 3px rgba(134,142,150,.5); */
+    border: none;
+}
+.btn-secondary:hover {
+    color: #fff;
+    /* background-color: #727b84; */
+    /* border-color: #6c757d; */
+}
+.btn.active, .btn:active {
+    background-image: none;
+}
+.btn.focus, .btn:focus {
+    outline: 0;
+    /* box-shadow: 0 0 0 3px rgba(0,123,255,.25); */
+}
+.show>.btn-secondary.dropdown-toggle {
+   background-color: transparent;
+    background-image: none;
+    /* border-color: #6c757d; */
+    border-color: #ffffff;
+}
+.btn.focus, .btn:focus {
+    outline: 0; 
+     box-shadow: none;
+    border-color: #fff;
+}
+
+
+.show>.btn-secondary.dropdown-toggle {
+    background-color: transparent;
+    background-image: none;
+    border-color: #ffffff;
+}
+.btn-secondary:hover {
+    color: #fff;
+    background-color:transparent; 
+     border-color: #fff; 
+}
+/* .user-login-div{
+    margin-left: 250px;
+} */
+
+.cart-icon{
+    width: 41px;
+    height: 32px;
+    
+}
+/* .cart-div{
+    margin-left: 350px;
 } */

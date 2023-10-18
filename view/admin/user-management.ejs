@@ -64,11 +64,13 @@
                               <%
                               if(user[i].isListed===true){
                                 %>
-                              <td><a class="btn btn-danger" href="/admin/block-unblock?id=<%=user[i]._id%>">Block</a></td>
+                              <td><a style="    width: 100px;
+                                padding: 13px;" class="btn btn-danger" href="/admin/block-unblock?id=<%=user[i]._id%>">Block</a></td>
                             <% 
                             }else{
                               %>
-                                <td><a class="btn btn-success" href="/admin/block-unblock?id=<%=user[i]._id%>">Unblock</a></td>
+                                <td><a style="    width: 100px;
+                                  padding: 13px;" class="btn btn-success" href="/admin/block-unblock?id=<%=user[i]._id%>">Unblock</a></td>
                              <%
                               }
                               %>

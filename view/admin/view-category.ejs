@@ -30,16 +30,19 @@
                     <tr>
                  
                         <td><%= category[i].categoryname %></td>
-                        <td> <a class="btn btn-danger" href="/admin/edit-category?id=<%=category[i]._id%>">Edit</a></td>
+                        <td> <a style="    width: 100px;
+                          padding: 13px;" class="btn btn-danger" href="/admin/edit-category?id=<%=category[i]._id%>">Edit</a></td>
                          <%
                         if(category[i].isListed===true){
                             %>
-                        <td> <a class="btn btn-success" href="/admin/list-unlist?id=<%=category[i]._id%>">List</a></td>   
+                        <td> <a style="    width: 100px;
+                          padding: 13px;" class="btn btn-success" href="/admin/list-unlist?id=<%=category[i]._id%>">List</a></td>   
                         <%
                     }else{
                         %>
                           
-                        <td> <a class="btn btn-danger" href="/admin/list-unlist?id=<%=category[i]._id%>">Unlist</a></td>
+                        <td> <a style="    width: 100px;
+                          padding: 13px;" class="btn btn-danger" href="/admin/list-unlist?id=<%=category[i]._id%>">Unlist</a></td>
                 <%       
                     }
                  %>

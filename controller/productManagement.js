@@ -28,6 +28,7 @@ const addProduct = async (req, res) => {
         const description = req.body.description
         const stock = req.body.stock
         const price = req.body.price
+        const brand=req.body.brand
 
         const image = [];
         for (i = 0; i < req.files.length; i++) {
@@ -39,6 +40,7 @@ const addProduct = async (req, res) => {
             category: category,
             description: description,
             stock: stock,
+            brand:brand,
             price: price,
             image: image
         })

@@ -1,7 +1,9 @@
 const express=require('express')
 const userRouter=express()
 const userControllers=require('../controller/userControllers')
+const allProduct=require('../controller/allProduct')
 const path=require('path')
+const userAuth=require('../middlewares/userAuth')
 
 // view engine setup
  userRouter.set('view engine','ejs')
@@ -20,22 +22,31 @@ userRouter.use(session({
  
 userRouter.use(express.json());
 userRouter.use(express.urlencoded({ extended: true }));
-userRouter.get('/signup',userControllers.loadSignup)
-userRouter.post('/signup',userControllers.insertUser)
-userRouter.get('/login',userControllers.loadLogin)
+userRouter.get('/signup',userAuth.isLogout,userControllers.loadSignup)
+userRouter.post('/signup',userAuth.isLogout,userControllers.insertUser)
+userRouter.get('/login',userAuth.isLogout,userControllers.loadLogin)
 userRouter.post('/login',userControllers.loginVerify)
 userRouter.get('/forgot-password',userControllers.forgotLoad)
 userRouter.post('/forgot-password',userControllers.forgotPassword)
 userRouter.get('/reset-password',userControllers.resetLoad)
 userRouter.post('/reset-password',userControllers.resetPassword)
+userRouter.get('/logout',userControllers.logOut)
 // otp verification
 
-userRouter.get('/otp-verification',userControllers.showverifyOTPPage)
-userRouter.post('/otp-verification',userControllers.verifyOTP)
+userRouter.get('/otp-verification',userAuth.isLogout,userControllers.showverifyOTPPage)
+userRouter.post('/otp-verification',userAuth.isLogout,userControllers.verifyOTP)
 
-userRouter.get('/resend-otp',userControllers.resendOtp)
+userRouter.get('/resend-otp',userAuth.isLogout,userControllers.resendOtp)
 
 // homepage rendering
 userRouter.get('/',userControllers.loadHome)
+
+//  user load product page
+
+userRouter.get('/all-product',userAuth.isLogin,allProduct.loadallProduct)
+
+userRouter.get('/product-view',userAuth.isLogin,allProduct.productView)
+
+userRouter.get('/formal-shoes',allProduct.formalShoes)
 
 module.exports=userRouter

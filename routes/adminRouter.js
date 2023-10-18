@@ -37,7 +37,8 @@ const upload = multer({
       file.mimetype == "image/png" ||
       file.mimetype == "image/jpg" ||
       file.mimetype == "image/jpeg" ||
-      file.mimetype == "image/webp" 
+      file.mimetype == "image/webp" ||
+      file.mimetype == "image/avif"
       
     ) {
       cb(null, true);
@@ -88,13 +89,13 @@ adminRouter.get('/view-products',adminAuth.isLogin,productManagement.loadProduct
 adminRouter.get('/add-product',adminAuth.isLogin,productManagement.loadAddproduct)
 
 // add product
-adminRouter.post('/add-product',upload.array("image",2),productManagement.addProduct)
+adminRouter.post('/add-product',upload.array("image",4),productManagement.addProduct)
 
 // edit product
-adminRouter.get('/edit-product',upload.array("image",2),productManagement.editProduct)
+adminRouter.get('/edit-product',upload.array("image",4),productManagement.editProduct)
 
 // post edit product
-adminRouter.post('/edit-product',upload.array("image",2),productManagement.updateProduct)
+adminRouter.post('/edit-product',upload.array("image",4),productManagement.updateProduct)
 
 // product list and unlist
 adminRouter.get('/blockunblock',adminAuth.isLogin,productManagement.listUnlist)

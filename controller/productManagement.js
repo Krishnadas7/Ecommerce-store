@@ -1,6 +1,6 @@
 const { findById, findByIdAndUpdate } = require('../model/adminModel');
 const Product = require('../model/productModel')
-
+const Category=require('../model/categoryModel')
 const { ObjectId } = require("mongodb")
 
 
@@ -16,7 +16,8 @@ const loadProduct = async (req, res) => {
 
 const loadAddproduct = async (req, res) => {
     try {
-        res.render('add-product')
+        const category=await Category.find()
+        res.render('add-product',{category:category})
     } catch (error) {
         console.log(error);
     }

@@ -1,0 +1,43 @@
+<%-include('../users/mainLayouts/mainheader.ejs')%>
+<div class="bg0 m-t-23 p-b-140" style="margin-top: 80px;">
+    <div class="container">
+        
+
+        <section class="vh-100 gradient-custom">
+            <div class="container py-1 h-100">
+              <div class="row d-flex justify-content-center align-items-center h-100">
+                <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+                  <div class="login-page border-0 shadow-lg card">
+                    <div class="card-body p-5 text-center">
+          
+                      <div class="mb-md-5 mt-md-4">
+                        <h2 class="login-letters fw-bold mb-2">Profile</h2>
+                       
+                        <form action="">
+                          <div class="form-outline mb-4">
+                            <label class="login-letters form-label text-dark" for="typeEmailX">Email</label>
+                            <input type="email" name="email" id="typeEmailX" class="form-control form-control-lg" />
+                          </div>
+          
+                          <div class="form-outline form-white">
+                            <label class="login-letters form-label text-dark" for="typePasswordX">Password</label>
+                            <input type="password" name="password" id="typePasswordX" class="form-control form-control-lg" />
+                            <div id="password-error" class="login-letters text-danger" style="display: none;"></div>
+                            <a class="login-letters mt-4" href="/forgot-password">forgot password</a>
+                          </div>
+                          <button class="login-letters btn btn-primary btn-lg mt-4" type="submit">Login</button>
+                        </form>
+                        
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+          
+        </div>
+        </div>
+
+
+<%-include('../users/mainLayouts/mainfooter.ejs')%>

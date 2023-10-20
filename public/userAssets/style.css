@@ -54,12 +54,7 @@ background: linear-gradient(90deg, rgba(115,215,187,1) 35%, rgba(74,222,210,1) 1
     background-color: transparent;
     border-color:transparent;
 }
-.prev-slick3 {
-    left: -118px;
-}
-.next-slick3 {
-    right: 122px;
-}
+
 .dropdown-item {
     display: block;
     /* width: 100%; */

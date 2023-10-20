@@ -2,7 +2,7 @@ const mongoose=require('mongoose')
 
 const categorySchema=mongoose.Schema({
 
-    categoryId: {type: String,unique: true,index: true},
+    // categoryId: {type: String,unique: true,index: true},
     categoryname:{
         type:String,
         required:true

@@ -49,4 +49,19 @@ userRouter.get('/product-view',userAuth.isLogin,allProduct.productView)
 
 userRouter.get('/formal-shoes',allProduct.formalShoes)
 
+// load user profile page
+userRouter.get('/profile',userAuth.isLogin,userControllers.viewProfile)
+
+// load contact page
+userRouter.get('/contact',userAuth.isLogin,userControllers.loadContact)
+
+// addto cart
+
+userRouter.get('/add-to=cart',userAuth.isLogin,userControllers.addToCart)
+
+userRouter.get('/view-cart',userAuth.isLogin,userControllers.getCartProducts)
+
+
+
+
 module.exports=userRouter

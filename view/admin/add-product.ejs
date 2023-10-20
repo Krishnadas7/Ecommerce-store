@@ -24,8 +24,15 @@
                             <input type="text" class="form-control  text-light mb-3 " name="brand"
                             id="exampleInputName1" placeholder="product brand" required>
 
-                            <input type="text" class="form-control  text-light mb-3 " name="category"
-                            id="exampleInputName1" placeholder="category" required>
+                            <div class="col-sm-4 my-1">
+                                <label for="exampleInputName1">Category</label>
+                                <select class="form-control" id="category" name="category" required>
+                                <option value="">Select one</option>
+                                    <% category.forEach(category => { %>
+                                    <option value="<%= category._id %>"><%= category.categoryname %></option>
+                                  <% }); %>
+                                </select>
+                              </div>
 
                             <input type="text" class="form-control  text-light mb-3 " name="description"
                             id="exampleInputName1" placeholder="description" required>

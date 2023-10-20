@@ -5,6 +5,9 @@ const nodemailer = require("nodemailer")
 const otpGenerator = require("otp-generator");
 const randomstring = require('randomstring')
 const config = require('../config/config')
+const Product=require('../model/productModel')
+const Cart=require('../model/cartModel')
+const { ObjectId } = require("mongodb")
 
 
 
@@ -95,7 +98,7 @@ const sendResetPasswordMail = async (name, email, token) => {
 const resendOtp = (req, res) => {
     try {
         const currentTime = Date.now() / 1000;
-        console.log("current", currentTime)
+       
         if (req.session.otp.expire != null) {
             if (currentTime > req.session.otp.expire) {
                 console.log("expire", req.session.otp.expire);
@@ -108,7 +111,7 @@ const resendOtp = (req, res) => {
                 });
                 req.session.otp.code = newDigit;
                 const newExpiry = currentTime + 30
-                console.log(newExpiry);
+               
                 req.session.otp.expire = newExpiry
                 sendVerifyMail(req.session.name, req.session.email, req.session.otp.code);
                 res.render("otp-verification", { message: `New OTP send to ${req.session.email}` });
@@ -209,8 +212,7 @@ const verifyOTP = async (req, res) => {
     try {
         const currentTime = Date.now() / 1000
         if (req.body.otp === req.session.otp.code && currentTime <= req.session.otp.expire) {
-            console.log(req.session.otp.code);
-            console.log("verify otp");
+           
             const user = await User({
                 name: req.session.name,
                 email: req.session.email,
@@ -239,7 +241,7 @@ const loginVerify = async (req, res) => {
         const email = req.body.email
         const password = req.body.password
         const userData = await User.findOne({ email: email })
-        console.log("userdata " + userData);
+       
         if (userData) {
 
             if (userData.isListed == true) {
@@ -250,8 +252,9 @@ const loginVerify = async (req, res) => {
                     if (userData.isverified === false) {
                         res.render('login', { message: "please verify your email" })
                     } else {
+                        req.session.User=userData
                         req.session.user = userData.name
-                        console.log('password matched');
+                       
                         res.redirect('/')
                     }
 
@@ -328,7 +331,7 @@ const forgotPassword = async (req, res) => {
 const resetLoad = async (req, res) => {
     try {
         const token = req.query.token
-        console.log(token);
+       
         const tokenData = await User.findOne({ token: token })
         if (tokenData) {
             res.render('reset-password', { user_id: tokenData._id })
@@ -353,6 +356,98 @@ const resetPassword = async (req, res) => {
         console.log(error);
     }
 }
+// load user profile
+
+const viewProfile=async (req,res)=>{
+    try {
+       
+            const User=req.session.userData
+        const user=await User.findOne({name:User})
+       
+        res.render('profile',{user:req.session.user})
+        
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+const loadContact=async (req,res)=>{
+    try {
+        const user=req.session.User
+        res.render('contact',{user:user})
+    } catch (error) {
+        console.log(error);
+    }
+}
+// addto cart
+const addToCart=async (req,res)=>{
+    try {
+        const productId=req.query.id
+        const name=req.session.user
+        const userData=await User.findOne({name:name})
+        const userId=userData._id
+        const productData=await Product.findById({_id:productId})
+         
+        const userCart=await Cart.findOne({user:userId})
+
+        if(userCart){
+            await Cart.updateOne({user:userId},{
+                $push:{products:{productId:productId}}
+            })
+        }else{
+            const data=new Cart({
+                user:userId,
+                products:[{productId:productId}]
+            })
+            const result=await data.save()
+        }
+       
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+const getCartProducts = async (req,res)=>{
+    try {
+           const name=req.session.user
+           const userData=await User.findOne({name:name}).exec()
+           const userId=userData._id
+
+           const cartItems=await Cart.aggregate([
+            {
+                $match:{user:new ObjectId(userId)}
+            },
+            {
+                $lookup:{
+                    from:'Product',
+                    let:{prodList:'$products'},
+                    pipeline:[
+                       { $match:{
+                            $expr:{
+                                $in:['$_id','$$prodList']
+                            }
+                       }
+                        }
+                    ],
+                     as:'cartItems'
+                }
+
+            }
+            
+           ])
+        
+        if (cartItems.length > 0) {
+            console.log(cartItems);
+          } else {
+            console.log('No cart items found.');
+          }
+
+       
+             res.render('view-cart',{user:req.session.user})
+    } catch (error) {
+        console.log(error);
+    }
+}
 
 
 module.exports = {
@@ -368,5 +463,9 @@ module.exports = {
     forgotLoad,
     forgotPassword,
     resetLoad,
-    resetPassword
+    resetPassword,
+    viewProfile,
+    loadContact,
+    addToCart,
+    getCartProducts
 }

@@ -57,7 +57,7 @@ userRouter.get('/contact',userAuth.isLogin,userControllers.loadContact)
 
 // addto cart
 
-userRouter.get('/add-to=cart',userAuth.isLogin,userControllers.addToCart)
+userRouter.get('/add-to-cart',userAuth.isLogin,userControllers.addToCart)
 
 userRouter.get('/view-cart',userAuth.isLogin,userControllers.getCartProducts)
 

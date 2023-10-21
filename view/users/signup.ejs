@@ -15,7 +15,7 @@
                 <%
                 if (typeof message !== 'undefined') {
                 %>
-                <p style="color: green;"><%= message %></p>
+                <p style="color: rgb(255, 0, 0);"><%= message %></p>
                 <%
                 }
                 %>
@@ -24,8 +24,9 @@
 
                   <div class="form-outline mb-3 px-5">
                     <label class="form-label text-dark" for="form3Example1cg">Full Name</label>
-                    <input type="text" id="fullname" class="form-control form-control-md" name="name" />
-                  </div>
+                    <input type="text" id="name" class="form-control form-control-md" name="name" />
+                    <span class="error-message" style="color: red;"></span>
+                  </div> 
 
                   <div class="form-outline mb-3 px-5">
                     <label class="form-label text-dark" for="form3Example3cg">Your Email</label>
@@ -72,31 +73,7 @@
   </section>
 </div>
 
-<script>
-  function validateForm() {
-    var fullname = document.getElementById("fullname").value;
-    var email = document.getElementById("email").value;
-    var mobile = document.getElementById("mobile").value;
-    var password = document.getElementById("password").value;
-    var cpassword = document.getElementById("cpassword").value;
 
-    if (password.length < 6 || !/^(?=.*[0-9])(?=.*[a-zA-Z])/.test(password)) {
-      document.getElementById("password-validation").style.display = "block";
-      return false;
-    } else {
-      document.getElementById("password-validation").style.display = "none";
-    }
-
-    if (password !== cpassword) {
-      document.getElementById("password-mismatch").style.display = "block";
-      return false;
-    } else {
-      document.getElementById("password-mismatch").style.display = "none";
-    }
-
-    return true;
-  }
-</script>
 
 
 

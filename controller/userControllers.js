@@ -9,6 +9,11 @@ const Product=require('../model/productModel')
 const Cart=require('../model/cartModel')
 const { ObjectId } = require("mongodb")
 
+const mongoose=require('mongoose')
+function isValidObjectId(id) {
+    return mongoose.Types.ObjectId.isValid(id);
+}
+
 
 
 const securePassword = async (password) => {
@@ -361,8 +366,8 @@ const resetPassword = async (req, res) => {
 const viewProfile=async (req,res)=>{
     try {
        
-            const User=req.session.userData
-        const user=await User.findOne({name:User})
+            const name=req.session.user
+        const user=await User.findOne({name:name})
        
         res.render('profile',{user:req.session.user})
         
@@ -382,7 +387,12 @@ const loadContact=async (req,res)=>{
 // addto cart
 const addToCart=async (req,res)=>{
     try {
+        if(req.session.user){
         const productId=req.query.id
+        // if (!isValidObjectId(productId)) {
+        //     res.status(400).send('Invalid productId');
+        //     return;
+        // }
         const name=req.session.user
         const userData=await User.findOne({name:name})
         const userId=userData._id
@@ -400,50 +410,32 @@ const addToCart=async (req,res)=>{
                 products:[{productId:productId}]
             })
             const result=await data.save()
+            res.redirect('/add-to-cart')
         }
+    }else{
+        res.json({login : true})
+    }
        
     } catch (error) {
         console.log(error);
     }
 }
 
-const getCartProducts = async (req,res)=>{
+
+const getCartProducts = async (req, res) => {
     try {
-           const name=req.session.user
-           const userData=await User.findOne({name:name}).exec()
-           const userId=userData._id
-
-           const cartItems=await Cart.aggregate([
-            {
-                $match:{user:new ObjectId(userId)}
-            },
-            {
-                $lookup:{
-                    from:'Product',
-                    let:{prodList:'$products'},
-                    pipeline:[
-                       { $match:{
-                            $expr:{
-                                $in:['$_id','$$prodList']
-                            }
-                       }
-                        }
-                    ],
-                     as:'cartItems'
-                }
-
-            }
+        const name = req.session.user;
+        const userData = await User.findOne({ name: name });
+        const userId = userData._id;
+        const cartData = await Cart.findOne({ user:userId }).populate("products.productId");
+        if (cartData) {
             
-           ])
-        
-        if (cartItems.length > 0) {
-            console.log(cartItems);
-          } else {
-            console.log('No cart items found.');
-          }
 
-       
-             res.render('view-cart',{user:req.session.user})
+            console.log(cartData.products[0]);
+            res.render('view-cart', { user: req.session.user,cart:cartData.products});
+        } else {
+            res.redirect('/add-to-cart');
+        }
     } catch (error) {
         console.log(error);
     }

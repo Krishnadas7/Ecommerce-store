@@ -3,7 +3,15 @@ const User=require('../model/userModel')
 
 const loadUsermanagement=async (req,res)=>{
     try {
-        const user=await User.find({})
+        var search=''
+        if(req.query.search){
+            search=req.query.search
+        }
+        const user=await User.find({
+            $or:[
+                { name: { $regex: new RegExp(search, 'i') } }
+            ]
+        })
     
         res.render('user-management',{user:user})
     } catch (error) {

@@ -6,8 +6,16 @@ const { ObjectId } = require("mongodb")
 
 const loadProduct = async (req, res) => {
     try {
+        var search=''
+        if(req.query.search){
+            search=req.query.search
+        }
 
-        const product = await Product.find({})
+        const product = await Product.find({
+            $or:[
+                { name: { $regex: new RegExp(search, 'i') } }
+            ]
+        })
         res.render('view-products', { product: product })
     } catch (error) {
         console.log(error);

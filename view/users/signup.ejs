@@ -31,29 +31,27 @@
                   <div class="form-outline mb-3 px-5">
                     <label class="form-label text-dark" for="form3Example3cg">Your Email</label>
                     <input name="email" type="email" id="email" class="form-control form-control-md" />
+                    <span class="error-message" style="color: red;"></span>
                   </div>
 
                   <div class="form-outline mb-3 px-5">
                     <label class="form-label text-dark" for="form3Example4cg">Enter your Mobile</label>
                     <input name="mobile" type="tel" id="mobile" class="form-control form-control-md" />
+                    <span class="error-message" style="color: red;"></span>
                   </div>
 
                   <div class="form-outline mb-3 px-5">
                     <label class="form-label text-dark" for="form3Example4cg">Password</label>
                     <input name="password" type="password" id="password" class="form-control form-control-md" />
+                    <span class="error-message" style="color: red;"></span>
                   </div>
 
                   <div class="form-outline mb-3 px-5">
                     <label class="form-label text-dark" for="form3Example4cg">Confirm Password</label>
-                    <input name="confirmpassword" type="password" id="cpassword" class="form-control form-control-md" />
+                    <input name="confirmpassword" type="password" id="Cpassword" class="form-control form-control-md" />
+                    <span class="error-message" style="color: red;"></span>
                   </div>
-                  <div id="password-mismatch" class="alert alert-danger mt-2" style="display: none;">
-                    Passwords do not match. Please try again.
-                  </div>
-
-                  <div id="password-validation" class="alert alert-danger mt-2" style="display: none;">
-                    Password must contain at least 6 characters, including letters and numbers.
-                  </div>
+                  
 
                   <div class="d-flex justify-content-center px-5">
                     <button type="submit"
@@ -73,6 +71,80 @@
   </section>
 </div>
 
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+      const form = document.querySelector('form'); // Correct form selection
+      const fnameInput = document.getElementById('name'); // Correct ID for the name input
+      const emailInput = document.getElementById('email');
+      const mobileInput = document.getElementById('mobile');
+      const passwordInput = document.getElementById('password');
+      const cpasswordInput = document.getElementById('Cpassword');
+      const errorMessages = document.querySelectorAll('.error-message');
+
+      form.addEventListener('submit', function (event) {
+          event.preventDefault(); // Prevent form submission initially
+
+          let isValid = true;
+          errorMessages.forEach(function (element) {
+              element.innerText = '';
+          });
+
+          if (fnameInput.value.trim() === '') {
+              errorMessages[0].innerText = 'Name is required.';
+              isValid = false;
+          }
+
+          // Add validation for the mobile input if needed
+
+          if (emailInput.value.trim() === '') {
+              errorMessages[1].innerText = 'Email is required.';
+              isValid = false;
+          }
+
+          if (mobileInput.value.trim() === '') {
+    errorMessages[2].innerText = 'Mobile is required.';
+    isValid = false;
+} else if (!/^\d{10}$/.test(mobileInput.value.trim())) {
+    errorMessages[2].innerText = 'Mobile must contain exactly 10 digits and consist of only numbers.';
+    isValid = false;
+}
+
+
+
+          if (passwordInput.value.length < 6) { // Correct password length check
+              errorMessages[3].innerText = 'Password must be at least 6 characters long.';
+              isValid = false;
+          } else if (!/[^a-zA-Z0-9]/.test(passwordInput.value) || passwordInput.value.includes(' ')) {
+              errorMessages[3].innerText = 'Password must contain at least one special character and cannot contain spaces.';
+              isValid = false;
+          }
+
+          if (cpasswordInput.value === '') {
+              errorMessages[4].innerText = 'Confirm Password is required.';
+              isValid = false;
+          }
+
+          if (passwordInput.value !== cpasswordInput.value) {
+              errorMessages[3].innerText = 'Passwords do not match.'; // Correct error message index
+              errorMessages[4].innerText = 'Passwords do not match.';
+              isValid = false;
+          }
+
+          if (isValid) {
+              form.submit();
+          }
+      });
+
+      // Real-time validation
+      const inputElements = [fnameInput, emailInput, mobileInput, passwordInput, cpasswordInput];
+
+      inputElements.forEach((input, index) => {
+          input.addEventListener('input', function () {
+              errorMessages[index].innerText = '';
+          });
+      });
+  });
+</script>
 
 
 

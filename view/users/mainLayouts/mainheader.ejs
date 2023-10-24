@@ -1,4 +1,6 @@
-   <!-- <!DOCTYPE html>
+ 
+
+   <!DOCTYPE html>
 <html lang="en">
 <head>                        
 	<title>Home 03</title>
@@ -37,189 +39,6 @@
 	<link rel="stylesheet" type="text/css" href="/public/userAssets/css/main.css">
 	<link rel="stylesheet" type="text/css" href="/public/userAssets/style.css">
          
-</head>
-<body class="animsition">
-	
-	
-	<header class="header-v3 ">
-		
-		<div class="container-menu-desktop trans-03 ">
-			<div class="wrap-menu-desktop">
-				<nav class="limiter-menu-desktop  p-l-45">
-					
-							
-					<a href="#" class="logo">
-						
-						<h1 style="  
-                          font-style: initial;
-                         font-weight: 900;
-                         height: 28px;
-                         width: 101px;
-                         margin-top: -22px;
-                         color: aliceblue;
-                         font-style: italic;;">Zoom</h1>
-					</a>
-
-					
-					<div class="menu-desktop">
-						<ul class="main-menu">
-							<li>
-								<a href="/">Home</a>
-								
-
-							<li>
-								<a href="/all-product">Shop</a>
-							</li>
-
-							<li class="label1" data-label1="hot">
-								<a href="shoping-cart.html">Features</a>
-							</li>
-
-							<li>
-								<a href="blog.html">Blog</a>
-							</li>
-
-							<li>
-								<a href="about.html">About</a>
-							</li>
-
-							<li>
-								<a href="contact.html">Contact</a>
-							</li>
-						</ul>
-					</div>	
-
-					
-					<div><a class="text-white " href=""> <img class="cart-icon" src="/public/userAssets/icons/carticon.png" alt="">Cart</a></div>
-					<%if(typeof user!=='undefined'){%>
-					<div class=" dropdown ml-auto " style="border: none; ">
-						<button class="user-login-button btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-						 <img class="login-icon" src="/public/userAssets/icons/loginicon.png" alt=""> my account
-						</button>
-						<div class="dropdown-menu" style="width: 256px;" aria-labelledby="dropdownMenuButton">
-						  <a class="dropdown-item" href="#"><%=user%></a>
-						  <a class="dropdown-item" href="#">Orders</a>
-						  <a class="dropdown-item" href="#">Wishlist</a>
-						  <a class="dropdown-item" href="/logout"><img  class="logout-icon" src="/public/userAssets/icons/logouticon.png" alt=""> Logout</a>
-						</div>
-					  </div>
-					<%}%>
-					<%if(typeof message!=='undefined'){%>
-						<div class=" dropdown " style="border: none;">
-							<button class="user-login-button btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-							 <img class="login-icon" src="/public/userAssets/icons/loginicon.png" alt=""> Sign in
-							</button>
-							<div class="dropdown-menu" style="width: 256px;" aria-labelledby="dropdownMenuButton">
-							<div class="d-flex justify-content-between"> <label for="">New customer? </label><a  class="text-primary" href="/signup">Sign in</a></div>
-							<hr>
-							  <a class="dropdown-item" href="/login">Log in</a>
-							  <a class="dropdown-item" href="#">about</a>
-							  
-							</div>
-						  </div>
-						<%}%>
-					 
-				</nav>
-			</div>	
-		</div>
-
-		
-
-		
-		
-		<div class="menu-mobile">
-			<ul class="main-menu-m">
-				<li>
-					<a href="index.html">Home</a>
-					<ul class="sub-menu-m">
-						<li><a href="index.html">Homepage 1</a></li>
-						<li><a href="home-02.html">Homepage 2</a></li>
-						<li><a href="home-03.html">Homepage 3</a></li>
-					</ul>
-					<span class="arrow-main-menu-m">
-						<i class="fa fa-angle-right" aria-hidden="true"></i>
-					</span>
-				</li>
-
-				<li>
-					<a href="product.html">Shop</a>
-				</li>
-
-				<li>
-					<a href="shoping-cart.html" class="label1 rs1" data-label1="hot">Features</a>
-				</li>
-
-				<li>
-					<a href="blog.html">Blog</a>
-				</li>
-
-				<li>
-					<a href="about.html">About</a>
-				</li>
-
-				<li>
-					<a href="contact.html">Contact</a>
-				</li>
-			</ul>
-			<a class="btn btn-danger" href="">LOGOUT</a>
-		</div>
-             
-		
-	</header>
-
-
-
-	
- 
-
- 
-
-   
-
-   
-
-
-
-   -->
-
-
-   <!DOCTYPE html>
-<html lang="en">
-<head>
-	<title>Home 03</title>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-
-	<link rel="icon" type="/public/userAssets/image/png" href="/public/userAssets/images/icons/favicon.png"/>
-
-	<link rel="stylesheet" type="text/css" href="/public/userAssets/vendor/bootstrap/css/bootstrap.min.css">
-
-	<link rel="stylesheet" type="text/css" href="/public/userAssets/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
-
-	<link rel="stylesheet" type="text/css" href="/public/userAssets/fonts/iconic/css/material-design-iconic-font.min.css">
-
-	<link rel="stylesheet" type="text/css" href="/public/userAssets/fonts/linearicons-v1.0.0/icon-font.min.css">
-
-	<link rel="stylesheet" type="text/css" href="/public/userAssets/vendor/animate/animate.css">
-
-	<link rel="stylesheet" type="text/css" href="/public/userAssets/vendor/css-hamburgers/hamburgers.min.css">
-
-	<link rel="stylesheet" type="text/css" href="/public/userAssets/vendor/animsition/css/animsition.min.css">
-
-	<link rel="stylesheet" type="text/css" href="/public/userAssets/vendor/select2/select2.min.css">
-
-	<link rel="stylesheet" type="text/css" href="/public/userAssets/vendor/daterangepicker/daterangepicker.css">
-
-	<link rel="stylesheet" type="text/css" href="/public/userAssets/vendor/slick/slick.css">
-
-	<link rel="stylesheet" type="text/css" href="/public/userAssets/vendor/MagnificPopup/magnific-popup.css">
-
-	<link rel="stylesheet" type="text/css" href="/public/userAssets/vendor/perfect-scrollbar/perfect-scrollbar.css">
-
-	<link rel="stylesheet" type="text/css" href="/public/userAssets/css/util.css">
-	<link rel="stylesheet" type="text/css" href="/public/userAssets/css/main.css">
-	<link rel="stylesheet" type="text/css" href="/public/userAssets/style.css">
-
 </head>
 <body class="animsition">
 	
@@ -524,7 +343,7 @@
 
 
 	
-	<!-- <div class="wrap-header-cart js-panel-cart">
+	<div class="wrap-header-cart js-panel-cart">
 		<div class="s-full js-hide-cart"></div>
 
 		<div class="header-cart flex-col-l p-l-65 p-r-25">
@@ -609,7 +428,7 @@
 				</div>
 			</div>
 		</div>
-	</div>  -->
+	</div>  
 
 
 

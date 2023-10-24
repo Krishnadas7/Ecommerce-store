@@ -13,6 +13,8 @@ adminRouter.use(session({
   resave:false,
   saveUninitialized:true
 }))
+adminRouter.use(express.json());
+adminRouter.use(express.urlencoded({ extended: true }));
 
 adminRouter.set('view engine','ejs')
 adminRouter.set('views','./view/admin')

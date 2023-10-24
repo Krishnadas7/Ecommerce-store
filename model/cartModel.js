@@ -10,6 +10,14 @@ const cartSchema=mongoose.Schema({
             type:mongoose.Types.ObjectId,
             ref : "Product",
             required:true
+        },
+        quantity:{
+            type:Number,
+            default:1
+        },
+        price:{
+            type:Number,
+            default:0
         }
     }]
 })

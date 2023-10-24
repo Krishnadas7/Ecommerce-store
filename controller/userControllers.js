@@ -523,7 +523,7 @@ const getCartProducts = async (req, res) => {
         console.log(error);
     }
 }
-const cartQuantity=async (req,res)=>{
+const cartQuantity =async (req,res)=>{
     try {
        
         console.log('api');

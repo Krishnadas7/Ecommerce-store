@@ -3,7 +3,8 @@ const Product = require('../model/productModel')
 const Category=require('../model/categoryModel')
 const { ObjectId } = require("mongodb")
 
-
+            // ADMIN LOADING PRODUCT PAGE
+             
 const loadProduct = async (req, res) => {
     try {
         var search=''
@@ -22,6 +23,8 @@ const loadProduct = async (req, res) => {
     }
 }
 
+        // LOAD  ADD PRODUCT PAGE
+
 const loadAddproduct = async (req, res) => {
     try {
         const category=await Category.find()
@@ -30,6 +33,9 @@ const loadAddproduct = async (req, res) => {
         console.log(error);
     }
 }
+               //   ADD PRODUCT
+
+
 const addProduct = async (req, res) => {
     try {
         const name = req.body.name
@@ -62,6 +68,9 @@ const addProduct = async (req, res) => {
         console.log(error);
     }
 }
+
+               //    EDIT PRODUCT
+
 const editProduct = async (req, res) => {
     try {
         const id = req.query.id
@@ -73,6 +82,8 @@ const editProduct = async (req, res) => {
         console.log(error);
     }
 }
+                      // UPDATE PRODUCT                        
+
 
 const updateProduct = async (req, res) => {
     try {
@@ -105,7 +116,10 @@ const updateProduct = async (req, res) => {
     } catch (error) {
         console.log(error);
     }
-}
+}                  
+
+        //    LIST AND UNLIST PRODUCT
+
    const listUnlist=async (req,res)=>{
     try {
        

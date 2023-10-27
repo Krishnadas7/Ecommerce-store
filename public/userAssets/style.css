@@ -17,6 +17,21 @@ background: linear-gradient(90deg, rgba(115,215,187,1) 35%, rgba(74,222,210,1) 1
 .user-login-button{
     background-color: transparent;
 }
+
+.dropdown-item {
+    display: block;
+    width: 100%;
+    padding: 0.25rem 1.5rem;
+    clear: both;
+    font-weight: 400;
+    color: #212529;
+    text-align: inherit;
+    white-space: nowrap;
+    background: 0 0;
+    border: 0;
+    line-height: 16px;
+    font-size: small;
+}
 .show>.btn-secondary.dropdown-toggle {
     background-color: transparent;
     background-image: none;
@@ -54,19 +69,7 @@ background: linear-gradient(90deg, rgba(115,215,187,1) 35%, rgba(74,222,210,1) 1
     background-color: transparent;
     border-color:transparent;
 }
-
-.dropdown-item {
-    display: block;
-    /* width: 100%; */
-    padding: 0.25rem 1.5rem;
-    clear: both;
-    font-weight: 400;
-    color: #212529;
-    text-align: inherit;
-    white-space: nowrap;
-    background: 0 0;
-    border: 0;
-}
+ 
 .btn-secondary:hover {
     color: #fff;
     /* background-color: #727b84; */

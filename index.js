@@ -3,10 +3,10 @@ const express=require('express')
 const app=express()
 const path=require('path')
 
-mongoose.connect('mongodb://127.0.0.1:27017/ecommerce');
+mongoose.connect('mongodb://0.0.0.0:27017/ecommerce');
  
  
-
+ 
 app.use('/public',express.static(path.join(__dirname,'public')))
   
 app.use(express.json());

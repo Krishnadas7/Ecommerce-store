@@ -1,0 +1,50 @@
+<%-include('../users/mainLayouts/mainheader.ejs')%>
+
+ <div class="bg0 m-t-23 p-b-140 align-items-center"  style="margin-top: 80px; background-color: gray;" >
+    <div class="container  ">
+
+        <form action="" method="post" class="m-5">
+
+           <input type="hidden" name="id" value="<%=address._id%>">
+            <div class="d-flex " >
+                <div class="col-sm-6">
+                    <label class="text-white" style="  margin-top: 27px;">Name *</label>
+                    <input type="text" class="form-control w-50 " value="<%=address.name%>"
+                        name="name">
+                </div>
+
+                <div class="col-sm-6">
+                    <label class="text-white"  style="    margin-top: 27px;">email *</label>
+                    <input type="text" class="form-control w-50" name="email"
+                        value="<%=address.email%>">
+                </div>
+            </div>
+                 
+            <label class="text-white">Mobile *</label>
+            <input type="mobile" class="form-control w-50" name="mobile"
+                value="<%=address.mobile%>">
+
+                <label class="text-white">House Name *</label>
+                <input type="text" class="form-control w-50" name="housename" value="<%=address.housename%>">
+
+                <label class="text-white">City *</label>
+                <input type="text" class="form-control w-50" name="city" style="color: black;" value="<%=address.city%>">
+
+                <label class="text-white">State *</label>
+                <input type="text" class="form-control w-50" name="state" value="<%=address.state%>">
+
+                <label class="text-white">Pin *</label>
+                <input type="text" class="form-control w-50" name="pin" value="<%=address.pin%>"> 
+           
+                <input type="submit" class="btn" value="Update">
+                  
+        </form>
+      
+
+
+</div>
+</div>  
+
+
+
+<%-include('../users/mainLayouts/mainfooter.ejs')%>

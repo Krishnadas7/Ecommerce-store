@@ -1,19 +1,7 @@
 const Category=require('../model/categoryModel')
 const mongoose=require('mongoose')
-// const postCategory=async (req,res)=>{
-//     try {
-//         const category=await Category({
-//             categoryname:req.body.categoryname,
-//             isListed:true
-//         })
-         
-//         const result=await category.save()
 
-//           res.redirect('/admin/addcategory')
-//     } catch (error) {
-//         console.log(error);
-//     }
-// }
+        // LOAD CATEGORY PAGE
 
 const loadCategory=async (req,res)=>{
     try {
@@ -26,6 +14,9 @@ const loadCategory=async (req,res)=>{
         console.log(error);
     }
 }
+                // EDIT CATEGORY PAGE
+
+
 const editCategory=async (req,res)=>{
     try {
        let id=req.query.id
@@ -43,6 +34,9 @@ const editCategory=async (req,res)=>{
     }
 }
 
+        // UPDATE CATEGORY
+
+
 const updateCategory=async (req,res)=>{
     try {
       
@@ -55,6 +49,8 @@ const updateCategory=async (req,res)=>{
         console.log(error);
         }
 }
+
+                     //   INSERT CATEGORY
 const postCategory=async (req,res)=>{
     try {
         const id=req.body.id
@@ -75,7 +71,7 @@ const postCategory=async (req,res)=>{
     }
 }
 
-
+            //   LIST AND UNLIST
 
 
 const listUnlist=async(req,res)=>{

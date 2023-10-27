@@ -4,6 +4,7 @@ const userControllers=require('../controller/userControllers')
 const allProduct=require('../controller/allProduct')
 const path=require('path')
 const userAuth=require('../middlewares/userAuth')
+const userProfile=require('../controller/userProfile')
 
 // view engine setup
  userRouter.set('view engine','ejs')
@@ -49,8 +50,7 @@ userRouter.get('/product-view',userAuth.isLogin,allProduct.productView)
 
 userRouter.get('/formal-shoes',allProduct.formalShoes)
 
-// load user profile page
-userRouter.get('/profile',userAuth.isLogin,userControllers.viewProfile)
+
 
 // load contact page
 userRouter.get('/contact',userAuth.isLogin,userControllers.loadContact)
@@ -64,6 +64,27 @@ userRouter.get('/view-cart',userAuth.isLogin,userControllers.getCartProducts)
 userRouter.post('/cart-quantity',userAuth.isLogin,userControllers.cartQuantity)
 
 userRouter.post('/remove-product',userAuth.isLogin,userControllers.removeProduct)
+
+
+
+// load user profile page
+userRouter.get('/profile',userAuth.isLogin,userControllers.viewProfile)
+
+userRouter.post('add-address',userAuth.isLogin,userControllers.addAddress)
+
+
+userRouter.get('/new-address',userAuth.isLogin,userProfile.addAddress)
+
+userRouter.post('/new-address',userAuth.isLogin,userProfile.insertAddress)
+
+userRouter.get('/edit-address',userAuth.isLogin,userProfile.editAddress)
+
+userRouter.post('/edit-address',userAuth.isLogin,userProfile.updateAddress)
+
+userRouter.get('/checkout',userAuth.isLogin,userProfile.loadCheckout)
+
+
+
 
 
 

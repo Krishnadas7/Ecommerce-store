@@ -38,6 +38,28 @@
 	<link rel="stylesheet" type="text/css" href="/public/userAssets/css/util.css">
 	<link rel="stylesheet" type="text/css" href="/public/userAssets/css/main.css">
 	<link rel="stylesheet" type="text/css" href="/public/userAssets/style.css">
+
+	<link rel="stylesheet" href="/public/userAssets/style.css">
+
+<style>
+	.btn-secondary:hover {
+    /* color: #fff; */
+    background-color: transparent;
+    border-color: transparent;
+}
+.header-v3 .main-menu > li > a {
+    color: white;
+}
+.zmdi-menu:before {
+    content: '\f197';
+	color: white;
+}
+</style>
+
+	 <!-- Plugins CSS File -->
+	 <!-- <link rel="stylesheet" href="/public/userAssets/userAccount/assets/css/bootstrap.min.css">   -->
+	 <!-- Main CSS File -->
+	 <link rel="stylesheet" href="/public/userAssets/userAccount/assets/css/style.css">
          
 </head>
 <body class="animsition">
@@ -50,8 +72,12 @@
 				<nav class="limiter-menu-desktop p-l-45">
 					
 							
-					<a href="#" class="logo">
-						<img src="/public/userAssets/images/icons/logo-02.png" alt="IMG-LOGO">
+					<a href="#" class="logo" style="    color: white;
+					font-weight: 700;
+					font-family: cursive;
+					margin-top: 54px;">
+					SHUE CROPS
+						<!-- <img src="/public/logo/john.png" style="width: 50px; height: 50px;" alt="IMG-LOGO">  -->
 					</a>
 
 					
@@ -85,8 +111,8 @@
 					</div>	
 
 				
-					<div class="wrap-icon-header flex-w flex-r-m h-full">							
-						<div class="flex-c-m h-full p-r-25 bor6">
+					<div class="wrap-icon-header flex-w flex-r-m h-full border-0" style="border: none;;">							
+						<div class="flex-c-m h-full p-r-25 " style="border: none;">
 							<div class="icon-header-item cl0 hov-cl1 trans-04 p-lr-11 icon-header-noti">
 								<%if(typeof user!=='undefined'){%>
 									<div class=" dropdown ml-auto " style="border: none; ">
@@ -97,29 +123,32 @@
 										  <a class="dropdown-item" href="/profile">My profile</a>
 										  <a class="dropdown-item" href="#">Orders</a>
 										  <a class="dropdown-item" href="#">Wishlist</a>
-										  <a class="dropdown-item" href="/logout"><img  class="logout-icon" src="/public/userAssets/icons/logouticon.png" alt=""> Logout</a>
+										  <a class="dropdown-item" href="/logout"> Logout</a>
+										  <!-- <img  class="logout-icon" src="/public/userAssets/icons/logouticon.png" alt=""> -->
 										</div>
 									  </div>
 									<%}%>
 									<%if(typeof message!=='undefined'){%>
-										<div class=" dropdown " style="border: none;">
-											<button class="mx-3 user-login-button btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-											 <img class="login-icon" src="/public/userAssets/icons/loginicon.png" alt=""> Sign in
+										<div  style="border: none;">
+											<button class="user-login-button btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+											 <img class="myacc login-icon" src="/public/userAssets/icons/loginicon.png" alt=""> Sign in
 											</button>
-											<div class="dropdown-menu" style="width: 256px;" aria-labelledby="dropdownMenuButton">
-											<div class="mx-3 d-flex justify-content-between"> <label for="">New customer? </label><a  class="text-primary" href="/signup">Sign in</a></div>
-											<hr>
-											  <a class="dropdown-item" href="/login">Log in</a>
-											  <!-- <a class="dropdown-item" href="#">about</a> -->
+											<div class=" dropdown-menu" style="width: 256px;" aria-labelledby="dropdownMenuButton">
+											<div class="d-flex justify-content-between mx-4 "> <label for="">New customer? </label><a  class="text-primary" style="font-size: medium;" href="/signup">Sign in</a></div>
+											
+											  <a style="font-size: medium;" class="dropdown-item justify-content-between mx-4 fw-bold" href="/login">Log in</a>
+											 
 											  
 											</div>
 										  </div>
 										<%}%>
 							</div>
 						</div>
-						<div class="flex-c-m h-full p-r-25 bor6">
+						<div class="flex-c-m h-full p-r-25 ">
 							<div class="icon-header-item cl0 hov-cl1 trans-04 p-lr-11 icon-header-noti js-show-cart" data-notify="2">
-							<a href="/view-cart">	<i class="zmdi zmdi-shopping-cart"></i>  </a>
+							<a href="/view-cart"><img src="/public/logo/6007114_basket_business_buy_cart_market_icon.png" style="width: 34px;
+								height: 41px;
+								margin-left: 21px;" alt=""> </a>
 							</div>
 						</div>
 							

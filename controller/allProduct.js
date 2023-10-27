@@ -3,30 +3,21 @@ const Category=require('../model/categoryModel')
 const mongoose=require('mongoose')
 const ObjectId = mongoose.Types.ObjectId;
 
+const User=require('../model/userModel')
+
 // Now you can use ObjectId in your code
 const id = new ObjectId(); 
-// const loadallProduct=async (req,res)=>{
-//     try {
-        
-//         const product=await Product.find({blocked:false}).exec()
-//         const category=await Category.find({isListed:true})
-       
-//         console.log(product);
-        
-//         res.render('all-product',{user:req.session.user,product:product,category:category})
-//     } catch (error) {
-//         console.log(error);
-//     }
-// }
+
+        //  LOAD SHOP PAGE
 const loadallProduct = async (req, res) => {
     try {
-      const perPage = 12; // Number of products per page
-      let page = parseInt(req.query.page) || 1; // Get the page from the request query and parse it as an integer
+      const perPage = 12; 
+      let page = parseInt(req.query.page) || 1; 
       const categoryDetails = await Category.find({});
       const totalProducts = await Product.countDocuments({ blocked: false });
       const totalPages = Math.ceil(totalProducts / perPage);
   
-      // Ensure that the page is within valid bounds
+      
       if (page < 1) {
         page = 1;
       } else if (page > totalPages) {
@@ -50,17 +41,30 @@ const loadallProduct = async (req, res) => {
     }
   };
 
+          //  ONE PRODUCT DETAILS
+
+
 const productView=async (req,res)=>{
     try {
         const strictPopulate = false
         console.log(req.query.id);
         const id=req.query.id
+        const name=req.session.user
+        const userData=await User.findOne({name:name})
+        const userId=userData._id
+        console.log(userData);
+
+        
+        
         const product=await Product.findById({_id:id}).exec()
-        res.render('product-view',{user:req.session.user,product:product})
+        console.log('product  :',product);
+        res.render('product-view',{user:req.session.user,product:product,userId:userId})
     } catch (error) {
         console.log(error);
     }
 }
+
+        
 
 const formalShoes=async (req,res)=>{
     try {

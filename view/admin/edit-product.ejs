@@ -37,11 +37,26 @@
                                  
                               <!-- <input type="file" class="font-weight-bold form-control  text-light mb-3 " name="" 
                               id="exampleInputName1"  placeholder="choosefile...." required> -->
-                              <label class="upload__btn ms-3" >
+                              <label class="upload__btn ms-3">
                                 <p>Upload images</p>
                                 <input type="file" id="formFile" name="image"
                                 multiple data-max_length="20" class="upload__inputfile">
-                              </label>
+                            </label>
+
+                              
+                            <div class=" ml-3">
+                                <label for="deleteImages">Delete Existing Images</label>
+                                <% for (let i = 0; i < product.image.length; i++) { %>
+                                    <div class="existing-image">
+                                        <img id="imageView<%= i %>" src="/public/adminAssets/product-images/<%= product.image[i] %>" alt="Existing Image" style="width: 100px; height: 100px;" class="product-image">
+                                        <label class="upload__btn ms-3" for="formFile<%= i %>">
+                                            <p>Upload images</p>
+                                            <input type="file" id="formFile <%= i %>" name="image" onchange="viewImage(event, <%=i %>)" multiple data-max_length="20" class="upload__inputfile">
+                                        </label>
+                                        <input style="margin-left: 100px;" type="checkbox" name="deleteImages" value="<%= product.image[i] %>"> Delete
+                                    </div>
+                                <% } %>
+                            </div>
                               
                           <button type="submit" class="btn btn-lg btn-inverse-primary mr-2 mt-2">ADD</button>
                       </div>
@@ -57,6 +72,55 @@
   
   </div>
   </div>
+
+  <style>
+    /* CSS for image size and overflow */
+    .product-image {
+        margin: 10px;
+        margin-left: 100px;
+      /* Limit image width */
+      height: auto; /* Maintain aspect ratio */
+      display: block; /* Remove extra space below image */
+    }
+  
+    .existing-image {
+      margin-bottom: 10px; /* Add some space between images */
+    }
+  </style>
+  
+  <script>
+      function viewImage(event, index) {
+        const imageElement = document.getElementById('imageView' + index);
+        imageElement.src = URL.createObjectURL(event.target.files[0]);
+    }
+    document.addEventListener("DOMContentLoaded", function () {
+      const addImageButton = document.querySelector(".add-image-input");
+      const dynamicImageInputs = document.querySelector(".dynamic-image-inputs");
+  
+      addImageButton.addEventListener("click", function () {
+        const inputGroup = document.createElement("div");
+        inputGroup.className = "input-group";
+        const inputFile = document.createElement("input");
+        inputFile.type = "file";
+        inputFile.name = "images";
+        inputFile.className = "form-control";
+        inputFile.required = true;
+        const inputGroupAppend = document.createElement("div");
+        inputGroupAppend.className = "input-group-append";
+        const removeButton = document.createElement("button");
+        removeButton.className = "btn btn-danger remove-image-input";
+        removeButton.type = "button";
+        removeButton.textContent = "Remove";
+        removeButton.addEventListener("click", function () {
+          inputGroup.remove();
+        });
+        inputGroupAppend.appendChild(removeButton);
+        inputGroup.appendChild(inputFile);
+        inputGroup.appendChild(inputGroupAppend);
+        dynamicImageInputs.appendChild(inputGroup);
+      });
+    });
+  </script>
   
 
 

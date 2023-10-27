@@ -7,6 +7,7 @@ const randomstring = require('randomstring')
 const config = require('../config/config')
 const Product = require('../model/productModel')
 const Cart = require('../model/cartModel')
+const Address=require('../model/addressModel')
 const { ObjectId } = require("mongodb")
 
 const mongoose = require('mongoose')
@@ -368,8 +369,18 @@ const viewProfile = async (req, res) => {
 
         const name = req.session.user
         const user = await User.findOne({ name: name })
+        const userId=user._id
+        const userData = await User.findOne({ _id:userId });
+        const address=await Address.findOne({user:userId})
+        
 
-        res.render('profile', { user: req.session.user })
+        res.render('profile', {
+             user: req.session.user,
+             data:user,
+             address:address,
+             name
+             
+            })
 
     } catch (error) {
         console.log(error);
@@ -384,39 +395,7 @@ const loadContact = async (req, res) => {
         console.log(error);
     }
 }
-// addto cart
-// const addToCart=async (req,res)=>{
-//     try {
-//         if(req.session.user){
-//             const productId = req.body.id
 
-//         const name=req.session.user
-//         const userData=await User.findOne({name:name})
-//         const userId=userData._id
-//         const productData=await Product.findById(productId)
-
-//         const userCart=await Cart.findOne({user:userId})
-
-//         if(userCart){
-//             await Cart.updateOne({user:userId},{
-//                 $push:{user:userId,"product.productId":productId}
-//             })
-//         }else{
-//             const data=new Cart({
-//                 user:userId,
-//                 products:[{productId:productId}]
-//             })
-//             const result=await data.save()
-//             // res.redirect('/add-to-cart')
-//         }
-//     }else{
-//         res.json({login : true})
-//     }
-
-//     } catch (error) {
-//         console.log(error);
-//     }
-// }
 const addToCart = async (req, res) => {
     try {
         if (req.session.user) {
@@ -570,7 +549,17 @@ const removeProduct=async (req,res)=>{
                     $pull:{products:{productId:proId}}
                 }
              )
-             res.json({success:true})
+             res.json({removeProduct:true})
+
+    } catch (error) {
+        console.log(error);
+        res.json({success:true})
+    }
+}
+const addAddress=async (req,res)=>{
+    try {
+        const userId=req.body.id
+        console.log(req.body);
 
     } catch (error) {
         console.log(error);
@@ -596,5 +585,6 @@ module.exports = {
     addToCart,
     getCartProducts,
     cartQuantity,
-    removeProduct
+    removeProduct,
+    addAddress
 }

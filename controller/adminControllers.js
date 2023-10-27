@@ -1,6 +1,10 @@
 const Admin=require('../model/adminModel')
 const bcrypt=require('bcrypt')
 
+
+    //    LOAD ADMIN LOGIN
+
+    
 const loadLogin=async (req,res)=>{
     try {
         
@@ -9,6 +13,9 @@ const loadLogin=async (req,res)=>{
         console.log(error);
     }
 }
+            // ADMIN CHECKING
+
+
 const loginVerify=async (req,res)=>{
     try {
          const email=req.body.email
@@ -32,6 +39,9 @@ const loginVerify=async (req,res)=>{
         console.log(error);
     }
 }
+         // LOAD ADMIN HOMEPAGE
+
+
 const loadHomepage=(req,res)=>{
     try {
         res.render('admin-homepage')
@@ -39,6 +49,8 @@ const loadHomepage=(req,res)=>{
        console.log(error); 
     }
 }
+             // LOAD CATEGORY PAGE
+
 
 const loadaddCategory=(req,res)=>{
     try {
@@ -47,6 +59,9 @@ const loadaddCategory=(req,res)=>{
         console.log(error);
     }
 }
+             // LOAD ADMIN LOGOUT
+
+
 const logOut=async (req,res)=>{
     try {
         req.session.Admin=false

@@ -1,4 +1,248 @@
 <%-include('../users/mainLayouts/mainheader.ejs')%>
-<h1>hety myy account</h1>
+
+<main class="main">
+    <div class="page-header text-center " style="background-image: url('/user/images/page-header-bg.jpg')">
+        <div class="container">
+            <h1 class="page-title text-white">My Account</h1>
+        </div><!-- End .container -->
+    </div><!-- End .page-header -->
+    <nav aria-label="breadcrumb" class="breadcrumb-nav mb-3">
+        <div class="container">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item " aria-current="page">My Account</li>
+
+            </ol>
+        </div><!-- End .container -->
+    </nav><!-- End .breadcrumb-nav -->
+
+    <div class="page-content">
+        <div class="dashboard">
+            <div class="container">
+                <div class="row">
+                    <aside class="col-md-4 col-lg-3">
+                        <ul class="nav nav-dashboard flex-column mb-3 mb-md-0" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="tab-dashboard-link" data-toggle="tab"
+                                    href="#tab-dashboard" role="tab" aria-controls="tab-dashboard"
+                                    aria-selected="true">My Profile</a>
+                            </li>
+                            <!-- <li class="nav-item">
+                            <a class="nav-link" id="tab-orders-link" data-toggle="tab" href="#tab-orders" role="tab" aria-controls="tab-orders" aria-selected="false">Orders</a>
+                        </li> -->
+                            <!-- <li class="nav-item">
+                            <a class="nav-link" id="tab-downloads-link" data-toggle="tab" href="#tab-downloads" role="tab" aria-controls="tab-downloads" aria-selected="false">Downloads</a>
+                        </li> -->
+
+                            <li class="nav-item">
+                                <a class="nav-link" id="tab-account-link" data-toggle="tab" href="#tab-account"
+                                    role="tab" aria-controls="tab-account" aria-selected="false">Edit
+                                    Details</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="tab-order-link" data-toggle="tab" href="#tab-order"
+                                    role="tab" aria-controls="tab-order" aria-selected="false">My Orders</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link" id="tab-address-link" data-toggle="tab" href="#tab-address"
+                                    role="tab" aria-controls="tab-address" aria-selected="false">Manage address</a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link"   href="/profile/coupons"
+                                   >Offers</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="/logout">Sign Out</a>
+                            </li>
+                        </ul>
+                    </aside><!-- End .col-lg-3 -->
+
+                    <div class="col-md-8 col-lg-9">
+                        <div class="tab-content">
+                            <div class="tab-pane fade show active" id="tab-dashboard" role="tabpanel"
+                                aria-labelledby="tab-dashboard-link">
+                                <h6 class="text-center fs-1 font-monospace text-decoration-underline ">My
+                                    Profile</h6>
+                                <form action="#">
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <label> Name </label>
+                                            <input type="text" class="form-control" value="<%=data.name%>"
+                                                disabled>
+                                        </div><!-- End .col-sm-6 -->
+
+                                        <div class="col-sm-6">
+                                            <label>Email </label>
+                                            <input type="email" class="form-control" value="<%=data.email%>"
+                                                disabled>
+                                        </div><!-- End .col-sm-6 -->
+                                    </div><!-- End .row -->
+
+                                    <label>Mobile </label>
+                                    <input type="tel" class="form-control w-25 " value="<%=data.mobile%>" disabled>
+                              </form>
+                            </div><!-- .End .tab-pane -->
+
+
+
+                            <!-- this you can use new fieldhhhhhh -->
+
+                            <div class="tab-pane fade" id="tab-orders" role="tabpanel"
+                                aria-labelledby="tab-orders-link">
+                                <p>No order has been made yet.</p>
+                                <a href="category.html" class="btn btn-outline-primary-2"><span>GO
+                                        SHOP</span><i class="icon-long-arrow-right"></i></a>
+                            </div><!-- .End .tab-pane -->
+                            <!-- this you can use new fieldhhhhhh   END-->
+
+
+
+                            <!-- orders page -->
+                            <div class="tab-pane fade" id="tab-order" role="tabpanel"
+                                aria-labelledby="tab-order-link">
+                               
+                                    <div class="card col-md-5 col-10 m-2 shadow-sm" id="allorder"
+                                        style="border-radius: 7px; background: #F3F3F9; cursor: pointer;">
+                                        <div class="card-body">
+                                            <div class="d-flex justify-content-center mt-1 py-4">
+                                                <i class="fa-solid fa-box-open mx-3"
+                                                    style="font-size: 35px;"></i>
+                                                <h5 class=" m-0 align-self-center" style="font-weight: 300;">All
+                                                    Orders</h5>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    
+
+
+
+
+
+
+                             
+
+                            </div><!-- .End .tab-pane -->
+                            <!-- orders page END -->
+                            <div class="tab-pane fade" id="tab-address" role="tabpanel"
+                            aria-labelledby="tab-address-link">
+
+                            <div class="card col-md-5 col-10 m-2 shadow-sm" id="addressDiv"
+                            style="border-radius: 7px; background: #F3F3F9; cursor: pointer;">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-center mt-1 ">
+                                
+                                  <p>
+                                   
+                                         <a class="fw-bold" href="/new-address" > <strong>+ ADD NEW ADDRESS </strong> </a>
+                                  </p>
+                                
+                                 </div>
+                            </div>
+                        </div>
+                       
+                        <div class="row m-t-23">
+                           <% if(address){%>
+                            <% address.address.forEach((data) => { %>
+                                <div class="col-md-4 col-12 col-sm-6 mb-3">
+                                   
+                                    <div class="card shadow-sm" id="addressDiv" style="border-radius: 7px; background: #F3F3F9; cursor: pointer;">
+                                        <div class="card-body">
+                                            <div class="text-center">
+                                                <a href="/edit-address?id=<%=data._id%>" ><img style="width: 15px;
+                                                
+                                                    float: right;
+                                                    margin-right: -31px;" src="/public/logo/8666681_edit_icon.png" alt=""></a>
+                                                <p>
+                                                    <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
+                                                        Open Modal
+                                                    </button> -->
+                                                    <strong><%= data.name %></strong><br>
+                                                    <%= data.state %> <%= data.city %><br>
+                                                    PIN: <%= data.pin %>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+
+                            <% }) %>
+                       <% }else{%>
+                       
+                       <%}%>
+                        </div>
+
+                            </div>
+
+                            <!-- change password area -->
+
+
+                            <!-- account tab details -->
+                            <div class="tab-pane fade" id="tab-account" role="tabpanel"
+                                aria-labelledby="tab-account-link">
+                                <h6 class="text-center fs-1 font-monospace text-decoration-underline ">Edit
+                                    Details</h6>
+
+                               
+
+                                <form action="" method="post">
+
+                                    <!-- profile end -->
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <label>Name *</label>
+                                            <input type="text" class="form-control" value=""
+                                                name="name">
+                                        </div><!-- End .col-sm-6 -->
+
+                                        <div class="col-sm-6">
+                                            <label>email *</label>
+                                            <input type="text" class="form-control" name="email"
+                                                value="">
+                                        </div><!-- End .col-sm-6 -->
+                                    </div><!-- End .row -->
+
+                                    <label>Mobile *</label>
+                                    <input type="email" class="form-control" name=""
+                                        value="">
+
+                                        <label>House Name *</label>
+                                        <input type="text" class="form-control" name="housename" value="">
+
+                                        <label>City *</label>
+                                        <input type="text" class="form-control" name="city" value="">
+
+                                        <label>State *</label>
+                                        <input type="text" class="form-control" name="state" value="">
+
+                                        <label>Pin *</label>
+                                        <input type="text" class="form-control" name="pin" value=""> 
+                                          
+                                </form>
+                              
+                               
+                            </div><!-- .End .tab-pane -->
+
+
+
+
+                        </div>
+                    </div><!-- End .col-lg-9 -->
+                </div><!-- End .row -->
+            </div><!-- End .container -->
+        </div><!-- End .dashboard -->
+    </div><!-- End .page-content -->
+</main><!-- End .main -->
+
+
+
+
+
+
+
 
 <%-include('../users/mainLayouts/mainfooter.ejs')%>

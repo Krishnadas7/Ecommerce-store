@@ -120,7 +120,7 @@ const insertAddress = async (req, res) => {
       const cartData=await Cart.findOne({user:userId}).populate("products.productId")
       const cart=await Cart.findOne({user:userId})
               let Total
-      const total=await Cart.aggregate([
+      let total=await Cart.aggregate([
           {$match:{user:new ObjectId(userId)}},
           {$unwind: "$products"},
           {
@@ -142,10 +142,14 @@ const insertAddress = async (req, res) => {
             }
           
       ])
-      Total=total[0].total
+
+     Total=total[0].total
+     
+      
+      
 
 
-         res.render('checkout',{user:req.session.user,total:Total,address:address.address})
+         res.render('checkout',{user:req.session.user,total:Total,address:address.address,data : cartData.products})
     } catch (error) {
       console.log(error);
     }

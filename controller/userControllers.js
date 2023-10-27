@@ -486,7 +486,7 @@ const getCartProducts = async (req, res) => {
                     
                     res.render('view-cart', { user: req.session.user,userId:userId,cart: cartData.products,total:Total });
                 } else {
-                    res.render('view-cart',{user:req.session.user,message:"hy"})
+                    res.render('view-cart',{user:req.session.user,cart:[],total:0})
                 }
 
 

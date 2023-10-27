@@ -5,7 +5,7 @@ const allProduct=require('../controller/allProduct')
 const path=require('path')
 const userAuth=require('../middlewares/userAuth')
 const userProfile=require('../controller/userProfile')
-
+const orderController=require('../controller/orderController')
 // view engine setup
  userRouter.set('view engine','ejs')
  userRouter.set('views','./view/users')
@@ -83,7 +83,11 @@ userRouter.post('/edit-address',userAuth.isLogin,userProfile.updateAddress)
 
 userRouter.get('/checkout',userAuth.isLogin,userProfile.loadCheckout)
 
+userRouter.post('/checkout',userAuth.isLogin,orderController.postCheckout)
 
+userRouter.post('/checkout/paymentselection',userAuth.isLogin,orderController.itemsAndDelivery)
+
+userRouter.get('/checkout/paymentselection',userAuth.isLogin,orderController.placeOrder)
 
 
 

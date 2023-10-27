@@ -32,6 +32,7 @@
                                 <th class="column-4">Quantity</th>
                                 <!-- <th class="column-5">Total</th> -->
                             </tr>
+                             
                             <% if (cart && cart.length > 0) { %>
                             <%cart.forEach((data,index)=>{%>
                             <tr class="table_row">
@@ -65,8 +66,10 @@
                             </tr>
                               <%})%>
                             <%}else{%>
-                                <tr>cart is empty</tr>
+                                <tr><b>cart is empty</b></tr>
                             <%}%>
+                              
+                            
 
                         </table>
                     </div>
@@ -164,11 +167,13 @@
                             </span>
                         </div>  
                     </div>
-
+                    <% if (cart && cart.length > 0) { %>
+                       
                    
                         <a class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer" href="/checkout">
                         Proceed to Checkout
                     </a>
+                    <%}%>
                    
                 </div>
             </div>

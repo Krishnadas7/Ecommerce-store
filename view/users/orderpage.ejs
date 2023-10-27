@@ -23,60 +23,42 @@
             <div class="container">
                 <div class="row">
                     <div class="col-lg-9 cart-item-box">
-                        <h5 class="text-dark mb-3">1. &nbsp; Select a delivery address</h5>
-                        <%if(address !=0){%>
-                            <form action="/checkout" method="post" id="addressForm">
-                                <% for(i=address.length-1; i>=0; i--) { %>
-                                <label class="p-3 border rounded-4 m-2 custom-label">
+                        <h5 class="text-dark mb-3">1. &nbsp;Delivery address</h5>
+                       
+                              
                                     <div class="form-check d-flex align-items-center mx-4">
-                                        <input class="form-check-input " type="radio" value="<%= address[i].id %>"
-                                            name="address" id="Radio<%=address[i]._id %>"  <% if(i==address.length-1) { %> checked <% } %> 
-                                            >
+                                        
                                             <div class="mx-5">
-                                                <p class="text-dark"><b><%= address[i].name %></b>&nbsp;<%= address[i].state %> &nbsp;<%= address[i].city %>&nbsp;
+                                                <p class="text-dark"><b><%= address.name %></b>,<%= address.state %> ,<%= address.city %>,  
                                                     
                                                             Contanct
                                                             Number:
                                                             <b style="color: #043a6c;">
                                                                 <span class="material-symbols-outlined"
-                                                                    style="font-size: 13px;"></b><%= address[i].mobile %> </p></span>
+                                                                    style="font-size: 13px;"></b><%= address.mobile %> </p></span>
                                                             
                                                 <p>
-                                                    <%= address[i].pin %> India
+                                                    <%= address.pin %> India
                                                 </p>
                                             </div>
                                     </div>
-                                </label>
-                                <% } %>
-                                
-                                
-                            </form>
-
-                        <%}else{%>
-                            <div class=" text-center w-100 card">
-                                <h6 class="mt-2 ">You have no shipping Address</h6>
-                                <p class="">Kindly add a shipping address to proceed.</p>
-                                <a class="btn btn-primary" href="/new-address"> +
-                                    Add a new
-                                    address </a>
-                            </div>
-
-                       <% }%>
-                       <% if(address!=0) { %>
-
-                        <a class="btn btn-primary" href="/new-address"> +
-                            Add a new
-                            address </a>
-                        <% } %>
+                               
+                               
 
                                             <hr>
 
                                             <div class=" py-4  mt-2  "
                                                 style="border-radius: 10px; background: #F3F3F9;">
+                                                <h5>2. Payment method</h5>
+                                                <form action="/checkout/paymentselection" method="post" id="addressForm">
                                                 <div class="form-check d-flex align-items-center mx-4 ">
-                                                    <h5>2. Payment method</h5>
+                                                   
+                                                    <input type="radio" value="COD" name="payment-method">&nbsp; <b>Cash on delivery</b>
                                                 </div>
+                                                <input type="hidden" name="id" value="<%=address._id%>">
+                                            </form>
                                             </div>
+                                        
                                             <div class=" py-4  mt-1  "
                                                 style="border-radius: 10px; background: #F3F3F9;">
                                                 <div class="form-check d-flex align-items-center mx-4 ">
@@ -87,13 +69,12 @@
                     </div><!-- End .col-lg-9 -->
                     <aside class="col-lg-3">
                         <div class="summary summary-cart">
-                            <% if(address !=0){ %>
-                            <button id="useAddressButton" class="btn btn-outline-primary-2  btn-block py-3"
+                           
+                            <button id="addressSubmitBtn" class="btn btn-outline-primary-2  btn-block py-3"
                                 style="background-color: #000; color: #fff; "
                                 onMouseOver="this.style.background='#575757'"
-                                onMouseOut="this.style.background='#000'">Use This
-                                Address</button>
-                            <%}%>
+                                onMouseOut="this.style.background='#000'">Proceed to checkout</button>
+                            
 
                             <h3 class="summary-title"></h3>
 
@@ -107,7 +88,7 @@
                                             </span></td>
                                     </tr><!-- End .summary-subtotal -->
 
-                                    
+
 
 
                                     <tr class="summary-shipping-row">
@@ -122,7 +103,6 @@
 
 
                                     <tr class="summary-total">
-
                                         <td>Total:</td>
                                         <td>₹<span id="totalDisplay">
                                             <%= total %>
@@ -222,14 +202,17 @@
         $(this).addClass("checked");
     });
 
-     
+    
 </script>
+
 <script>
-    // Add a click event listener to the "Use This Address" button
-    document.getElementById("useAddressButton").addEventListener("click", function () {
-        // Submit the form with id "addressForm"
+    document.addEventListener("DOMContentLoaded", function() {
+    // Your code here
+    document.getElementById("addressSubmitBtn").addEventListener("click", function() {
+        console.log("Button clicked");
         document.getElementById("addressForm").submit();
     });
+});
 </script>
 
 <%-include('../users/mainLayouts/mainfooter.ejs')%>

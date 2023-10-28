@@ -113,43 +113,58 @@ const insertAddress = async (req, res) => {
 
   const loadCheckout=async (req,res)=>{
     try {
-      const name=req.session.user
-      const userData=await User.findOne({name:name})
-      const userId=userData._id
-       const address=await Address.findOne({user:new ObjectId(userId)})
-      const cartData=await Cart.findOne({user:userId}).populate("products.productId")
-      const cart=await Cart.findOne({user:userId})
-              let Total
-      let total=await Cart.aggregate([
-          {$match:{user:new ObjectId(userId)}},
-          {$unwind: "$products"},
-          {
-            $project:{
-              price:"$products.price",
-              quantity:"$products.quantity"
-            },
-          },  
-            {
-              $group:{
-                _id:null,
-                total:{
-                  $sum:{
-                    $multiply:["$price","$quantity"]
-                  }
-                }
+    //   const name=req.session.user
+    //   const userData=await User.findOne({name:name})
+    //   const userId=userData._id
+    //    const address=await Address.findOne({user:new ObjectId(userId)})
+    //   const cartData=await Cart.findOne({user:userId}).populate("products.productId")
+    //   const cart=await Cart.findOne({user:userId})
+    //           let Total
+    //   let total=await Cart.aggregate([
+    //       {$match:{user:new ObjectId(userId)}},
+    //       {$unwind: "$products"},
+    //       {
+    //         $project:{
+    //           price:"$products.price",
+    //           quantity:"$products.quantity"
+    //         },
+    //       },  
+    //         {
+    //           $group:{
+    //             _id:null,
+    //             total:{
+    //               $sum:{
+    //                 $multiply:["$price","$quantity"]
+    //               }
+    //             }
   
-              }
-            }
+    //           }
+    //         }
           
-      ])
+    //   ])
 
-     Total=total[0].total
+    //  Total=total[0].total
+    if(req.session.user){
+        const name=req.session.user
+        const userData=await User.findOne({name:name})
+        console.log(userData);
+        const userId=userData._id
+        console.log(userId);
+        const address=await Address.findOne({user:new ObjectId(userId)})
+        console.log(address);
+
+
+      res.render('checkout',{user:req.session.user,address:address.address})
+    }else{
+      res.render('checkout',{message:"user logged"})
+    }
      
       
       
 
 
-         res.render('checkout',{user:req.session.user,total:Total,address:address.address,data : cartData.products})
+         
+        //  ,{user:req.session.user,total:Total,address:address.address,data : cartData.products}
     } catch (error) {
       console.log(error);
     }

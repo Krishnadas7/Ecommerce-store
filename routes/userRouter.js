@@ -83,11 +83,11 @@ userRouter.post('/edit-address',userAuth.isLogin,userProfile.updateAddress)
 
 userRouter.get('/checkout',userAuth.isLogin,userProfile.loadCheckout)
 
-userRouter.post('/checkout',userAuth.isLogin,orderController.postCheckout)
+// userRouter.post('/checkout',userAuth.isLogin,orderController.postCheckout)
 
-userRouter.post('/checkout/paymentselection',userAuth.isLogin,orderController.itemsAndDelivery)
+// userRouter.post('/checkout/paymentselection',userAuth.isLogin,orderController.itemsAndDelivery)
 
-userRouter.get('/checkout/paymentselection',userAuth.isLogin,orderController.placeOrder)
+// userRouter.get('/checkout/paymentselection',userAuth.isLogin,orderController.placeOrder)
 
 
 

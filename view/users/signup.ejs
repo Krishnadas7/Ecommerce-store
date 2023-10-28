@@ -1,16 +1,20 @@
-<%-include('../users/layouts/header.ejs')%>
+<%-include('../users/mainLayouts/mainheader.ejs')%>
    
 
 
-<div class="signup-page">
+<div class="signup-page" style="    margin-top: 83px;">
   <section class="vh-100 bg-image">
-    <div class="mask d-flex align-items-center h-100 gradient-custom-3">
+    <div class="mask d-flex align-items-center h-100 gradient-custom-3" style="    background-color: white;">
       <div class="container h-100">
         <div class="row d-flex justify-content-center align-items-center h-100">
           <div class="col-12 col-md-9 col-lg-7 col-xl-6">
-            <div class="card border-0 shadow-lg">
+            <div class="card ">
               <div class="card-body">
-                <h4 class="text-uppercase text-center">Create Your Account</h4>
+                
+
+                <form action="/signup" method="post" class="border mt-1" onsubmit="return validateForm()" >
+
+                  <h4 class="text-uppercase text-center" style="padding: 31px;">Create Your Account</h4>
 
                 <%
                 if (typeof message !== 'undefined') {
@@ -19,8 +23,6 @@
                 <%
                 }
                 %>
-
-                <form action="/signup" method="post" onsubmit="return validateForm()">
 
                   <div class="form-outline mb-3 px-5">
                     <label class="form-label text-dark" for="form3Example1cg">Full Name</label>
@@ -55,7 +57,7 @@
 
                   <div class="d-flex justify-content-center px-5">
                     <button type="submit"
-                      class="btn btn-primary text-success btn-block btn-md gradient-custom-4 text-body">Create Account</button>
+                      class="btn btn-primary text-white btn-block btn-md gradient-custom-4 text-body" style="background-color: #007bff;">Create Account</button>
                   </div>
 
                   <p class="text-center text-muted mt-3 mb-0">Have already an account? <a href="/login"
@@ -151,4 +153,4 @@
 
 
 
-<%-include('../users/layouts/footer.ejs')%>
+<%-include('../users/mainLayouts/mainfooter.ejs')%>

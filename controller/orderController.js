@@ -140,6 +140,7 @@ const placeOrder=async (req,res)=>{
   try {
     
      const address=req.body.id
+     const add=await Address.findOne({})
      console.log('addresssssssssss',address);
      const payment=req.body.payment
      const totalAmount=req.body.total
@@ -153,7 +154,7 @@ const placeOrder=async (req,res)=>{
       deliveryDetails:address,
       user:userData._id,
       paymentMethod:payment,
-      product:product,
+      product:cartData.products,
       totalAmount:totalAmount,
       Date:new Date(),
       

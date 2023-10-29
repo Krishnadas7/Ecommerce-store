@@ -139,48 +139,51 @@ const Product=require('../model/productModel')
 // }
 const placeOrder=async (req,res)=>{
   try {
-    console.log('hhhh');
-     const address=req.body.address
-     
-     
-     const payment=req.body.payment
-     const totalAmount=req.body.total
-     const name=req.session.user
-     const amount=req.body.amount
+    console.log('place order');
+    console.log(req.body);
 
+     const name=req.session.user
+     const address=req.body.address
      const userData=await User.findOne({name:name})
-     const cartData=await Cart.findOne({user:userData._id})
-     const product=cartData.products
+     const userId=userData._id
+     const cartData=await Cart.findOne({user:userId})
+     const products=cartData.products
+     const total=parseInt(req.body.Total)
+     
+     const paymentMethods=req.body.payment
+     const uniNum = Math.floor(Math.random() * 900000) + 100000;
+     const status=paymentMethods=== 'COD'?'placed':'pending'
+     console.log(req.body.address);
+     console.log(total);
+
+     const order=new Order({
+        deliveryDetails:address,
+        uniqueId:uniNum,
+        userId:userId,
+        userName:name,
+        paymentMethod:paymentMethods,
+        products:products,
+        totalAmount:total,
+        date:new Date(),
+        status:status,
+     })
     
 
-
-     const status = payment === "COD" ? "Placed" : "Pending"
-
-
-     const newOrder=new Order({
-      deliveryDetails:address,
-      user:userData._id,
-      paymentMethod:payment,
-      product:product,
-      totalAmount:totalAmount,
-      Date:new Date(),
-      
-      amount:amount
-
-     })
-     await newOrder.save()
+   
+    const orderdata= await order.save()
+    const orderid=order._id
      
       
-     if(status=='Placed'){
-      for(let i=0;i<product.length;i++){
-        const productId = product[i].productId
-        const quantity = product[i].quantity
+     if(status=='placed'){
+      for(let i=0;i<products.length;i++){
+        const productId = products[i].productId
+        const quantity = products[i].quantity
         await Product.findByIdAndUpdate(productId,{$inc : {stock:-quantity}})
       }
       res.json({ codSuccess: true });
      
      }else {
-       console.log('error');
+       console.log('not added');
      }
         
 

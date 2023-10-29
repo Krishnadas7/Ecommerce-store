@@ -83,6 +83,8 @@ userRouter.post('/edit-address',userAuth.isLogin,userProfile.updateAddress)
 
 userRouter.get('/checkout',userAuth.isLogin,userProfile.loadCheckout)
 
+userRouter.post('/place-order',userAuth.isLogin,orderController.placeOrder)
+
 // userRouter.post('/checkout',userAuth.isLogin,orderController.postCheckout)
 
 // userRouter.post('/checkout/paymentselection',userAuth.isLogin,orderController.itemsAndDelivery)

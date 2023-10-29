@@ -508,11 +508,11 @@ const cartQuantity =async (req,res)=>{
        const count= number
 
        
-       console.log(count);
+      
       
        const cartData = await Cart.findOne({ user: new ObjectId(userId), "products.productId": new ObjectId(proId)},
                         { "products.productId.$": 1, "products.quantity": 1 })
-       console.log("cartdata  :",cartData);
+      
 
        const [{quantity:quantity}]=cartData.products
        stockAvailable=await Product.find({_id:new ObjectId(proId)})

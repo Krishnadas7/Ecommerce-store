@@ -4,7 +4,7 @@ const ObjectId = mongoose.Types.ObjectId;
 const orderSchema = new mongoose.Schema({
     deliveryDetails: {
         type: String,
-        // required: true,
+        required: true,
     },
     user: {
         type: ObjectId,

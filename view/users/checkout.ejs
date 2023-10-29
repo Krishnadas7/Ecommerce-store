@@ -31,7 +31,7 @@
             <div class="checkout-discount">
                
             </div><!-- End .checkout-discount -->
-            <form action="#">
+            <form action="" id="place-order" >
                 <div class="row" style="margin-left: -19px;
                 margin-right: -10px;">
                     <div class="col-lg-9" >
@@ -45,8 +45,8 @@
                       margin-right: 234px; " >
                         <div class="card-body"> </div>
                             
-                        <p> <input class="form-check-input ml-1" type="radio" value=""
-                                name="address" id="" >
+                        <p> <input class="form-check-input ml-1" type="radio" value="<%=address[i].name%>,<%=address[i].housename%>,<%=address[i].pin%>"
+                                name="address" id=""  >
                             
                               <b class="m-l-30"> <%=address[i].name%> &nbsp; &nbsp; &nbsp; &nbsp; <%=address[i].mobile%>  </b></p>
                             <p class="m-l-30">
@@ -77,18 +77,17 @@
                                 </thead>
 
                                 <tbody>
+                                    <%product.forEach((data)=>{%>
                                     <tr>
-                                        <td><a href="#">Beige knitted elastic runner shoes</a></td>
-                                        <td>$84.00</td>
+                                        <td><a href="#"><%=data.productId.name%></a></td>
+                                        <td>&#8377 <%=data.price%></td>
                                     </tr>
+                                <%})%>
 
-                                    <tr>
-                                        <td><a href="#">Blue utility pinafore denimdress</a></td>
-                                        <td>$76,00</td>
-                                    </tr>
+                                   
                                     <tr class="summary-subtotal">
                                         <td>Subtotal:</td>
-                                        <td>$160.00</td>
+                                        <td id="subtotal-amount" >&#8377 <%=total%></td>
                                     </tr><!-- End .summary-subtotal -->
                                     <tr>
                                         <td>Shipping:</td>
@@ -96,36 +95,28 @@
                                     </tr>
                                     <tr class="summary-total">
                                         <td>Total:</td>
-                                        <td>$160.00</td>
+                                        <td id="total">&#8377 <%=total%></td>
                                     </tr><!-- End .summary-total -->
                                 </tbody>
                             </table><!-- End .table table-summary -->
 
                             <div class="accordion-summary" id="accordion-payment">
-                               
+                                <label class="d-flex">
+                                    <input type="radio" id="payment" name="payment" value="COD">&nbsp;&nbsp;
+                                    Cash on Delivery
+                                </label>
+                        
+                                <label class="d-flex">
+                                    <input type="radio" name="payment" value="online">&nbsp;&nbsp;
+                                    Online
+                                </label>
 
-                                <div class="card">
-                                    <div class=" card-header" id="heading-3">
-                                        <h2 class="card-title d-flex">
-                                            <input type="radio" > &nbsp;  &nbsp;  &nbsp;Cash on delivery
-                                        </h2>
-                                    </div><!-- End .card-header -->
-                                    
-                                </div><!-- End .card -->
-
-                                <div class="card mt-2">
-                                    <div class="card-header" id="heading-4">
-                                        <h2 class="card-title d-flex">
-                                            <input type="radio" > &nbsp;  &nbsp;  &nbsp;Online
-                                        </h2>
-                                    </div><!-- End .card-header -->
-                                   
-                                </div><!-- End .card -->
+                         
 
                                 
                             </div><!-- End .accordion -->
 
-                            <a style="    margin-left: 134px;" class=" btn btn-success" href="">Proceed to checkout</a>
+                            <!-- <a type="su" style="    margin-left: 134px;" class=" btn btn-success" href="/checkout">Proceed to checkout</a> -->
                             
 
                             <button type="submit" class="btn btn-outline-primary-2 btn-order btn-block">
@@ -144,5 +135,45 @@
 
     </div>
 </div>
+
+<script>
+    console.log('beforrrr');
+     document.addEventListener("DOMContentLoaded", function() {
+    $("#place-order").submit((e) => {
+    console.log('Button submitted');
+    const amount = document.getElementById("total-amount").innerHTML;
+    const totalAmount = document.getElementById("subtotal-amount").innerHTML;
+
+    let address = $("input[name=address]:checked").val();
+    let paymentMethod = $("input[name=payment]:checked").val();
+
+    e.preventDefault();
+    
+    $.ajax({
+        url: "/place-order",
+        method: 'post',
+        encoded:true,
+        data: {
+            total: amount,
+            address: address,
+            payment: paymentMethod,
+            amount: totalAmount
+        },
+        success: (response) => {
+            if (response) {
+            alert('Order placed successfully');
+                // location.href = "/order-placed"
+            } else {
+                alert('Order placement failed');
+            }
+        },
+        error: (xhr, status, error) => {
+            console.log("Error: " + error);
+        }
+    });
+});
+     })
+     console.log(afterrr);
+</script>
 
 <%-include('../users/mainLayouts/mainfooter.ejs')%>

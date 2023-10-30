@@ -85,6 +85,8 @@ userRouter.get('/checkout',userAuth.isLogin,userProfile.loadCheckout)
 
 userRouter.post('/place-order',userAuth.isLogin,orderController.placeOrder)
 
+userRouter.get('/order-placed',userAuth.isLogin,orderController.orderSuccess)
+
 // userRouter.post('/checkout',userAuth.isLogin,orderController.postCheckout)
 
 // userRouter.post('/checkout/paymentselection',userAuth.isLogin,orderController.itemsAndDelivery)

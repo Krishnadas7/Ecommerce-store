@@ -171,7 +171,7 @@ const placeOrder=async (req,res)=>{
 
    
     const orderdata= await order.save()
-    const orderid=order._id
+    // const orderid=order._id
      
       
      if(status=='placed'){
@@ -194,10 +194,17 @@ const placeOrder=async (req,res)=>{
   }
 }
 
+const orderSuccess=async (req,res)=>{
+  try {
+    res.render('order-placed',{user:req.session.user})
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 
 module.exports={
   
-  
+  orderSuccess,
     placeOrder
 }

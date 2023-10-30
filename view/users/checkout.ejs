@@ -160,7 +160,8 @@
         data:{Total:total,address:address,payment:payment},
         success: (response)=>{
             if(response){
-                swal('order placed')
+                // swal('order placed')
+                location.href='/order-placed'
             }else{
                 swal('failed')
             }

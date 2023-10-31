@@ -125,7 +125,7 @@ const updateProduct = async (req, res) => {
        
          const id=req.query.id
         const product=await Product.findById({_id:id})
-
+          
         if(product.blocked===true){
             const list=await Product.findByIdAndUpdate({_id:id},{$set:{blocked:false}})
         }else{

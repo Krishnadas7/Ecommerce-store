@@ -20,7 +20,7 @@ const userSchema=new mongoose.Schema({
     
     isverified:{
         type:Boolean,
-        default:0
+        default:true
     },
     token:{
      type:String,
@@ -32,7 +32,7 @@ const userSchema=new mongoose.Schema({
       },
       isListed:{
         type:Boolean,
-        default:0
+        default:false
     },
 },
     {

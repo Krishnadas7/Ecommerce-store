@@ -1,8 +1,8 @@
 <%-include('../users/mainLayouts/mainheader.ejs')%>
 
-
+<div class="bg0 m-t-23 p-b-140" style="margin-top: 80px;" id="reloadDiv">
 <!-- breadcrumb -->
-<div class="container" style="margin-top: 80px;" id="reloadDiv">
+<div class="container" style="margin-top: 80px;" >
     <div class="bread-crumb flex-w p-l-25 p-r-15 p-t-30 p-lr-0-lg">
         <a href="index.html" class="stext-109 cl8 hov-cl1 trans-04">
             Home
@@ -17,7 +17,7 @@
     
 
 <!-- Shoping Cart -->
-<form class="bg0 p-t-50 p-b-85" id="reloadDiv">
+<form class="bg0 p-t-50 p-b-85" >
     <div class="container">
         <div class="row">
             <div class="col-lg-10 col-xl-7 m-lr-auto m-b-50">
@@ -71,6 +71,7 @@
                             <%}else{%>
                                 <!-- <tr class="text-center"> -->
                                     <tr>
+                                        
                                        <img style="height: 200px; width: 200px; margin-left: 280px; "  src="/public/sample/cartempty.webp" alt="">
                                        <a style="margin-left: 290px" class="rounded btn btn-primary" href="/all-product">Go shopping</a>
                                             <!-- <p class="h1">Cart is empty</p> -->
@@ -190,7 +191,7 @@
         </div>
     </div>
 </form>
-
+</div>
 <script>
     function removeProduct(proId){
            $.ajax({
@@ -202,7 +203,8 @@
             }
            }).done((data)=>{
             if(data){
-                swal('Item removed')
+                Swal.fire('Item deleted successfully')
+                // swal('Item removed')
                 $("#reloadDiv").load("/view-cart #reloadDiv")
            
             // location.reload()
@@ -217,7 +219,8 @@
         const quantity=parseInt(document.getElementById(proId).innerHTML)
         const button=document.getElementById('minus-button')
         count = parseInt(count)
-        if(count==-1 && quantity==0){
+        if(count==-1 && quantity==1){
+           
             removeProduct(proId)
             
             

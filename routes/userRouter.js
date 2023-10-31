@@ -6,6 +6,7 @@ const path=require('path')
 const userAuth=require('../middlewares/userAuth')
 const userProfile=require('../controller/userProfile')
 const orderController=require('../controller/orderController')
+const cartController=require('../controller/cartController')
 // view engine setup
  userRouter.set('view engine','ejs')
  userRouter.set('views','./view/users')
@@ -48,29 +49,28 @@ userRouter.get('/all-product',userAuth.isLogin,allProduct.loadallProduct)
 
 userRouter.get('/product-view',userAuth.isLogin,allProduct.productView)
 
-userRouter.get('/formal-shoes',allProduct.formalShoes)
 
 
 
 // load contact page
 userRouter.get('/contact',userAuth.isLogin,userControllers.loadContact)
 
-// addto cart
+//  ==================================CARTMANAGEMENT=====================================================
 
-userRouter.post('/add-to-cart',userAuth.isLogin,userControllers.addToCart)
+userRouter.post('/add-to-cart',userAuth.isLogin,cartController.addToCart)
 
-userRouter.get('/view-cart',userAuth.isLogin,userControllers.getCartProducts)
+userRouter.get('/view-cart',userAuth.isLogin,cartController.getCartProducts)
 
-userRouter.post('/cart-quantity',userAuth.isLogin,userControllers.cartQuantity)
+userRouter.post('/cart-quantity',userAuth.isLogin,cartController.cartQuantity)
 
-userRouter.post('/remove-product',userAuth.isLogin,userControllers.removeProduct)
+userRouter.post('/remove-product',userAuth.isLogin,cartController.removeProduct)
 
 
 
 // load user profile page
 userRouter.get('/profile',userAuth.isLogin,userControllers.viewProfile)
 
-userRouter.post('add-address',userAuth.isLogin,userControllers.addAddress)
+userRouter.post('add-address',userAuth.isLogin,userControllers.loadAddress)
 
 
 userRouter.get('/new-address',userAuth.isLogin,userProfile.addAddress)
@@ -86,6 +86,10 @@ userRouter.get('/checkout',userAuth.isLogin,userProfile.loadCheckout)
 userRouter.post('/place-order',userAuth.isLogin,orderController.placeOrder)
 
 userRouter.get('/order-placed',userAuth.isLogin,orderController.orderSuccess)
+
+// ================================FILTER===================================
+
+userRouter.get('/category-filter',userAuth.isLogin,userProfile.categoryFilter)
 
 // userRouter.post('/checkout',userAuth.isLogin,orderController.postCheckout)
 

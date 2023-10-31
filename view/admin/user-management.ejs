@@ -66,7 +66,7 @@
                               </td> -->
                               <td> <%= new Date(user[i].createdAt).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })%> </td>
                               <%
-                              if(user[i].isListed===true){
+                              if(user[i].isListed===false){
                                 %>
                               <td><a style="    width: 100px;
                                 padding: 13px;" class="btn btn-danger" href="/admin/block-unblock?id=<%=user[i]._id%>">Block</a></td>

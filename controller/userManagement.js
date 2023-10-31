@@ -1,3 +1,4 @@
+const { findById } = require('../model/productModel')
 const User=require('../model/userModel')
 
 
@@ -23,14 +24,17 @@ const blockUnblock=async (req,res)=>{
     try {
         let id=req.query.id
         console.log(id);
-        const user=await User.findById({_id:id})
+        
+        const userData=await User.findById({_id:id})
+        
       
-        if (user.isListed===true) {
-            const block=await User.findByIdAndUpdate({_id:id},{$set:{isListed:false}})
+        if (userData.isListed===true) {
+            await User.updateOne({_id:id},{$set:{isListed:false}})
         }else{
-            const block=await User.findByIdAndUpdate({_id:id},{$set:{isListed:true}})
+            await User.updateOne({_id:id},{$set:{isListed:true}})
+             req.session.destroy()
         }
-
+        
           res.redirect('/admin/user-management')
     } catch (error) {
        console.log(error); 

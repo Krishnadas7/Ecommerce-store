@@ -13,7 +13,9 @@ const loadallProduct = async (req, res) => {
     try {
       const perPage = 12; 
       let page = parseInt(req.query.page) || 1; 
-      const categoryDetails = await Category.find({});
+      const categoryDetails = await Category.find({})
+      
+      
       const totalProducts = await Product.countDocuments({ blocked: false });
       const totalPages = Math.ceil(totalProducts / perPage);
   
@@ -66,23 +68,11 @@ const productView=async (req,res)=>{
 
         
 
-const formalShoes=async (req,res)=>{
-    try {
-        console.log('formal');
-        const catagoryId=req.query.id
-       
-        const product=await Product.find({category:catagoryId}).exec()
-        const category=await Category.find({isListed:true})
-       
-        res.render('all-product',{category:category,product:product,})
-    } catch (error) {
-        console.log(error);
-    }
-}
+
 
 module.exports={
     loadallProduct,
     productView,
-    formalShoes
+    
 
 }

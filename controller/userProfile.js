@@ -2,6 +2,9 @@ const Address=require('../model/addressModel')
 const User=require('../model/userModel')
 const { ObjectId } = require("mongodb")
 const Cart=require('../model/cartModel')
+const Products=require('../model/productModel')
+const Category=require('../model/categoryModel')
+
 
 
 const  addAddress=async(req,res)=>{
@@ -169,11 +172,32 @@ const insertAddress = async (req, res) => {
     }
   }
 
+  const categoryFilter= async (req,res)=>{
+    try {
+          if (req.session.user) {
+              // console.log('categoryid ',req.query.id);
+              const id=req.query.id
+              console.log('-------id',id);
+              const category=await Category.findById(id)
+              
+
+              // const filterProducts=await Products.find({category:{$eq:id}})
+              const filterProducts = await Products.find({ category:category._id });
+              console.log('filtered //////////',filterProducts);
+          }   
+         
+          res.json({success:true})  
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
 module.exports={
     addAddress,
     insertAddress,
     editAddress,
     updateAddress,
-   loadCheckout
+   loadCheckout,
+   categoryFilter
 
 }

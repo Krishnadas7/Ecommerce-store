@@ -54,19 +54,28 @@
                                         <div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
                                             <i class="fs-16 zmdi zmdi-plus"></i>
                                         </div> -->
-                                        <a class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m " onclick="cartCount('<%=data.productId._id%>','<%=userId%>',-1)" >-</a>
+                                        <a id="minus-button" class="btn-num-product-down  cl8 hov-btn3 trans-04 flex-c-m " onclick="cartCount('<%=data.productId._id%>','<%=userId%>',-1)" >-</a>
                                         <span class="mtext-104 cl3 txt-center num-product p-2" id="<%=data.productId._id%>"><%=data.quantity%></span>
                                         <a class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m " onclick="cartCount('<%=data.productId._id%>','<%=userId%>', 1)" >+</a>
                                         
                                     </div>
                                 </td>
                                 <td class="column-5">
-                                    <a class=" btn btn-danger text-white " onclick="removeProduct('<%=data.productId._id%>')">Remove</a>
+                                    <a class=" btn btn-danger  text-white " onclick="removeProduct('<%=data.productId._id%>')">Remove</a>
                                 </td>
+                                <!-- <td>
+                                    <%=data.totalprice%>
+                                </td> -->
                             </tr>
                               <%})%>
                             <%}else{%>
-                                <tr><b>cart is empty</b></tr>
+                                <tr>
+                                    <td>
+                                       
+                                            <p class="h1">Cart is empty</p>
+                                        
+                                    </td>
+                                </tr>
                             <%}%>
                               
                             
@@ -204,9 +213,12 @@
 
     function cartCount(proId,userId,count){
         const quantity=parseInt(document.getElementById(proId).innerHTML)
+        const button=document.getElementById('minus-button')
         count = parseInt(count)
-        if(count==-1 && quantity==0){
-            removeProduct(proId)
+        if(count==-1 && quantity==0 || quantity==1){
+            // removeProduct(proId)
+            button.disabled=true
+            
         }else{
             $.ajax({
             url:'/cart-quantity',
@@ -221,6 +233,7 @@
              }).done((data)=>{
                 if(data){
                     document.getElementById(proId).innerText = quantity +count
+                    button.disabled=false
                     //  location.reload()
                     // $(proId).html(data);
                     // alert(data)

@@ -398,102 +398,112 @@ const loadContact = async (req, res) => {
 
 const addToCart = async (req, res) => {
     try {
-        if (req.session.user) {
+        
             const productId = req.body.id;
+           
             const name = req.session.user;
             const userData = await User.findOne({ name: name });
             const userId = userData._id;
             const productData = await Product.findById(productId);
-
-            const userCart = await Cart.findOne({ user: userId });
-
-            if (userCart) {
-                const proExist = await userCart.products.findIndex(product => product.productId == productId)
-
-                console.log(proExist);
-
-                if (proExist != -1) {
-                    const cartData = await Cart.findOne({ user: userId, "products.productId": productId },
-                        { "products.productId.$": 1, "products.quantity": 1 })
-
-                    const [{ quantity: quantity }] = cartData.products
-
-                    if (productData.stock <= quantity) {
-                        res.json({ outofstock: true })
-                    } else {
-                        await Cart.findOneAndUpdate({ user: userId, "products.productId": productId },
-                            { $inc: { "products.$.quantity": 1 } })
+            const productStock=productData.stock
+            // const cart=await Cart.findOne({user:userId,'products.productId':productId})
+           
+             const cartData=await Cart.findOneAndUpdate(
+                
+                {user:userId},
+                {
+                    $setOnInsert: {
+                        user:userId,
+                        products:[],
+                        // totalprice:totalprice
                     }
-
-                } else {
-                    await Cart.findOneAndUpdate({ user: userId }, { $push: { products: { productId: productId, price: productData.price } } });
-                }
-
-
-            } else {
-                const data = new Cart({
-                    user: userId,
-                    products: [{ productId: productId, price: productData.price }]
-                });
-                const result = await data.save();
-            }
-            res.json({ success: true });
-        } else {
-            res.json({ loginRequired: true });
-        }
-    } catch (error) {
+                },
+                {upsert:true,new:true}
+             )
+              const updatedProduct=cartData.products.find(
+                (product) => product.productId === productId
+             )
+             
+             
+             const updatedQuantity=updatedProduct?updatedProduct.quantity : 0
+            
+             if(updatedQuantity+1>productStock){
+               
+                return res.json({
+                    success:false,
+                    message:'Quantity limit reached'
+                    
+                })
+             }
+             const price=productData.price
+             const total=price
+             if(updatedProduct) {
+                await Cart.updateOne(
+                    {user:userId,"products.productId":productId},
+                    {
+                        $inc:{
+                            'products.$.quantity':1,
+                            // "products.$.totalprice":total
+                        }
+                    }
+                )
+             }else {
+                   await cartData.products.push({
+                        productId: productId,
+                       
+                        totalprice:total
+                    })
+                await cartData.save()
+             }
+             res.json({success:true})
+       
+    }catch (error) {
         console.log(error);
         res.status(500).json({ error: 'An error occurred' });
     }
 };
 
+
 const getCartProducts = async (req, res) => {
     try {
-        const name = req.session.user;
-        const userData = await User.findOne({ name: name });
-        const userId = userData._id;
-        const cartData = await Cart.findOne({ user: userId }).populate("products.productId");
-        if (req.session.user) {
-            if (cartData) {
-
-                if (cartData.products != 0) {
-                    let Total
-                    const total = await Cart.aggregate([
-                        {
-                            $match: { user: new ObjectId(userId) }
-                        },
-                        {
-                            $unwind: '$products'
-                        },
-                        {
-                            $project: {
-                                quantity: "$products.quantity",
-                                price: "$products.price"
-                            }
-                        },
-                        {
-                            $group:{
-                                _id:null,
-                                total:{
-                                    $sum:{
-                                        $multiply:["$quantity","$price"]
-                                    }
-                                }
-                            }
-                        }
-                    ])
-                    Total=total[0].total
+        const name=req.session.user
+        const userData=await User.findOne({name:name})
+        const userId=userData._id
+        const cartData=await Cart.findOne({user:userId}).populate('products.productId')
+        const cart=await Cart.findOne({user:userId})
+        let cartCount=0
+        if(cart){
+            cartCount=cart.products.length
+        }  
+        let totalPrice = 0;
+        
+        if(cartData){
+            if(cartData.products.length>0){
+                const products=cartData.products
+                
+                for (const product of cartData.products) {
+                    totalPrice += product.quantity * product.productId.price;
+                  }
+                 console.log('totalprice  ',totalPrice);
+               
+                res.render('view-cart',{
+                     user:req.session.user,
+                     cart:products,
+                     count:cartCount,
+                     userId:userId,
+                     total:totalPrice
+                     
                     
-                    res.render('view-cart', { user: req.session.user,userId:userId,cart: cartData.products,total:Total });
-                } else {
-                    res.render('view-cart',{user:req.session.user,cart:[],total:0})
-                }               
-            } else {
-                res.render('view-cart', { user: req.session.user, cart:[],total:0})
+                })
+            }else{
+                 res.render('view-cart',{
+                    cart:[],
+                 total:0
+                })
             }
-        } else {
-               res.redirect('/')
         }
+
+       
     } catch (error) {
         console.log(error);
     }

@@ -7,19 +7,21 @@ const cartSchema=mongoose.Schema({
     },
     products : [{
         productId :{
-            type:mongoose.Types.ObjectId,
+            type:String,
             ref : "Product",
             required:true
         },
         quantity:{
             type:Number,
             default:1
-        },
-        price:{
-            type:Number,
-            default:0
         }
-    }]
+    }],
+    totalprice:{
+        type:Number,
+            default:0
+    }
+   
+    
 })
 
 module.exports=mongoose.model('Cart',cartSchema)

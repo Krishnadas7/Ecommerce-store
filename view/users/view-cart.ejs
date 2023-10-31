@@ -2,7 +2,7 @@
 
 
 <!-- breadcrumb -->
-<div class="container" style="margin-top: 80px;">
+<div class="container" style="margin-top: 80px;" id="reloadDiv">
     <div class="bread-crumb flex-w p-l-25 p-r-15 p-t-30 p-lr-0-lg">
         <a href="index.html" class="stext-109 cl8 hov-cl1 trans-04">
             Home
@@ -17,7 +17,7 @@
     
 
 <!-- Shoping Cart -->
-<form class="bg0 p-t-50 p-b-85">
+<form class="bg0 p-t-50 p-b-85" id="reloadDiv">
     <div class="container">
         <div class="row">
             <div class="col-lg-10 col-xl-7 m-lr-auto m-b-50">
@@ -69,13 +69,14 @@
                             </tr>
                               <%})%>
                             <%}else{%>
-                                <tr>
-                                    <td>
-                                       
-                                            <p class="h1">Cart is empty</p>
+                                <!-- <tr class="text-center"> -->
+                                    <tr>
+                                       <img style="height: 200px; width: 200px; margin-left: 280px; "  src="/public/sample/cartempty.webp" alt="">
+                                       <a style="margin-left: 290px" class="rounded btn btn-primary" href="/all-product">Go shopping</a>
+                                            <!-- <p class="h1">Cart is empty</p> -->
                                         
-                                    </td>
-                                </tr>
+                                        </tr>
+                                <!-- </tr> -->
                             <%}%>
                               
                             
@@ -201,9 +202,10 @@
             }
            }).done((data)=>{
             if(data){
-            
-            swal('Item removed')
-            location.reload()
+                swal('Item removed')
+                $("#reloadDiv").load("/view-cart #reloadDiv")
+           
+            // location.reload()
             }else{
                 res.json({action:failed})
             }
@@ -215,11 +217,12 @@
         const quantity=parseInt(document.getElementById(proId).innerHTML)
         const button=document.getElementById('minus-button')
         count = parseInt(count)
-        if(count==-1 && quantity==0 || quantity==1){
-            // removeProduct(proId)
-            button.disabled=true
+        if(count==-1 && quantity==0){
+            removeProduct(proId)
+            
             
         }else{
+            
             $.ajax({
             url:'/cart-quantity',
             method: "post",
@@ -232,8 +235,9 @@
             },
              }).done((data)=>{
                 if(data){
+                    $("#reloadDiv").load("/view-cart #reloadDiv")
                     document.getElementById(proId).innerText = quantity +count
-                    button.disabled=false
+                    
                     //  location.reload()
                     // $(proId).html(data);
                     // alert(data)

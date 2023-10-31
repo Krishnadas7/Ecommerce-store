@@ -498,7 +498,8 @@ const getCartProducts = async (req, res) => {
             }else{
                  res.render('view-cart',{
                     cart:[],
-                 total:0
+                 total:0,
+                 user:req.session.user
                 })
             }
         }
@@ -528,6 +529,7 @@ const cartQuantity =async (req,res)=>{
        stockAvailable=await Product.find({_id:new ObjectId(proId)})
 
        if(stockAvailable.stock < quantity+count){
+        swal('item limit reached')
         res.json({success:false})
        }else{
         const datat=await Cart.updateOne({user:userId,"products.productId":proId},

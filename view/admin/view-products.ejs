@@ -1,26 +1,44 @@
 <%-include('../admin/adminhomeLayouts/admin-header.ejs')%>
   <%-include('../admin/adminhomeLayouts/admin-sidebar.ejs')%>
     <%-include('../admin/adminhomeLayouts/admin-navbar.ejs')%>
+    <style>
+      .row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-right: -2.75rem;
+    margin-left: -2.75rem;
+}
+    </style>
 
       <div class="main-panel">
-        <div class="content-wrapper">
+        <div class="content-wrapper" style="background-color:#191C24 ;">
 
-          <div class="row ">
+          <div class="row " >
             <div class="col-12 grid-margin ">
               <div class="d-flex">
                 <form class="nav-link mt-2 mt-md-0 d-none d-lg-flex search">
-                  <div class="input-group rounded">
-                    <input name="search" value="search" type="search" class="text-white rounded my-2" style=" height: 32px; width: 50%; background-color: #191c24; border: none;" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+                 
+                    <!-- <input  name="search" value="search" type="search" class="text-white rounded my-2" style=" height: 32px; width: 50%; background-color: #191c24; border: none;" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
                     
-                    <button type="submit" class=" btn btn-primary justify-content-center mt-2" style="height: 32px;width: 87px;">Search</button>
+                    <button type="submit" class=" btn btn-primary justify-content-center mt-2" style="height: 32px;width: 87px;">Search</button> -->
+
+                   
                   </div>
                 </form>
               
             </div>
               <div class="card">
-                <div class="card-body">
+                <div class="card-body"  style="    margin-top: -96px;">
 
                   <h4 class="card-title">All Products</h4>
+                  <form action="">
+                  <div class="input-group w-50">
+                    
+                    <input type="search" name="search" value="search" class="form-control w-25 rounded search" style="background-color: rgb(255, 255, 255); " placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+                    <button type="submit" class="btn btn-primary">search</button>
+                  
+                  </div>
+                </form>
                               <a class="btn btn-primary font-weight-bold" style="margin-left: 91%;" href="/admin/add-product">+ ADD</a>
                   <div class="table-responsive">
 
@@ -81,13 +99,41 @@
                         
                       </tbody>
                     </table>
+                    <div id="paginationControls">
+                      <% for (let page = 1; page <= totalPages; page++) { %>
+                          <a href="?page=<%= page %>&pageSize=<%= pageSize %>"><%= page %></a>
+                      <% } %>
+                  </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
+        
       </div>
+      <style>
+        #paginationControls {
+    text-align: center; /* Center-align the pagination links */
+}
+
+#paginationControls a {
+    display: inline-block;
+    margin: 0 5px; /* Add spacing between page links */
+    padding: 5px 10px; /* Add padding to the links for better clickability */
+    border: 1px solid #ccc; /* Add a border to separate links */
+    border-radius: 4px; /* Round the corners */
+    text-decoration: none; /* Remove underlines from links */
+    color: #333; /* Link color */
+    background-color: #f8f8f8; /* Background color */
+    cursor: pointer; /* Show pointer cursor on hover */
+}
+
+#paginationControls a:hover {
+    background-color: #ddd; /* Change background color on hover */
+}
+      </style>
+      
 
       <%-include('../admin/adminhomeLayouts/admin-footer.ejs')%>
 

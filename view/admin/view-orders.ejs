@@ -1,0 +1,101 @@
+<%-include('../admin/adminhomeLayouts/admin-header.ejs')%>
+<%-include('../admin/adminhomeLayouts/admin-sidebar.ejs')%>
+<%-include('../admin/adminhomeLayouts/admin-navbar.ejs')%>
+
+<style>
+    .content-wrapper {
+      background: #000000;
+      padding: -0.125rem 1.75rem;
+      width: 100%;
+      -webkit-flex-grow: 1;
+      flex-grow: 1;
+  }
+  </style>
+  
+        <!-- usermanagement -->
+        <div class="main-panel">
+          <div class="content-wrapper">
+            
+            <div class="row ">
+              <div class="col-12 grid-margin">
+                <div class="card" style="    margin-top: -31px;
+                margin-left: -29px;">
+                  <div class="card-body">
+                    <h4 class="card-title">Orders</h4>
+  
+                    
+                    <div class="table-responsive">
+                      <ul class="navbar-nav  w-100">
+                        <li class="nav-item w-100">
+                          <form class="nav-link mt-2 mt-md-0 d-none d-lg-flex search">
+                            <div class="input-group rounded">
+                              <input name="search" value="search" type="search" class="text-white rounded my-2" style=" height: 35px; width: 50%; border: none;" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+                              
+                              <button type="submit" class=" btn btn-primary justify-content-center mt-2" style="height: 35px;width: 87px;">Search</button>
+                            </div>
+                          </form>
+                        </li>
+                      </ul>
+  
+                      <table class="table">
+                        <thead>
+  
+  
+                          <th> No </th>
+                          <th> Order ID</th>
+                          <th> Order Date </th>
+                          <th> Payment </th>
+                          <th>Status</th>
+                          <th> View</th>
+  
+                          </tr>
+                        </thead>
+                        <tbody>
+                          
+  
+                          <%if(orders.length!=0){%>
+                          <% for(let i=0;i<orders.length;i++){%>
+                              <tr>
+
+
+                                <td>
+                                 <%=i+1%>
+                                </td>
+                                <td>
+                                  <%=orders[i].uniqueId%>
+                                </td>
+                                <td>
+                                    <%= new Date(orders[i].date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })%>
+                                    
+                                </td>
+                                <td>
+                                    <%=orders[i].paymentMethod%>
+                                </td>
+                                <td>
+                                <%=orders[i].status%>
+                            </td>
+                            <td>
+                                <a style="height: 40px;
+                                width: 80px;
+                                padding: 12px;" class="btn btn-primary" href="/admin/order-details?id=<%= orders[i]._id %>">Details</a>
+                            </td>
+                        </tr>
+                                <%}%>
+                          <%}else{%>
+                            <tr>
+                                <td>No Orders  Found</td>
+                              </tr>
+                          <%}%>
+                                
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+<%-include('../admin/adminhomeLayouts/admin-footer.ejs')%>

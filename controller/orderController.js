@@ -149,12 +149,14 @@ const placeOrder=async (req,res)=>{
      const cartData=await Cart.findOne({user:userId})
      const products=cartData.products
      const total=parseInt(req.body.Total)
+     console.log(total);
+  
      
      const paymentMethods=req.body.payment
      const uniNum = Math.floor(Math.random() * 900000) + 100000;
      const status=paymentMethods=== 'COD'?'placed':'pending'
      console.log(req.body.address);
-     console.log(total);
+     
 
      const order=new Order({
         deliveryDetails:address,

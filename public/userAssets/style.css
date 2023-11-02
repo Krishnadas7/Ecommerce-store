@@ -4,7 +4,17 @@ background: linear-gradient(90deg, rgba(115,215,187,1) 35%, rgba(74,222,210,1) 1
 } */
 /* .login-letters{
     color: rgb(255, 255, 255);
+
 } */
+.table-shopping-cart .column-4 {
+    width: 145px;
+    text-align: center;
+}
+.mtext-104 {
+    font-family: Poppins-Medium;
+    font-size: 22px;
+    line-height: 1.6;
+}
 
 .logout-icon{
     width: 23px;
@@ -158,3 +168,26 @@ background: linear-gradient(90deg, rgba(115,215,187,1) 35%, rgba(74,222,210,1) 1
 /* .cart-div{
     margin-left: 350px;
 } */
+.remove-button{
+    width: 100px;
+}
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 0.85rem 1.5rem;
+    font-weight: 400;
+    font-size: 1.4rem;
+    line-height: 1.5;
+    letter-spacing: -0.01em;
+    min-width: 128px;
+    border-radius: 71;
+    white-space: normal;
+    transition: all 0.3s;
+    margin-left: 53px;
+    margin-right: 38px;
+}
+.th {
+    text-align: revert-layer;
+}

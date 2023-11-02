@@ -1,70 +1,70 @@
-const Cart=require('../model/cartModel')
-const User=require('../model/userModel')
-const Product=require('../model/productModel')
-
+const Cart = require('../model/cartModel')
+const User = require('../model/userModel')
+const Product = require('../model/productModel')
+const { ObjectId } = require("mongodb")
 
 const addToCart = async (req, res) => {
     try {
-        
-            const productId = req.body.id;
-           
-            const name = req.session.user;
-            const userData = await User.findOne({ name: name });
-            const userId = userData._id;
-            const productData = await Product.findById(productId);
-            const productStock=productData.stock
-            // const cart=await Cart.findOne({user:userId,'products.productId':productId})
-           
-             const cartData=await Cart.findOneAndUpdate(
-                
-                {user:userId},
+
+        const productId = req.body.id;
+
+        const name = req.session.user;
+        const userData = await User.findOne({ name: name });
+        const userId = userData._id;
+        const productData = await Product.findById(productId);
+        const productStock = productData.stock
+        // const cart=await Cart.findOne({user:userId,'products.productId':productId})
+
+        const cartData = await Cart.findOneAndUpdate(
+
+            { user: userId },
+            {
+                $setOnInsert: {
+                    user: userId,
+                    products: [],
+                    // totalprice:totalprice
+                }
+            },
+            { upsert: true, new: true }
+        )
+        const updatedProduct = cartData.products.find(
+            (product) => product.productId === productId
+        )
+
+
+        const updatedQuantity = updatedProduct ? updatedProduct.quantity : 0
+
+        if (updatedQuantity + 1 > productStock) {
+
+            return res.json({
+                success: false,
+                message: 'Quantity limit reached'
+
+            })
+        }
+        const price = productData.price
+        const total = price
+        if (updatedProduct) {
+            await Cart.updateOne(
+                { user: userId, "products.productId": productId },
                 {
-                    $setOnInsert: {
-                        user:userId,
-                        products:[],
-                        // totalprice:totalprice
+                    $inc: {
+                        'products.$.quantity': 1,
+                        // "products.$.totalprice":total
                     }
-                },
-                {upsert:true,new:true}
-             )
-              const updatedProduct=cartData.products.find(
-                (product) => product.productId === productId
-             )
-             
-             
-             const updatedQuantity=updatedProduct?updatedProduct.quantity : 0
-            
-             if(updatedQuantity+1>productStock){
-               
-                return res.json({
-                    success:false,
-                    message:'Quantity limit reached'
-                    
-                })
-             }
-             const price=productData.price
-             const total=price
-             if(updatedProduct) {
-                await Cart.updateOne(
-                    {user:userId,"products.productId":productId},
-                    {
-                        $inc:{
-                            'products.$.quantity':1,
-                            // "products.$.totalprice":total
-                        }
-                    }
-                )
-             }else {
-                   await cartData.products.push({
-                        productId: productId,
-                        
-                       
-                    })
-                await cartData.save()
-             }
-             res.json({success:true})
-       
-    }catch (error) {
+                }
+            )
+        } else {
+            await cartData.products.push({
+                productId: productId,
+
+
+            })
+            await cartData.save()
+        }
+        res.json({ success: true })
+
+    } catch (error) {
         console.log(error);
         res.status(500).json({ error: 'An error occurred' });
     }
@@ -73,102 +73,110 @@ const addToCart = async (req, res) => {
 
 const getCartProducts = async (req, res) => {
     try {
-        const name=req.session.user
-        const userData=await User.findOne({name:name})
-        const userId=userData._id
-        const cartData=await Cart.findOne({user:userId}).populate('products.productId')
-        const cart=await Cart.findOne({user:userId})
-        let cartCount=0
-        if(cart){
-            cartCount=cart.products.length
-        }  
+        const name = req.session.user
+        const userData = await User.findOne({ name: name })
+        const userId = userData._id
+        const cartData = await Cart.findOne({ user: userId }).populate('products.productId')
+        const cart = await Cart.findOne({ user: userId })
+        let cartCount = 0
+        if (cart) {
+            cartCount = cart.products.length
+        }
         let totalPrice = 0;
-        
-        if(cartData){
-            if(cartData.products.length>0){
-                const products=cartData.products
+
+        if (cartData) {
+            if (cartData.products.length > 0) {
+                const products = cartData.products
                 
+
                 for (const product of cartData.products) {
                     totalPrice += product.quantity * product.productId.price;
-                  }
-                 console.log('totalprice  ',totalPrice);
-               
-                res.render('view-cart',{
-                     user:req.session.user,
-                     cart:products,
-                     count:cartCount,
-                     userId:userId,
-                     total:totalPrice
-                     
-                    
+                }
+                console.log('totalprice  ', totalPrice);
+
+                res.render('view-cart', {
+                    user: req.session.user,
+                    cart: products,
+                    count: cartCount,
+                    userId: userId,
+                    total: totalPrice,
+                    // Total:Total
+
+
                 })
-            }else{
-                 res.render('view-cart',{
-                    cart:[],
-                 total:0,
-                 user:req.session.user
+            } else {
+                res.render('view-cart', {
+                    cart: [],
+                    total: 0,
+                    user: req.session.user
                 })
             }
         }
 
-       
+
     } catch (error) {
         console.log(error);
     }
 }
-const cartQuantity =async (req,res)=>{
+const cartQuantity = async (req, res) => {
     try {
-       
-     console.log('api');
-     let number=parseInt(req.body.count)
-     const proId=req.body.product
-     const userId=req.body.user
-     const product=await Product.find({_id:new ObjectId(proId)})
-console.log('product ',product[0].stock);
-     const count= number
-    const cartData = await Cart.findOne({ user: new ObjectId(userId), "products.productId": new ObjectId(proId)},
-                        { "products.productId.$": 1, "products.quantity": 1 })
-      const [{quantity:quantity}]=cartData.products
-     const stockAvailable=await Product.find({_id:new ObjectId(proId)})
-        if(stockAvailable[0].stock < quantity+count){
-         
-        res.json({success:false})
-        return
-       }else{
-        const datat=await Cart.updateOne({user:userId,"products.productId":proId},
-        {
-            $inc:{"products.$.quantity": count}
-        })
-        res.json({changeSuccess:true})
-       }
+
+        console.log('api');
+        let number = parseInt(req.body.count)
+        const proId = req.body.product
+        const userId = req.body.user
+        const product = await Product.find({ _id: new ObjectId(proId) })
+
+
+        console.log('product ', product[0].stock);
+        const count = number
+        const cartData = await Cart.findOne({ user: new ObjectId(userId), "products.productId": new ObjectId(proId) },
+            { "products.productId.$": 1, "products.quantity": 1 })
+
+
+        const [{ quantity: quantity }] = cartData.products
+        const stockAvailable = await Product.find({ _id: new ObjectId(proId) })
+
+
+        if (stockAvailable[0].stock < quantity + count) {
+
+            res.json({ success: false })
+            return
+        } else {
+            const datat = await Cart.updateOne({ user: userId, "products.productId": proId },
+                {
+                    $inc: { "products.$.quantity": count }
+                })
+            res.json({ changeSuccess: true })
+        }
 
     } catch (error) {
         console.log(error);
     }
 }
 
-const removeProduct=async (req,res)=>{
+const removeProduct = async (req, res) => {
     try {
         console.log('apicall');
-          const proId=req.body.product
-            console.log("productiddd ",proId);
-          const user=req.session.user
-          const userId=user._id
+        const proId = req.body.product
+        console.log("productiddd ", proId);
+        const user = req.session.user
+        const userId = user._id
 
-             const cartData=await Cart.findOneAndUpdate({"products.productId":proId},
-                {
-                    $pull:{products:{productId:proId}}
-                }
-             )
-             res.json({removeProduct:true})
+        const cartData = await Cart.findOneAndUpdate({ "products.productId": proId },
+            {
+                $pull: { products: { productId: proId } }
+            }
+        )
+        res.json({ removeProduct: true })
 
     } catch (error) {
         console.log(error);
-        res.json({success:true})
+        res.json({ success: true })
     }
 }
 
-module.exports={
+module.exports = {
     removeProduct,
     cartQuantity,
     getCartProducts,

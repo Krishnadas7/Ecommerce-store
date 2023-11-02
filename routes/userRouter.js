@@ -70,8 +70,9 @@ userRouter.post('/remove-product',userAuth.isLogin,cartController.removeProduct)
 // load user profile page
 userRouter.get('/profile',userAuth.isLogin,userControllers.viewProfile)
 
-userRouter.post('add-address',userAuth.isLogin,userControllers.loadAddress)
 
+
+// ================================USERPROFILE===================================
 
 userRouter.get('/new-address',userAuth.isLogin,userProfile.addAddress)
 
@@ -80,6 +81,8 @@ userRouter.post('/new-address',userAuth.isLogin,userProfile.insertAddress)
 userRouter.get('/edit-address',userAuth.isLogin,userProfile.editAddress)
 
 userRouter.post('/edit-address',userAuth.isLogin,userProfile.updateAddress)
+
+userRouter.post('/profile',userAuth.isLogin,userProfile.resetPassword)
 
 userRouter.get('/checkout',userAuth.isLogin,userProfile.loadCheckout)
 
@@ -91,11 +94,9 @@ userRouter.get('/order-placed',userAuth.isLogin,orderController.orderSuccess)
 
 userRouter.get('/category-filter',userAuth.isLogin,userProfile.categoryFilter)
 
-// userRouter.post('/checkout',userAuth.isLogin,orderController.postCheckout)
+// ===============================RESET PASSWORD=============================================
 
-// userRouter.post('/checkout/paymentselection',userAuth.isLogin,orderController.itemsAndDelivery)
-
-// userRouter.get('/checkout/paymentselection',userAuth.isLogin,orderController.placeOrder)
+userRouter.post('/profile-password',userAuth.isLogin,userProfile.resetPassword)
 
 
 

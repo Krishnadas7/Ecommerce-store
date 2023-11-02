@@ -2,7 +2,15 @@
 <%-include('../admin/adminhomeLayouts/admin-sidebar.ejs')%>
 <%-include('../admin/adminhomeLayouts/admin-navbar.ejs')%>
 
-
+<style>
+  .content-wrapper {
+    background: #000000;
+    padding: -0.125rem 1.75rem;
+    width: 100%;
+    -webkit-flex-grow: 1;
+    flex-grow: 1;
+}
+</style>
 
       <!-- usermanagement -->
       <div class="main-panel">
@@ -10,7 +18,8 @@
           
           <div class="row ">
             <div class="col-12 grid-margin">
-              <div class="card">
+              <div class="card" style="    margin-top: -31px;
+              margin-left: -29px;">
                 <div class="card-body">
                   <h4 class="card-title">Usrer details</h4>
 
@@ -20,9 +29,9 @@
                       <li class="nav-item w-100">
                         <form class="nav-link mt-2 mt-md-0 d-none d-lg-flex search">
                           <div class="input-group rounded">
-                            <input name="search" value="search" type="search" class="text-white rounded my-2" style=" height: 32px; width: 50%; background-color: #191c24; border: none;" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+                            <input name="search" value="search" type="search" class="text-white rounded my-2" style=" height: 35px; width: 50%; border: none;" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
                             
-                            <button type="submit" class=" btn btn-primary justify-content-center mt-2" style="height: 32px;width: 87px;">Search</button>
+                            <button type="submit" class=" btn btn-primary justify-content-center mt-2" style="height: 35px;width: 87px;">Search</button>
                           </div>
                         </form>
                       </li>

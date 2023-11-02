@@ -80,9 +80,25 @@
                                         </div><!-- End .col-sm-6 -->
                                     </div><!-- End .row -->
 
-                                    <label>Mobile </label>
+                                         <label>Mobile </label>
                                     <input type="tel" class="form-control w-25 " value="<%=data.mobile%>" disabled>
-                              </form>
+                                </form>
+                                             
+                                        <form action="/profile-password" method="post">
+                                            
+
+                                            <label>Current password (leave blank to leave unchanged)</label>
+		            						<input type="password" name="currentpassword" class="form-control">
+
+		            						<label>New password (leave blank to leave unchanged)</label>
+		            						<input type="password" name="newpassword" class="form-control">
+
+		            						<label>Confirm new password</label>
+		            						<input type="password" name="confirmpassword" class="form-control mb-2">
+                                           
+                                            <input type="submit" class="btn" id="submitButton" value="Save>">
+                                        </form>
+                                        
                             </div><!-- .End .tab-pane -->
 
 
@@ -237,6 +253,31 @@
         </div><!-- End .dashboard -->
     </div><!-- End .page-content -->
 </main><!-- End .main -->
+
+
+<script>
+// document.addEventListener('DOMContentLoaded', function() {
+//     var form = document.getElementById('myForm');
+//     var button = document.getElementById('submitButton');
+    
+//     button.addEventListener('click', function(event) {
+//         event.preventDefault(); // Prevent the default form submission
+        
+//         var formData = {
+//             name: form.elements['currentpassword'].value,
+//             email: form.elements['newpassword'].value
+//         };
+
+//         // Now you can use the formData object in your function
+//         handleFormData(formData);
+//     });
+    
+//     function handleFormData(formData) {
+//         // Your function to handle the form data goes here
+//         console.log(formData);
+//     }
+// });
+</script>
 
 
 

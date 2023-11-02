@@ -9,39 +9,46 @@ const User=require('../model/userModel')
 const id = new ObjectId(); 
 
         //  LOAD SHOP PAGE
-const loadallProduct = async (req, res) => {
-    try {
-      const perPage = 12; 
-      let page = parseInt(req.query.page) || 1; 
-      const categoryDetails = await Category.find({})
+        const loadallProduct = async (req, res) => {
+          try {
+              const perPage = 12;
+              let page = parseInt(req.query.page) || 1;
+              const categoryDetails = await Category.find({});
       
+              let search = ''; // Fix the variable name here
       
-      const totalProducts = await Product.countDocuments({ blocked: false });
-      const totalPages = Math.ceil(totalProducts / perPage);
-  
+              if (req.query.search) {
+                  search = req.query.search; // Fix the variable name here
+              }
       
-      if (page < 1) {
-        page = 1;
-      } else if (page > totalPages) {
-        page = totalPages;
-      }
-  
-      const products = await Product
-        .find({ blocked: false})
-        .skip((page - 1) * perPage)
-        .limit(perPage);
-  
-      res.render('all-product', {
-        category: categoryDetails,
-        product: products,
-        currentPage: page,
-        pages: totalPages,
-        user:req.session.user
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
+              const totalProducts = await Product.countDocuments({ blocked: false });
+              const totalPages = Math.ceil(totalProducts / perPage);
+      
+              if (page < 1) {
+                  page = 1;
+              } else if (page > totalPages) {
+                  page = totalPages;
+              }
+      
+              const products = await Product
+                  .find({
+                      blocked: false,
+                      name: { $regex: new RegExp(search, 'i') }
+                  })
+                  .skip((page - 1) * perPage)
+                  .limit(perPage);
+      
+              res.render('all-product', {
+                  category: categoryDetails,
+                  product: products,
+                  currentPage: page,
+                  pages: totalPages,
+                  user: req.session.user
+              });
+          } catch (error) {
+              console.log(error);
+          }
+      };
 
           //  ONE PRODUCT DETAILS
 

@@ -5,23 +5,41 @@ const { ObjectId } = require("mongodb")
 
             // ADMIN LOADING PRODUCT PAGE
              
-const loadProduct = async (req, res) => {
-    try {
-        var search=''
-        if(req.query.search){
-            search=req.query.search
-        }
-
-        const product = await Product.find({
-            $or:[
-                { name: { $regex: new RegExp(search, 'i') } }
-            ]
-        })
-        res.render('view-products', { product: product })
-    } catch (error) {
-        console.log(error);
-    }
-}
+            const loadProduct = async (req, res) => {
+                try {
+                    const page = parseInt(req.query.page) || 1;
+                    const pageSize = parseInt(req.query.pageSize) || 8;
+            
+                    let search = '';
+                    if (req.query.search) {
+                        search = req.query.search;
+                    }
+            
+                    const skip = (page - 1) * pageSize;
+            
+                    // Count the total number of products matching the search criteria
+                    const totalProducts = await Product.countDocuments({
+                        $or: [{ name: { $regex: new RegExp(search, 'i') } }],
+                    });
+            
+                    const totalPages = Math.ceil(totalProducts / pageSize);
+            
+                    const products = await Product.find({
+                        $or: [{ name: { $regex: new RegExp(search, 'i') } }],
+                    })
+                        .skip(skip)
+                        .limit(pageSize);
+            
+                    res.render('view-products', {
+                        product: products,
+                        currentPage: page,
+                        pageSize: pageSize,
+                        totalPages: totalPages,
+                    });
+                } catch (error) {
+                    console.log(error);
+                }
+            };
 
         // LOAD  ADD PRODUCT PAGE
 

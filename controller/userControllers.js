@@ -398,15 +398,15 @@ const loadContact = async (req, res) => {
 }
 
 
-const loadAddress=async (req,res)=>{
-    try {
-        const userId=req.body.id
-        console.log(req.body);
+// const loadAddress=async (req,res)=>{
+//     try {
+//         const userId=req.body.id
+//         console.log(req.body);
 
-    } catch (error) {
-        console.log(error);
-    }
-}
+//     } catch (error) {
+//         console.log(error);
+//     }
+// }
 
 module.exports = {
     loadSignup,
@@ -425,5 +425,5 @@ module.exports = {
     viewProfile,
     loadContact,
     
-    loadAddress
+    // loadAddress
 }

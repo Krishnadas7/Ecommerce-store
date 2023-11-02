@@ -1,5 +1,6 @@
 const Admin=require('../model/adminModel')
 const bcrypt=require('bcrypt')
+const Order=require('../model/orderModel')
 
 
     //    LOAD ADMIN LOGIN
@@ -70,11 +71,37 @@ const logOut=async (req,res)=>{
         console.log(error);
     }
 }
+//  =============================OEDER=============================================
+const loadOrders=async (req,res)=>{
+    try {
+        const orders=await Order.find({})
+          console.log(orders);
+        res.render('view-orders',{orders:orders})
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+const orderDetails=async (req,res)=>{
+    try {
+        console.log('orderiddd ',req.query.id);
+        const id=req.query.id
+
+        const orderedProducts=await Order.findOne({_id:id}).populate('products.productId')
+        console.log('////////////',orderedProducts);
+        res.render('order-details',{orders:orderedProducts})
+    } catch (error) {
+        console.log(error);
+    }
+}
+
 module.exports={
     loadLogin,
     loginVerify,
     loadHomepage,
     loadaddCategory,
-    logOut
+    logOut,
+    loadOrders,
+    orderDetails
 
 }

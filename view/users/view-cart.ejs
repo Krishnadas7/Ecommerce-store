@@ -24,49 +24,49 @@
                 <div class="m-l-25 m-r--38 m-lr-0-xl">
                     <div class="wrap-table-shopping-cart">
                         <table class="table-shopping-cart">
-                            <tr class="table_head">
+                            <td>
+                            <tr class="table_head ">
+                                
                                
                                 <th class="column-1">Product</th>
                                 <th class="column-2">Name</th>
                                 <th class="column-3">Price</th>
                                 <th class="column-4">Quantity</th>
-                                <!-- <th class="column-5">Total</th> -->
+                                <th class="column-5"></th>
+                                <th class="column-6"></th>
+                            
                             </tr>
+                        </td>
                              
                             <% if (cart && cart.length > 0) { %>
                             <%cart.forEach((data,index)=>{%>
-                            <tr class="table_row">
-                                <td class="column-1">
-                                    <div class="how-itemcart1">
+                                <tbody>
+                                <tr class="table_row">
+                                    <td class="column-1">
+                                      <div class="how-itemcart1">
                                         <img src="/public/adminAssets/product-images/<%=data.productId.image[0]%>" alt="IMG">
-                                    </div>
-                                </td>
-                                <td class="column-2"><%=data.productId.name%></td>
-                                <td class="column-3">&#8377; <%=data.productId.price%></td>
-                                <td class="column-4">
-                                    <div id="numbersdiv" class="wrap-num-product flex-w m-l-auto m-r-0">
-                                        <!-- <div class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m">
-                                            <i class="fs-16 zmdi zmdi-minus"></i>
-                                        </div>
-
-                                        <input class="mtext-104 cl3 txt-center num-product" type="number" name="num-product1" value="">
-
-                                        <div class="btn-num-product-up cl8 hov-btn3 trans-04 flex-c-m">
-                                            <i class="fs-16 zmdi zmdi-plus"></i>
-                                        </div> -->
-                                        <a id="minus-button" class="btn-num-product-down  cl8 hov-btn3 trans-04 flex-c-m " onclick="cartCount('<%=data.productId._id%>','<%=userId%>',-1)" >-</a>
+                                      </div>
+                                    </td>
+                                    <td class="column-2"><%=data.productId.name%></td>
+                                    <td class="column-3">&#8377; <%=data.productId.price%></td>
+                                    <td class="column-4">
+                                      <div id="numbersdiv" class="wrap-num-product flex-w ">
+                                        <a id="minus-button" class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m" onclick="cartCount('<%=data.productId._id%>','<%=userId%>',-1)">-</a>
                                         <span class="mtext-104 cl3 txt-center num-product p-2" id="<%=data.productId._id%>"><%=data.quantity%></span>
-                                        <a class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m " onclick="cartCount('<%=data.productId._id%>','<%=userId%>', 1)" >+</a>
-                                        
-                                    </div>
-                                </td>
-                                <td class="column-5">
-                                    <a class=" btn btn-danger  text-white " onclick="removeProduct('<%=data.productId._id%>')">Remove</a>
-                                </td>
-                                <!-- <td>
-                                    <%=data.totalprice%>
-                                </td> -->
-                            </tr>
+                                        <a class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m" onclick="cartCount('<%=data.productId._id%>','<%=userId%>', 1)">+</a>
+                                      </div>
+                                    </td>
+                                    <td>
+                                      <a onclick="removeProduct('<%=data.productId._id%>')">
+                                        <img style="width: 26px;
+                                        margin: 19px;
+                                        margin-left: 61px;
+                                    " src="/public/userAssets/icons/3844424_can_delete_remove_trash_icon.png" alt="">
+                                      </a>
+                                    </td>
+                                   
+                                  </tr>
+                                </tbody>
                               <%})%>
                             <%}else{%>
                                 <!-- <tr class="text-center"> -->
@@ -83,6 +83,15 @@
                             
 
                         </table>
+
+
+
+
+                        
+
+
+
+
                     </div>
 
                     <div class="flex-w flex-sb-m bor15 p-t-18 p-b-15 p-lr-40 p-lr-15-sm">
@@ -253,5 +262,6 @@
         
     }
 </script>
+
 
 <%-include('../users/mainLayouts/mainfooter.ejs')%>

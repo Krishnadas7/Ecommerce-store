@@ -104,6 +104,12 @@ adminRouter.get('/blockunblock',adminAuth.isLogin,productManagement.listUnlist)
 
 // logout
 adminRouter.get('/logout',adminControllers.logOut)
+
+//view orders
+adminRouter.get('/orders',adminAuth.isLogin,adminControllers.loadOrders)
+
+//view order details
+adminRouter.get('/order-details',adminAuth.isLogin,adminControllers.orderDetails)
    
 
 

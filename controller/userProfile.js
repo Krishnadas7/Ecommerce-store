@@ -4,7 +4,19 @@ const { ObjectId } = require("mongodb")
 const Cart=require('../model/cartModel')
 const Products=require('../model/productModel')
 const Category=require('../model/categoryModel')
+const bcrypt=require('bcrypt')
 
+
+
+
+const securePassword = async (password) => {
+  try {
+      const passwordHash = await bcrypt.hash(password, 10)
+      return passwordHash
+  } catch (error) {
+      console.log(error);
+  }
+}
 
 
 const  addAddress=async(req,res)=>{
@@ -127,36 +139,46 @@ const insertAddress = async (req, res) => {
         
         const cartData=await Cart.findOne({user:userId}).populate('products.productId')
       
-                let Total
-        const total=await Cart.aggregate([
-          {
-             $match:{user :new ObjectId(userId)}
-          },
-          {
-            $unwind:"$products"
-          },
-          {
-           $project:{
-            price:'$products.price',
-            quantity:'$products.quantity'
-           }
-          },
-          {
-            $group:{
-              _id:null,
-              total:{
-                $sum:{
-                  $multiply:['$quantity','$price']
+                let totalPrice=0
+                if(cartData){
+                  if(cartData.products.length>0){
+                    let products=cartData.products
+
+                    for(product of cartData.products){
+                      totalPrice+=product.quantity*product.productId.price
+                    }
+
+                  }
                 }
-              }
-            }
-          }
-            ]).exec()
-            Total=total[0].total
+        // const total=await Cart.aggregate([
+        //   {
+        //      $match:{user :new ObjectId(userId)}
+        //   },
+        //   {
+        //     $unwind:"$products"
+        //   },
+        //   {
+        //    $project:{
+        //     price:'$products.price',
+        //     quantity:'$products.quantity'
+        //    }
+        //   },
+        //   {
+        //     $group:{
+        //       _id:null,
+        //       total:{
+        //         $sum:{
+        //           $multiply:['$quantity','$price']
+        //         }
+        //       }
+        //     }
+        //   }
+        //     ]).exec()
+        //     Total=total[0].total
           
 
 
-      res.render('checkout',{user:req.session.user,address:address.address,product:cartData.products,total:Total})
+      res.render('checkout',{user:req.session.user,address:address.address,product:cartData.products,total:totalPrice})
     }else{
       res.render('checkout',{message:"user logged"})
     }
@@ -192,12 +214,50 @@ const insertAddress = async (req, res) => {
     }
   }
 
+  const resetPassword=async (req,res)=>{
+    try {
+      const currentpd=req.body.currentpassword
+      const newpd=req.body.newpassword
+      const confirmpd=req.body.confirmpassword
+          
+      const name=req.session.user
+      const userData=await User.findOne({name:name})
+      const userId=userData._id
+      console.log(userData);
+      const oldpd=userData.password
+      console.log(oldpd);
+
+        if(userData){
+          const passwordMatch=await bcrypt.compare(currentpd,oldpd)
+         
+          if(passwordMatch){
+              if(newpd===confirmpd){
+                   const secure=await securePassword(newpd)
+                   const store=await User.updateOne({_id:userId},{$set:{password:secure}})
+                   console.log('all matched');
+                   res.redirect('/profile')
+              }else{
+                console.log('new and confirm not matched');
+                res.redirect('/profile')
+              }
+          }else{
+            console.log('old and currnt is not matched');
+            res.redirect('/profile')
+          }
+        }
+
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
 module.exports={
     addAddress,
     insertAddress,
     editAddress,
     updateAddress,
    loadCheckout,
-   categoryFilter
+   categoryFilter,
+   resetPassword
 
 }

@@ -39,9 +39,11 @@
                     <button class="size-113 flex-c-m fs-16 cl2 hov-cl1 trans-04">
                         <i class="zmdi zmdi-search"></i>
                     </button>
-
-                    <input class="mtext-107 cl2 size-114 plh2 p-r-15" type="text" name="search-product" placeholder="Search">
-                </div>	
+                    <form action="">
+                  
+                        <input class="mtext-107 cl2 size-114 plh2 p-r-15" type="search" name="search" value="search" placeholder="Search">
+                    </form>        
+                    </div>	
             </div>
 
             <!-- Filter -->
@@ -316,26 +318,52 @@
 
 <nav aria-label="Page navigation example">
     <ul class="pagination justify-content-center">
-      <li class="page-item <%= currentPage === 1 ? 'disabled' : '' %>">
-        <a class="page-link" href="/all-product?page=<%= currentPage - 1 %>" aria-label="Previous">
-          <span aria-hidden="true">&laquo;</span>
-          <span class="sr-only">Previous</span>
-        </a>
-      </li>
-      <% for (let i = 1; i <= pages; i++) { %>
-        <li class="page-item <%= currentPage === i ? 'active' : '' %>">
-          <a class="page-link" href="/all-product?page=<%= i %>"><%= i %></a>
-        </li>
-      <% } %>
-      <li class="page-item <%= currentPage === pages ? 'disabled' : '' %>">
-        <a class="page-link" href="/all-product?page=<%= currentPage + 1 %>" aria-label="Next">
-          <span aria-hidden="true">&raquo;</span>
-          <span class="sr-only">Next</span>
-        </a>
-      </li>
-    </ul>
-  </nav>
 
+        <li class="page-item <%= currentPage === 1 ? 'disabled' : '' %>">
+            <a class="page-link" href="/all-product?page=<%= currentPage - 1 %>" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+                <span class="sr-only">Previous</span>
+            </a>
+        </li>
+
+        <% for (let i = 1; i <= pages; i++) { %>
+            <li class="page-item <%= currentPage === i ? 'active' : '' %>">
+                <a class="page-link" href="/all-product?page=<%= i %>"><%= i %></a>
+            </li>
+        <% } %>
+
+        <li class="page-item <%= currentPage === pages ? 'disabled' : '' %>">
+            <a class="page-link" href="/all-product?page=<%= currentPage + 1 %>" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+                <span class="sr-only">Next</span>
+            </a>
+        </li>
+
+    </ul>
+</nav>
+
+
+<style>
+    .pagination .page-item .page-link {
+    border-radius: 50px; /* Makes the pagination link circular */
+    color: #333; /* Text color for non-active links */
+}
+
+.pagination .page-item .page-link:hover {
+    background-color: #f8f8f8; /* Background color on hover */
+}
+
+/* Style for the active page link */
+.pagination .page-item.active .page-link {
+    background-color: #007bff; /* Background color for the active link */
+    color: #fff; /* Text color for the active link */
+}
+
+/* Style for the "Previous" and "Next" buttons */
+.pagination .page-item.disabled .page-link {
+    cursor: not-allowed; /* Disable the cursor on disabled buttons */
+}
+</style>
 
 
 <script>

@@ -22,6 +22,7 @@ const editCategory=async (req,res)=>{
        let id=req.query.id
 
        const category=await Category.findById({_id:id})
+       
 
        if(category){
         res.render('edit-category',{category:category})
@@ -41,8 +42,14 @@ const updateCategory=async (req,res)=>{
     try {
       
         const id=req.body.id
-        const updated=await Category.findByIdAndUpdate({_id:id},
-            {$set:{categoryname:req.body.categoryname}})
+        const already=await Category.findById({_id:id})
+        if(already){
+            res.render('add-Category',{message : "Category Already Created"})
+        }else{
+            const updated=await Category.findByIdAndUpdate({_id:id},
+                {$set:{categoryname:req.body.categoryname}})
+        }
+         
            
             res.redirect('/admin/viewcategory')
     } catch (error) {

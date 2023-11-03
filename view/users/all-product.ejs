@@ -3,21 +3,11 @@
 
 <div class="bg0 m-t-23 p-b-140" style="margin-top: 80px;">
     <div class="container">
+        <!-- <h3>ALL PRODUCTS</h3> -->
         <div class="flex-w flex-sb-m p-b-52">
             <div class="flex-w flex-sb-m p-b-52">
-                <div class="flex-w flex-l-m filter-tope-group m-tb-10">
-                    <button class="stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 how-active1 filter-button" data-filter="*">
-                        All Products
-                    </button>
-                    <% category.forEach(function(cat) { %>
-                      <a onclick="categoryFilter('<%=cat._id%>')">  <button class="text-dark stext-106 cl6 hov1 bor3 trans-04 m-r-32 m-tb-5 filter-button" >
-                           
-                            <%= cat.categoryname %>
-                        
-                        </button></a>
-                    <% }); %>
-                </div>
-               
+                
+               <!-- <h3>ALL PRODUCTS</h3> -->
 
             <div class="flex-w flex-c-m m-tb-10">
                 <div class="flex-c-m stext-106 cl6 size-104 bor4 pointer hov-btn3 trans-04 m-r-8 m-tb-4 js-show-filter">
@@ -45,7 +35,7 @@
                     </form>        
                     </div>	
             </div>
-
+        <form action="/filter" method="post">
             <!-- Filter -->
             <div class="dis-none panel-filter w-full p-t-10">
                 <div class="wrap-filter flex-w bg6 w-full p-lr-40 p-t-27 p-lr-15-sm">
@@ -56,83 +46,79 @@
 
                         <ul>
                             <li class="p-b-6">
-                                <a href="#" class="filter-link stext-106 trans-04">
+                                <label class="d-flex radio-label">
+                                    <input class="radiobutton" type="radio" name="sort" value="0" checked>&nbsp;
                                     Default
-                                </a>
+                                </label>
+                            </li>
+
+                           
+
+                            <li class="p-b-6">
+                                <label class="d-flex radio-label">
+                                    <input class="radiobutton" type="radio" name="sort" value="1" checked>&nbsp;
+                                    price: Low to High
+                                </label>
                             </li>
 
                             <li class="p-b-6">
-                                <a href="#" class="filter-link stext-106 trans-04">
-                                    Popularity
-                                </a>
-                            </li>
-
-                            <li class="p-b-6">
-                                <a href="#" class="filter-link stext-106 trans-04">
-                                    Average rating
-                                </a>
-                            </li>
-
-                            <li class="p-b-6">
-                                <a href="#" class="filter-link stext-106 trans-04 filter-link-active">
-                                    Newness
-                                </a>
-                            </li>
-
-                            <li class="p-b-6">
-                                <a href="#" class="filter-link stext-106 trans-04">
-                                    Price: Low to High
-                                </a>
-                            </li>
-
-                            <li class="p-b-6">
-                                <a href="#" class="filter-link stext-106 trans-04">
-                                    Price: High to Low
-                                </a>
+                                <label class="d-flex radio-label">
+                                    <input class="radiobutton" type="radio" name="sort" value="-1" checked>&nbsp;
+                                    price: High to low
+                                </label>
                             </li>
                         </ul>
                     </div>
 
                     <div class="filter-col2 p-r-15 p-b-27">
-                        <div class="mtext-102 cl2 p-b-15">
+                        <div  class="mtext-102 cl2 p-b-15">
                             Price
                         </div>
 
                         <ul>
                             <li class="p-b-6">
-                                <a href="#" class="filter-link stext-106 trans-04 filter-link-active">
+                                <label  class="d-flex radio-label">
+                                    <input class="radiobutton" type="radio" name="price" value="0-10000000000" checked>&nbsp;
                                     All
-                                </a>
+                                </label>
                             </li>
 
                             <li class="p-b-6">
-                                <a href="#" class="filter-link stext-106 trans-04">
-                                    $0.00 - $50.00
-                                </a>
+                                <label  class="d-flex radio-label">
+                                    <input class="radiobutton" type="radio" name="price" value="150-350" checked>&nbsp;
+                                    $150 - $350
+                                </label>
                             </li>
 
                             <li class="p-b-6">
-                                <a href="#" class="filter-link stext-106 trans-04">
-                                    $50.00 - $100.00
-                                </a>
+                                <label  class="d-flex radio-label">
+                                    <input class="radiobutton" type="radio" name="price" value="350-550" checked>&nbsp;
+                                    $350 - $550
+                                </label>
                             </li>
 
                             <li class="p-b-6">
-                                <a href="#" class="filter-link stext-106 trans-04">
-                                    $100.00 - $150.00
-                                </a>
+                                <label  class="d-flex radio-label">
+                                    <input class="radiobutton" type="radio" name="price" value="550-750" checked>&nbsp;
+                                    $550 - $750
+                                </label>
                             </li>
 
-                            <li class="p-b-6">
-                                <a href="#" class="filter-link stext-106 trans-04">
-                                    $150.00 - $200.00
-                                </a>
-                            </li>
 
                             <li class="p-b-6">
-                                <a href="#" class="filter-link stext-106 trans-04">
-                                    $200.00+
-                                </a>
+                                <label   class="d-flex radio-label">
+                                    <input class="radiobutton" type="radio" name="price" value="750-1000" checked>&nbsp;
+                                    $750 - $1000
+                                </label>
+                            </li>
+
+                            
+
+                            <li class="p-b-6">
+                                <label  class="d-flex radio-label">
+                                    <input class="radiobutton"  type="radio" name="price" value="1000-10000000" checked>&nbsp;
+                                    $1000+
+                                </label>
                             </li>
                         </ul>
                     </div>
@@ -207,33 +193,27 @@
 
                     <div class="filter-col4 p-b-27">
                         <div class="mtext-102 cl2 p-b-15">
-                            Tags
+                            Catagory
                         </div>
-
-                        <div class="flex-w p-t-4 m-r--5">
-                            <a href="#" class="flex-c-m stext-107 cl6 size-301 bor7 p-lr-15 hov-tag1 trans-04 m-r-5 m-b-5">
-                                Fashion
-                            </a>
-
-                            <a href="#" class="flex-c-m stext-107 cl6 size-301 bor7 p-lr-15 hov-tag1 trans-04 m-r-5 m-b-5">
-                                Lifestyle
-                            </a>
-
-                            <a href="#" class="flex-c-m stext-107 cl6 size-301 bor7 p-lr-15 hov-tag1 trans-04 m-r-5 m-b-5">
-                                Denim
-                            </a>
-
-                            <a href="#" class="flex-c-m stext-107 cl6 size-301 bor7 p-lr-15 hov-tag1 trans-04 m-r-5 m-b-5">
-                                Streetstyle
-                            </a>
-
-                            <a href="#" class="flex-c-m stext-107 cl6 size-301 bor7 p-lr-15 hov-tag1 trans-04 m-r-5 m-b-5">
-                                Crafts
-                            </a>
+                        <div class="flex-w p-t-4 m-r--5 ">
+                            <% category.forEach(function(category,index) { %>
+                            <label class="radio-label">
+                                <input class="radiobutton" type="radio" name="category" value="<%= category._id %>"  <%= index === 0 ? 'checked' : '' %> >
+                                <p style="    margin-left: 25px;
+                                margin-top: -21px;" class="flex-c-m stext-107 cl6 size-301 bor7 p-lr-15 hov-tag1 trans-04 m-r-5 m-b-5">
+                                    <%= category.categoryname %>
+                                </p>
+                            </label>  
+                            <% }); %>
                         </div>
+                    </div>
+                    <div class="text-center">
+                        <button style="    margin-left: 843px;" class="btn btn-light mb-1" onclick="deselectRadios()">Remove Filters</button>
+                        <button type="submit" class="btn btn-light" style="    margin-left: 843px;">Apply Filters</button>
                     </div>
                 </div>
             </div>
+        </form>
         </div>
 
        
@@ -364,27 +344,34 @@
     cursor: not-allowed; /* Disable the cursor on disabled buttons */
 }
 </style>
-
+<script>
+    function deselectRadios() {
+        var radios = document.getElementsByClassName("radiobutton"); 
+        for (var i = 0; i < radios.length; i++) {
+            radios[i].checked = false;
+        }
+    }
+</script>
 
 <script>
-   function categoryFilter(catId){
-    $.ajax({
-        url:`/category-filter?id=${catId}`,
-        method:'get',
-        encoded:true,
-        data:{
-            catId:catId
-        }
-    }).done((response)=>{
-        if(response){
-            // alert('success')
-            // $("#reloadDiv").html(response);
-            // .load("/all-product #reloadDiv")
-        }else{
-            alert('failed')
-        }
-    })
-   }
+//    function categoryFilter(catId){
+//     $.ajax({
+//         url:`/category-filter?id=${catId}`,
+//         method:'get',
+//         encoded:true,
+//         data:{
+//             catId:catId
+//         }
+//     }).done((response)=>{
+//         if(response){
+//             alert('success')
+//             $("#reloadDiv").html(response);
+//             .load("/all-product #reloadDiv")
+//         }else{
+//             alert('failed')
+//         }
+//     })
+//    }
 </script>
 
 

@@ -10,7 +10,7 @@
         <div class="container">
             <ol class="breadcrumb">
                 <li class="breadcrumb-item"><a href="/">Home</a></li>
-                <li class="breadcrumb-item " aria-current="page">My Account</li>
+                <li class="breadcrumb-item" aria-current="page">My Account</li>
 
             </ol>
         </div><!-- End .container -->
@@ -59,7 +59,7 @@
                         </ul>
                     </aside><!-- End .col-lg-3 -->
 
-                    <div class="col-md-8 col-lg-9">
+                    <div class="col-md-8 col-lg-9" id="reloadDiv">
                         <div class="tab-content">
                             <div class="tab-pane fade show active" id="tab-dashboard" role="tabpanel"
                                 aria-labelledby="tab-dashboard-link">
@@ -86,15 +86,19 @@
                                              
                                         <form action="/profile-password" method="post">
                                             
+                                          <div class="d-flex flex-row justify-content-between">
+                                            <label class="mr-2">Current password</label>
+		            						<input type="password" name="currentpassword" class="form-control mt-1">
+                                            <p id="currentpassworderror"></p>
+		            						<label class="mr-2" style="    margin-left: 62px;" >New password </label>
+		            						<input type="password" name="newpassword" class="form-control mt-1">
+                                            <p id="newpassworderror"></p>
+                                        </div>
+		            						<label  >Confirm new password</label>
+		            						<input type="password" name="confirmpassword" class="form-control mt-1">
+                                            <p id="confirmpassworderror"></p>
 
-                                            <label>Current password (leave blank to leave unchanged)</label>
-		            						<input type="password" name="currentpassword" class="form-control">
-
-		            						<label>New password (leave blank to leave unchanged)</label>
-		            						<input type="password" name="newpassword" class="form-control">
-
-		            						<label>Confirm new password</label>
-		            						<input type="password" name="confirmpassword" class="form-control mb-2">
+                                        
                                            
                                             <input type="submit" class="btn" id="submitButton" value="Save>">
                                         </form>
@@ -119,17 +123,78 @@
                             <div class="tab-pane fade" id="tab-order" role="tabpanel"
                                 aria-labelledby="tab-order-link">
                                
-                                    <div class="card col-md-5 col-10 m-2 shadow-sm" id="allorder"
+                                    <!-- <div class="card col-md-5 col-10 m-2 shadow-sm" id="allorder"
                                         style="border-radius: 7px; background: #F3F3F9; cursor: pointer;">
                                         <div class="card-body">
                                             <div class="d-flex justify-content-center mt-1 py-4">
                                                 <i class="fa-solid fa-box-open mx-3"
                                                     style="font-size: 35px;"></i>
-                                                <h5 class=" m-0 align-self-center" style="font-weight: 300;">All
-                                                    Orders</h5>
+                                              <a href="">  <h5 class=" m-0 align-self-center" style="font-weight: 300;">All
+                                                    Orders</h5></a>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> -->
+
+
+                                    <% if (orders.length==0) { %>
+                                        <div  style=" max-width: 800px;
+                                            margin: 0 auto;
+                                            padding: 20px;
+                                            text-align: center;">
+                                        <h1 style=" font-size: 24px;
+                                            margin-bottom: 20px;">Your Orders</h1>
+                                        <div style=" border: 1px solid #ddd;
+                                            padding: 20px;
+                                            background-color: #fff;
+                                            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
+                                        <div style=" font-size: 18px;
+                                            margin-bottom: 20px;">
+                                        <div style="font-size: 48px;
+                                            color: #ccc;">&#128722;</div>
+                                        <p style="font-size: 16px;">Your orders list is empty.</p>
+                                         <p><a style=" text-decoration: none;
+                                            color: #007bff;" href="/">Continue shopping</a></p>
+                                        </div>
+                                        </div>
+                                        <div style="width: 100%;height: 77px;"></div>
+                                        </div>
+                                    <% }else { %>           
+                                                <table style="width: 100%; border-collapse: separate; border-spacing: 0 20px;">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>No.</th>
+                                                            <th>Date</th>
+                                                            <th>Amount</th>
+                                                            <th>Payment</th>
+                                                            <th>Status</th>
+                                                            <th>Details</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <% orders.forEach(function(order,index) { %>
+                                                        <tr>
+                                                            <td><%= index + 1 %></td>
+                                                            <td><%= order.date.toLocaleDateString('en-US', { year:
+                                                                'numeric', month: 'short', day: '2-digit'
+                                                                }).replace(/\//g, '-') %></td>
+                                                            <td><%= order.totalAmount %></td>
+                                                            <td><%= order.paymentMethod %></td>
+
+                                                             <% if(order.status==='cancel'){%>
+                                                                <td><p class="text-danger"><%= order.status %></p></td>
+                                                             <% }%>
+                                                             <% if(order.status==='placed'){%>
+                                                                <td><p class="text-success"><%= order.status %></p></td>
+                                                             <% }%>
+                                                           
+
+
+                                                            <td><a class="btn text-white btn-primary rounded" href="/order-details?_id=<%= order._id %>">Details</a></td>
+                                                        </tr>
+                                                        <% }); %>
+                                                    </tbody>
+                                                </table> 
+                                                <% } %>   
 
                                     
 
@@ -167,8 +232,12 @@
                                     <div class="card shadow-sm" id="addressDiv" style="border-radius: 7px; background: #F3F3F9; cursor: pointer;">
                                         <div class="card-body">
                                             <div class="text-center">
+                                                <a onclick="deleteAddress('<%=data._id%>')"><img style="width: 17px;
+                                                 float: right;
+                                                margin-right: -31px;
+                                                margin-top: 22px;
+                                                "  src="/public/userAssets/icons/3844424_can_delete_remove_trash_icon.png" alt=""></a>
                                                 <a href="/edit-address?id=<%=data._id%>" ><img style="width: 15px;
-                                                
                                                     float: right;
                                                     margin-right: -31px;" src="/public/logo/8666681_edit_icon.png" alt=""></a>
                                                 <p>
@@ -277,6 +346,24 @@
 //         console.log(formData);
 //     }
 // });
+
+function deleteAddress(addressId){
+    $.ajax({
+        url:'/delete-address',
+        method:'post',
+        encoded:true,
+        data:{
+            id:addressId
+        }
+    }).done((data)=>{
+        if(data){
+            $("#reloadDiv").load("/profile #reloadDiv")
+        }else{
+               alert('failed')
+        }
+    })
+
+}
 </script>
 
 

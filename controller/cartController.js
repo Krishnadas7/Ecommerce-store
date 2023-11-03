@@ -111,9 +111,14 @@ const getCartProducts = async (req, res) => {
                     user: req.session.user
                 })
             }
-        }
+        }else{
+            res.render('view-cart', {
+                cart: [],
+                total: 0,
+                user: req.session.user
+        })
 
-
+    }
     } catch (error) {
         console.log(error);
     }

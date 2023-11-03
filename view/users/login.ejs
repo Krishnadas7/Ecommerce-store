@@ -12,23 +12,24 @@
              <img style="    margin-left: 169px;
              height: 93px;" src="/public/userAssets/icons/loginpage.png" alt="">
               <!-- <p class="login-letters  text-dark">Please enter your login and password!</p> -->
-              <%
+              <!-- <%
               if (typeof message !== 'undefined') {
                 %>
                 <p style="color: rgb(252, 4, 4);"><%= message %></p>
                 <%
               }
-              %>
+              %> -->
               <form action="/login" method="post" onsubmit="return validatePassword();">
                 <div class="form-outline mb-4" style="margin-left: 28px;">
                   <label class="form-label text-dark align-items-start" for="form3Example1cg"  for="typeEmailX">Email</label>
                   <input  type="email" name="email" id="typeEmailX" class="form-control  form-control-lg" />
+                  <p id="email-error" class="login-letters text-danger" style="display: none;"></p>
                 </div>
 
                 <div class="form-outline form-white" style="margin-left: 28px;">
                   <label class="login-letters form-label text-dark" for="typePasswordX">Password</label>
                   <input type="password" name="password" id="typePasswordX" class="form-control form-control-lg" />
-                  <div id="password-error" class="login-letters text-danger" style="display: none;"></div>
+                  <p id="password-error" class="login-letters text-danger" style="display: none;"></p>
                   <a class="login-letters mt-2" href="/forgot-password">forgot password</a>
                 </div>
                 <button class="login-letters text-center btn btn-primary btn-lg mt-2" type="submit" style="margin-left: 31%; background-color: #7FB8D4;">Login</button>
@@ -44,22 +45,50 @@
   </div>
 </section>
 
+
+
+
 <script>
-  function validatePassword() {
-    var password = document.getElementById("typePasswordX").value;
-    var passwordPattern = /^(?=.*[0-9])(?=.*[a-zA-Z]).{6,}$/;
-    var passwordError = document.getElementById("password-error");
+function validatePassword() {
+  const email = document.getElementById("typeEmailX").value;
+  const password = document.getElementById("typePasswordX").value;
+  const emailError = document.getElementById("email-error");
+  const passwordError = document.getElementById("password-error");
 
-    if (!passwordPattern.test(password)) {
-      passwordError.style.display = "block";
-      passwordError.textContent = "Password must contain at least 6 characters, including letters and numbers.";
-      return false;
-    } else {
-      passwordError.style.display = "none";
-    }
+  // Reset error messages
+  emailError.style.display = "none";
+  passwordError.style.display = "none";
 
-    return true;
+  // Validate email
+  const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+  if (!email) {
+    emailError.innerText = "Email is required.";
+    emailError.style.display = "block";
+    return false;
+  } else if (!email.match(emailRegex)) {
+    emailError.innerText = "Invalid email format.";
+    emailError.style.display = "block";
+    return false;
   }
+
+  // Validate password
+  const passwordRegex = /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@#$%^&!])[A-Za-z\d@#$%^&!]{6,}$/;
+  if (!password) {
+    passwordError.innerText = "Password is required.";
+    passwordError.style.display = "block";
+    return false;
+  } else if (password.length < 6) {
+    passwordError.innerText = "Password must be at least 6 characters long.";
+    passwordError.style.display = "block";
+    return false;
+  } else if (!password.match(passwordRegex)) {
+    passwordError.innerText = "Password must contain letters, numbers, and symbols.";
+    passwordError.style.display = "block";
+    return false;
+  }
+
+  return true; // Form is valid
+}
 </script>
 
 <%-include('../users/mainLayouts/mainfooter.ejs')%>

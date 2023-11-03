@@ -24,6 +24,9 @@ userRouter.use(session({
  
 userRouter.use(express.json());
 userRouter.use(express.urlencoded({ extended: true }));
+
+// ============================USERMANAGEMENT=======================================
+
 userRouter.get('/signup',userAuth.isLogout,userControllers.loadSignup)
 userRouter.post('/signup',userAuth.isLogout,userControllers.insertUser)
 userRouter.get('/login',userAuth.isLogout,userControllers.loadLogin)
@@ -33,21 +36,24 @@ userRouter.post('/forgot-password',userControllers.forgotPassword)
 userRouter.get('/reset-password',userControllers.resetLoad)
 userRouter.post('/reset-password',userControllers.resetPassword)
 userRouter.get('/logout',userControllers.logOut)
-// otp verification
+
+
+// ===============================OTP VERIFICATION==================================================
 
 userRouter.get('/otp-verification',userAuth.isLogout,userControllers.showverifyOTPPage)
 userRouter.post('/otp-verification',userAuth.isLogout,userControllers.verifyOTP)
-
 userRouter.get('/resend-otp',userAuth.isLogout,userControllers.resendOtp)
 
 // homepage rendering
 userRouter.get('/',userControllers.loadHome)
 
-//  user load product page
+// =============================LOAD PRODUCT PAGE======================================================
 
 userRouter.get('/all-product',userAuth.isLogin,allProduct.loadallProduct)
-
 userRouter.get('/product-view',userAuth.isLogin,allProduct.productView)
+// ================================FILTER===================================
+
+userRouter.post('/filter',userAuth.isLogin,userProfile.productFilter)
 
 
 
@@ -58,11 +64,8 @@ userRouter.get('/contact',userAuth.isLogin,userControllers.loadContact)
 //  ==================================CARTMANAGEMENT=====================================================
 
 userRouter.post('/add-to-cart',userAuth.isLogin,cartController.addToCart)
-
 userRouter.get('/view-cart',userAuth.isLogin,cartController.getCartProducts)
-
 userRouter.post('/cart-quantity',userAuth.isLogin,cartController.cartQuantity)
-
 userRouter.post('/remove-product',userAuth.isLogin,cartController.removeProduct)
 
 
@@ -75,24 +78,21 @@ userRouter.get('/profile',userAuth.isLogin,userControllers.viewProfile)
 // ================================USERPROFILE===================================
 
 userRouter.get('/new-address',userAuth.isLogin,userProfile.addAddress)
-
 userRouter.post('/new-address',userAuth.isLogin,userProfile.insertAddress)
-
 userRouter.get('/edit-address',userAuth.isLogin,userProfile.editAddress)
-
 userRouter.post('/edit-address',userAuth.isLogin,userProfile.updateAddress)
-
 userRouter.post('/profile',userAuth.isLogin,userProfile.resetPassword)
 
+// ================================ORDER==================================================
+
 userRouter.get('/checkout',userAuth.isLogin,userProfile.loadCheckout)
-
 userRouter.post('/place-order',userAuth.isLogin,orderController.placeOrder)
-
 userRouter.get('/order-placed',userAuth.isLogin,orderController.orderSuccess)
+userRouter.get('/order-details',userAuth.isLogin,orderController.loadDetails)
+userRouter.post('/orderCancel',userAuth.isLogin,orderController.cancelOrder)
+userRouter.post('/delete-address',userProfile.deleteAddress)
 
-// ================================FILTER===================================
 
-userRouter.get('/category-filter',userAuth.isLogin,userProfile.categoryFilter)
 
 // ===============================RESET PASSWORD=============================================
 

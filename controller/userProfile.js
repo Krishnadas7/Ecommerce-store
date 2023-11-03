@@ -136,6 +136,8 @@ const insertAddress = async (req, res) => {
         const userId=userData._id
         
         const address=await Address.findOne({user:new ObjectId(userId)})
+      //   let address = await Address.findOne({user:userId})
+      // address = address == null ? {user:req.session.userId,_id:1,address:[]} : address
         
         const cartData=await Cart.findOne({user:userId}).populate('products.productId')
       
@@ -144,8 +146,8 @@ const insertAddress = async (req, res) => {
                   if(cartData.products.length>0){
                     let products=cartData.products
 
-                    for(product of cartData.products){
-                      totalPrice+=product.quantity*product.productId.price
+                    for(const productz of cartData.products){
+                      totalPrice+=productz.quantity*productz.productId.price
                     }
 
                   }
@@ -194,21 +196,62 @@ const insertAddress = async (req, res) => {
     }
   }
 
-  const categoryFilter= async (req,res)=>{
+  const productFilter= async (req,res)=>{
     try {
-          if (req.session.user) {
-              // console.log('categoryid ',req.query.id);
-              const id=req.query.id
-              console.log('-------id',id);
-              const category=await Category.findById(id)
-              
 
-              // const filterProducts=await Products.find({category:{$eq:id}})
-              const filterProducts = await Products.find({ category:category._id });
-              console.log('filtered //////////',filterProducts);
-          }   
+      const perPage = 12;
+      let page = parseInt(req.query.page) || 1;
+      // const categoryDetails = await Category.find({});
+
+      let search = ''; // Fix the variable name here
+
+      if (req.query.search) {
+          search = req.query.search; // Fix the variable name here
+      }
+
+      const totalProducts = await Products.countDocuments({ blocked: false });
+      const totalPages = Math.ceil(totalProducts / perPage);
+
+      if (page < 1) {
+          page = 1;
+      } else if (page > totalPages) {
+          page = totalPages;
+      }
+
+      const products = await Products
+          .find({
+              blocked: false,
+              name: { $regex: new RegExp(search, 'i') }
+          })
+          .skip((page - 1) * perPage)
+          .limit(perPage);
+          let splitPrice
+          let minimum
+          let maximum
+      
+          let price=req.body.price
+          if(price){
+             splitPrice=price.split('-')
+             minimum=parseInt(splitPrice[0])
+            maximum=parseInt(splitPrice[1])
+          }
+          
+            
+          
+          
          
-          res.json({success:true})  
+         const sort=parseInt(req.body.sort)
+         const category=req.body.category
+         
+         const categoryData=await Category.find()
+         const productData=await Products.find({price:{$gte:minimum,$lte:maximum},category:category}).sort({price:sort})
+         res.render('all-product',{
+          user:req.session.user,
+          product:productData,
+          category:categoryData,
+          currentPage: page, 
+          pages: totalPages
+         })
     } catch (error) {
       console.log(error);
     }
@@ -251,13 +294,32 @@ const insertAddress = async (req, res) => {
     }
   }
 
+  const deleteAddress=async (req,res)=>{
+    try {
+      const id=req.body.id
+      console.log('//////////////',id);
+      const name=req.session.user
+      const userData=await User.findOne({name:name})
+      const userId=userData._id
+      
+      const deleteAddress=await Address.findOneAndUpdate({user:userId},{
+        $pull:{address:{_id:id}}
+      })
+
+      res.json({delete:true})
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
 module.exports={
     addAddress,
     insertAddress,
     editAddress,
     updateAddress,
    loadCheckout,
-   categoryFilter,
-   resetPassword
+   productFilter,
+   resetPassword,
+   deleteAddress
 
 }

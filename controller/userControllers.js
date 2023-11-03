@@ -9,6 +9,7 @@ const Product = require('../model/productModel')
 const Cart = require('../model/cartModel')
 const Address=require('../model/addressModel')
 const { ObjectId } = require("mongodb")
+const Order=require('../model/orderModel')
 
 const mongoose = require('mongoose')
 function isValidObjectId(id) {
@@ -373,13 +374,14 @@ const viewProfile = async (req, res) => {
         const userId=user._id
         const userData = await User.findOne({ _id:userId });
         const address=await Address.findOne({user:userId})
-        
+        const orderData=await Order.find({userId:userId})
 
         res.render('profile', {
              user: req.session.user,
              data:user,
              address:address,
-             name
+             name,
+             orders:orderData
              
             })
 

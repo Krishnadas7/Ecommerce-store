@@ -26,7 +26,7 @@ const disable = (req, res, next) => {
 }
 app.use(disable);
 
-// app.set('view engine','ejs')
+// app.set('view engine','ejs')  
 // app.set('views','./view/users')
 
 

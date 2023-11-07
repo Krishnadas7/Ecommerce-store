@@ -13,20 +13,22 @@
             <h4 class="card-title">ADD PRODUCT</h4>
             <!-- <p class="card-description"> Basic form elements </p> -->
             <hr class="white-line">
-            <form class="forms-sample" action="/admin/add-product" enctype="multipart/form-data" method="post">
+            <form class="forms-sample" action="/admin/add-product" enctype="multipart/form-data" method="post" id="productForm">
   
                 <div class="form-group  row">
                     <div class="col-12 col-md-9 mt-2">
                        
                         <input type="text" class="form-control  text-light mb-3 " name="name"
-                            id="exampleInputName1" placeholder="product name" required>
+                            id="name" placeholder="product name" >
+                            <p id="nameError"></p>
 
                             <input type="text" class="form-control  text-light mb-3 " name="brand"
-                            id="exampleInputName1" placeholder="product brand" required>
+                            id="brand" placeholder="product brand" >
+                            <p id="brandError"></p>
 
                             <div class="col-sm-4 my-1">
                                 <label for="exampleInputName1">Category</label>
-                                <select class="form-control" id="category" name="category" required>
+                                <select class="form-control" id="category" name="category" >
                                 <option value="">Select one</option>
                                     <% category.forEach(category => { %>
                                     <option value="<%= category._id %>"><%= category.categoryname %></option>
@@ -35,14 +37,17 @@
                               </div>
 
                             <input type="text" class="form-control  text-light mb-3 " name="description"
-                            id="exampleInputName1" placeholder="description" required>
+                            id="description" placeholder="description" >
+                            <p id="description"></p>
 
 
                             <input type="text" class="form-control  text-light mb-3 " name="price"
-                            id="exampleInputName1" placeholder="price" required>
+                            id="price" placeholder="price" >
+                            <p id="priceError"></p>
 
                             <input type="text" class="form-control  text-light mb-3 " name="stock"
-                            id="exampleInputName1" placeholder="stock" required>
+                            id="stock" placeholder="stock" >
+                            <p id="stockError"></p>
 
                             <label class="upload__btn ms-3" >
                                 <p>Upload images</p>
@@ -65,7 +70,45 @@
 
 </div>
 </div>
-  
+    
+
+<script>
+  document.getElementById('productForm').addEventListener('submit', function (event) {
+    // Prevent the form from submitting by default
+    event.preventDefault();
+
+    // Get form values
+    const name = document.getElementById('name').value;
+    const brand = document.getElementById('brand').value;
+    const category = document.getElementById('category').value;
+    const description = document.getElementById('description').value;
+    const price = document.getElementById('price').value;
+    const stock = document.getElementById('stock').value;
+
+    // Validation
+    let isValid = true;
+
+    // Check if fields are empty
+    if (!name || !brand || !category || !description || !price || !stock) {
+        isValid = false;
+        alert('All fields are required.');
+    }
+
+    // Check if price is a positive number
+    if (!/^\d+(\.\d{1,2})?$/.test(price) || parseFloat(price) <= 0) {
+        isValid = false;
+        document.getElementById('priceError').textContent = 'Price must be greater than zero';
+    } else {
+        document.getElementById('priceError').textContent = '';
+    }
+
+    // If all validation checks pass, you can submit the form
+    if (isValid) {
+        alert('Form is valid. Submitting data.');
+        // You can use AJAX or other methods to submit the form data to your server.
+    }
+});
+</script>
   
   
 

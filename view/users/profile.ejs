@@ -1,5 +1,9 @@
 <%-include('../users/mainLayouts/mainheader.ejs')%>
-
+<style>
+    .dashboard .btn {
+    min-width: 60px;
+}
+</style>
 <main class="main" style="margin-top: 60px;">
     <div class="page-header text-center " style="background-image: url('/user/images/page-header-bg.jpg')">
         <div class="container">
@@ -65,6 +69,26 @@
                                 aria-labelledby="tab-dashboard-link">
                                 <h6 class="text-center fs-1 font-monospace text-decoration-underline ">My
                                     Profile</h6>
+                                    <%if(address){%>
+                       
+                                        <%for(let i=0;i<=0;i++){%>
+                                         <div class=" col-12  mb-3">
+                                                    
+                                             <div class="card border border-dark " id="addressDiv" style="height: 100px; border-radius: 7px;  cursor: pointer;     margin-left: -8px;">
+                                                 <div class="card-body">
+                                                     
+                                                         
+                                                         <p><b style="background-color: darkgray;">HOME</b><br>
+                                                             <strong><%= address.address[i].name %> &nbsp;&nbsp;&nbsp;<%= address.address[i].mobile %></strong><br>
+                                                             <%= address.address[i].state %> <%= address.address[i].city %>
+                                                             PIN: <%= address.address[i].pin %>
+                                                         </p>
+                                                     
+                                                 </div>
+                                             </div>
+                                         </div>
+                                         <% } %>
+                                           <%}%>
                                 <form action="#">
                                     <div class="row">
                                         <div class="col-sm-6">
@@ -110,12 +134,12 @@
                             <!-- this you can use new fieldhhhhhh -->
 
                             <div class="tab-pane fade" id="tab-orders" role="tabpanel"
-                                aria-labelledby="tab-orders-link">
+                                aria-labelledby="tab-orders-link"> 
                                 <p>No order has been made yet.</p>
                                 <a href="category.html" class="btn btn-outline-primary-2"><span>GO
                                         SHOP</span><i class="icon-long-arrow-right"></i></a>
                             </div><!-- .End .tab-pane -->
-                            <!-- this you can use new fieldhhhhhh   END-->
+                            <!-- this you can use new fieldhhhhhh   END--> 
 
 
 
@@ -123,132 +147,65 @@
                             <div class="tab-pane fade" id="tab-order" role="tabpanel"
                                 aria-labelledby="tab-order-link">
                                
-                                    <!-- <div class="card col-md-5 col-10 m-2 shadow-sm" id="allorder"
+                                    <div class="card col-md-5 col-10 m-2 shadow-sm" id="allorder"
                                         style="border-radius: 7px; background: #F3F3F9; cursor: pointer;">
                                         <div class="card-body">
                                             <div class="d-flex justify-content-center mt-1 py-4">
                                                 <i class="fa-solid fa-box-open mx-3"
                                                     style="font-size: 35px;"></i>
-                                              <a href="">  <h5 class=" m-0 align-self-center" style="font-weight: 300;">All
+                                              <a href="/all-orders">  <h5 class=" m-0 align-self-center" style="font-weight: 300;">All
                                                     Orders</h5></a>
                                             </div>
                                         </div>
-                                    </div> -->
-
-
-                                    <% if (orders.length==0) { %>
-                                        <div  style=" max-width: 800px;
-                                            margin: 0 auto;
-                                            padding: 20px;
-                                            text-align: center;">
-                                        <h1 style=" font-size: 24px;
-                                            margin-bottom: 20px;">Your Orders</h1>
-                                        <div style=" border: 1px solid #ddd;
-                                            padding: 20px;
-                                            background-color: #fff;
-                                            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);">
-                                        <div style=" font-size: 18px;
-                                            margin-bottom: 20px;">
-                                        <div style="font-size: 48px;
-                                            color: #ccc;">&#128722;</div>
-                                        <p style="font-size: 16px;">Your orders list is empty.</p>
-                                         <p><a style=" text-decoration: none;
-                                            color: #007bff;" href="/">Continue shopping</a></p>
-                                        </div>
-                                        </div>
-                                        <div style="width: 100%;height: 77px;"></div>
-                                        </div>
-                                    <% }else { %>           
-                                                <table style="width: 100%; border-collapse: separate; border-spacing: 0 20px;">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>No.</th>
-                                                            <th>Date</th>
-                                                            <th>Amount</th>
-                                                            <th>Payment</th>
-                                                            <th>Status</th>
-                                                            <th>Details</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        <% orders.forEach(function(order,index) { %>
-                                                        <tr>
-                                                            <td><%= index + 1 %></td>
-                                                            <td><%= order.date.toLocaleDateString('en-US', { year:
-                                                                'numeric', month: 'short', day: '2-digit'
-                                                                }).replace(/\//g, '-') %></td>
-                                                            <td><%= order.totalAmount %></td>
-                                                            <td><%= order.paymentMethod %></td>
-
-                                                             <% if(order.status==='cancel'){%>
-                                                                <td><p class="text-danger"><%= order.status %></p></td>
-                                                             <% }%>
-                                                             <% if(order.status==='placed'){%>
-                                                                <td><p class="text-success"><%= order.status %></p></td>
-                                                             <% }%>
-                                                           
-
-
-                                                            <td><a class="btn text-white btn-primary rounded" href="/order-details?_id=<%= order._id %>">Details</a></td>
-                                                        </tr>
-                                                        <% }); %>
-                                                    </tbody>
-                                                </table> 
-                                                <% } %>   
-
-                                    
-
-
-
-
-
-
-                             
-
+                                    </div>
                             </div><!-- .End .tab-pane -->
                             <!-- orders page END -->
                             <div class="tab-pane fade" id="tab-address" role="tabpanel"
                             aria-labelledby="tab-address-link">
 
-                            <div class="card col-md-5 col-10 m-2 shadow-sm" id="addressDiv"
-                            style="border-radius: 7px; background: #F3F3F9; cursor: pointer;">
+                          
+
+                            <div class="card  col-10 m-2 shadow-sm" id="addressDiv"
+                            style="border-radius: 6px;
+                            background: #007bff;
+                            cursor: pointer;
+                            height: 44px;">
                             <div class="card-body">
-                                <div class="d-flex justify-content-center mt-1 ">
+                                <div class="d-flex text-center justify-content-center ">
                                 
                                   <p>
                                    
-                                         <a class="fw-bold" href="/new-address" > <strong>+ ADD NEW ADDRESS </strong> </a>
+                                         <a class="fw-bold  " style="color: #ccc;" href="/new-address" > <strong>+ ADD NEW ADDRESS </strong> </a>
                                   </p>
                                 
                                  </div>
                             </div>
                         </div>
+
+                     
                        
                         <div class="row m-t-23">
                            <% if(address){%>
                             <% address.address.forEach((data) => { %>
-                                <div class="col-md-4 col-12 col-sm-6 mb-3">
+                                <div class=" col-12  mb-3">
                                    
-                                    <div class="card shadow-sm" id="addressDiv" style="border-radius: 7px; background: #F3F3F9; cursor: pointer;">
+                                    <div class="card  border border-dark" id="addressDiv" style="border-radius: 7px; background: #fdfdfd; cursor: pointer;">
                                         <div class="card-body">
-                                            <div class="text-center">
-                                                <a onclick="deleteAddress('<%=data._id%>')"><img style="width: 17px;
-                                                 float: right;
-                                                margin-right: -31px;
-                                                margin-top: 22px;
-                                                "  src="/public/userAssets/icons/3844424_can_delete_remove_trash_icon.png" alt=""></a>
-                                                <a href="/edit-address?id=<%=data._id%>" ><img style="width: 15px;
-                                                    float: right;
-                                                    margin-right: -31px;" src="/public/logo/8666681_edit_icon.png" alt=""></a>
-                                                <p>
-                                                    <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal">
-                                                        Open Modal
-                                                    </button> -->
+                                            <div class="">
+                                                 <p>
+                                                    
                                                     <strong><%= data.name %></strong><br>
-                                                    <%= data.state %> <%= data.city %><br>
-                                                    PIN: <%= data.pin %>
+                                                 <%= data.state %> <%= data.city %>
+                                                   &nbsp; &nbsp; PIN: <%= data.pin %>
                                                 </p>
+                                           
+                                                <a style="background-color: rgb(255, 4, 4); border-radius: 10%; color: #fff; height: 23px; margin-left: -4px;
+                                                width: 4px;" class="btn" onclick="deleteAddress('<%=data._id%>')">Delete</a>
+                                                <a style="background-color:rgb(85, 85, 104); border-radius: 10%; height: 23px;
+                                                width: 4px; margin-left: -35px; color: white;" class="btn " href="/edit-address?id=<%=data._id%>" >Edit</a>
+                                               
                                             </div>
+                                            
                                         </div>
                                     </div>
                                 </div>

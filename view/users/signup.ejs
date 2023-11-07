@@ -12,57 +12,54 @@
               <div class="card-body">
                 
 
-                <form action="/signup" method="post" class="border mt-1" onsubmit="return validateForm()" >
-
+                
+                <form action="/signup" method="post" class="border mt-1" id="form">
+                
                   <h4 class="text-uppercase text-center" style="padding: 31px;">Create Your Account</h4>
-
-                <%
-                if (typeof message !== 'undefined') {
-                %>
-                <p style="color: rgb(255, 0, 0);"><%= message %></p>
-                <%
-                }
-                %>
-
+                
+                  <%
+                  if (typeof message !== 'undefined') {
+                  %>
+                  <p style="color: rgb(255, 0, 0);"><%= message %></p>
+                  <%
+                  }
+                  %>
+                
                   <div class="form-outline mb-3 px-5">
                     <label class="form-label text-dark" for="form3Example1cg">Full Name</label>
                     <input type="text" id="name" class="form-control form-control-md" name="name" />
-                    <span class="error-message" style="color: red;"></span>
-                  </div> 
-
+                    <p id="nameError" class="error-message" style="color: rgb(255, 0, 0);"></p>
+                  </div>
+                
                   <div class="form-outline mb-3 px-5">
                     <label class="form-label text-dark" for="form3Example3cg">Your Email</label>
                     <input name="email" type="email" id="email" class="form-control form-control-md" />
-                    <span class="error-message" style="color: red;"></span>
+                    <p id="emailError" class="error-message" style="color: rgb(255, 0, 0);"></p>
                   </div>
-
+                
                   <div class="form-outline mb-3 px-5">
                     <label class="form-label text-dark" for="form3Example4cg">Enter your Mobile</label>
                     <input name="mobile" type="tel" id="mobile" class="form-control form-control-md" />
-                    <span class="error-message" style="color: red;"></span>
+                    <p id="mobileError" class="error-message" style="color: rgb(255, 0, 0);"></p>
                   </div>
-
+                
                   <div class="form-outline mb-3 px-5">
                     <label class="form-label text-dark" for="form3Example4cg">Password</label>
                     <input name="password" type="password" id="password" class="form-control form-control-md" />
-                    <span class="error-message" style="color: red;"></span>
+                    <p id="passwordError" class="error-message" style="color: rgb(255, 0, 0);"></p>
                   </div>
-
+                
                   <div class="form-outline mb-3 px-5">
                     <label class="form-label text-dark" for="form3Example4cg">Confirm Password</label>
                     <input name="confirmpassword" type="password" id="Cpassword" class="form-control form-control-md" />
-                    <span class="error-message" style="color: red;"></span>
+                    <p id="cpasswordError" class="error-message" style="color: rgb(255, 0, 0);"></p>
                   </div>
-                  
-
+                
                   <div class="d-flex justify-content-center px-5">
-                    <button type="submit"
-                      class="btn btn-primary text-white btn-block btn-md gradient-custom-4 text-body" style="background-color:#7FB8D4;">Create Account</button>
+                    <button type="submit" class="btn btn-primary text-white btn-block btn-md gradient-custom-4 text-body" style="background-color:#7FB8D4;">Create Account</button>
                   </div>
-
-                  <p class="text-center text-muted mt-3 mb-0">Have already an account? <a href="/login"
-                      class="fw-bold text-body"><u>Login here</u></a></p>
-
+                
+                  <p class="text-center text-muted mt-3 mb-0">Have already an account? <a href="/login" class="fw-bold text-body"><u>Login here</u></a></p>
                 </form>
               </div>
             </div>
@@ -73,83 +70,77 @@
   </section>
 </div>
 
+
+
 <script>
-  document.addEventListener('DOMContentLoaded', function () {
-      const form = document.querySelector('form'); // Correct form selection
-      const fnameInput = document.getElementById('name'); // Correct ID for the name input
-      const emailInput = document.getElementById('email');
-      const mobileInput = document.getElementById('mobile');
-      const passwordInput = document.getElementById('password');
-      const cpasswordInput = document.getElementById('Cpassword');
-      const errorMessages = document.querySelectorAll('.error-message');
+  document.getElementById("form").addEventListener("submit", function (event) {
+    // Validation for Full Name (required)
+    const name = document.getElementById("name").value;
+    if (name.trim() === "") {
+      document.getElementById("nameError").innerText = " Name is required";
+      event.preventDefault();
+    } else {
+      document.getElementById("nameError").innerText = "";
+    }
 
-      form.addEventListener('submit', function (event) {
-          event.preventDefault(); // Prevent form submission initially
+    // Validation for Email (required)
+    const email = document.getElementById("email").value;
+    if (email.trim() === "") {
+      document.getElementById("emailError").innerText = "Email is required";
+      event.preventDefault();
+    } else {
+      document.getElementById("emailError").innerText = "";
+    }
 
-          let isValid = true;
-          errorMessages.forEach(function (element) {
-              element.innerText = '';
-          });
+    // Validation for Mobile (only numbers, exactly 10 digits)
+    const mobile = document.getElementById("mobile").value;
+    if (!/^\d{10}$/.test(mobile)) {
+      document.getElementById("mobileError").innerText = "Mobile should contain exactly 10 digits";
+      event.preventDefault();
+    } else {
+      document.getElementById("mobileError").innerText = "";
+    }
 
-          if (fnameInput.value.trim() === '') {
-              errorMessages[0].innerText = 'Name is required.';
-              isValid = false;
-          }
+    // Validation for Password (at least 6 characters, including letters, numbers, and symbols)
+    const password = document.getElementById("password").value;
+    if (!/^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{6,}$/.test(password)) {
+      document.getElementById("passwordError").innerText = "Password should contain at least 6 characters, including letters apace not allowed, numbers, and symbols";
+      event.preventDefault();
+    } else {
+      document.getElementById("passwordError").innerText = "";
+    }
 
-          // Add validation for the mobile input if needed
+    // Validation for Confirm Password (must match Password)
+    const cpassword = document.getElementById("Cpassword").value;
+    if (cpassword !== password) {
+      document.getElementById("cpasswordError").innerText = "Passwords do not match";
+      event.preventDefault();
+    } else {
+      document.getElementById("cpasswordError").innerText = "";
+    }
+  });
 
-          if (emailInput.value.trim() === '') {
-              errorMessages[1].innerText = 'Email is required.';
-              isValid = false;
-          }
+  // Clear error messages when the user corrects the input
+  document.getElementById("name").addEventListener("input", function () {
+    document.getElementById("nameError").innerText = "";
+  });
 
-          if (mobileInput.value.trim() === '') {
-    errorMessages[2].innerText = 'Mobile is required.';
-    isValid = false;
-} else if (!/^\d{10}$/.test(mobileInput.value.trim())) {
-    errorMessages[2].innerText = 'Mobile must contain exactly 10 digits and consist of only numbers.';
-    isValid = false;
-}
+  document.getElementById("email").addEventListener("input", function () {
+    document.getElementById("emailError").innerText = "";
+  });
 
+  document.getElementById("mobile").addEventListener("input", function () {
+    document.getElementById("mobileError").innerText = "";
+  });
 
+  document.getElementById("password").addEventListener("input", function () {
+    document.getElementById("passwordError").innerText = "";
+  });
 
-          if (passwordInput.value.length < 6) { // Correct password length check
-              errorMessages[3].innerText = 'Password must be at least 6 characters long.';
-              isValid = false;
-          } else if (!/[^a-zA-Z0-9]/.test(passwordInput.value) || passwordInput.value.includes(' ')) {
-              errorMessages[3].innerText = 'Password must contain at least one special character and cannot contain spaces.';
-              isValid = false;
-          }
-
-          if (cpasswordInput.value === '') {
-              errorMessages[4].innerText = 'Confirm Password is required.';
-              isValid = false;
-          }
-
-          if (passwordInput.value !== cpasswordInput.value) {
-              errorMessages[3].innerText = 'Passwords do not match.'; // Correct error message index
-              errorMessages[4].innerText = 'Passwords do not match.';
-              isValid = false;
-          }
-
-          if (isValid) {
-              form.submit();
-          }
-      });
-
-      // Real-time validation
-      const inputElements = [fnameInput, emailInput, mobileInput, passwordInput, cpasswordInput];
-
-      inputElements.forEach((input, index) => {
-          input.addEventListener('input', function () {
-              errorMessages[index].innerText = '';
-          });
-      });
+  document.getElementById("Cpassword").addEventListener("input", function () {
+    document.getElementById("cpasswordError").innerText = "";
   });
 </script>
-
-
-
 
 
 

@@ -163,7 +163,7 @@ const insertUser = async (req, res) => {
 
         const userCheck = await User.findOne({ email: req.body.email })
         if (userCheck) {
-            res.send("user already exist");
+            res.render("signup",{message:'user already exist'});
         }
         else {
             const spassword = await securePassword(req.body.password);

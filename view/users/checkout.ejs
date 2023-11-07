@@ -37,8 +37,10 @@
                     <div class="col-lg-9" >
                        
                     <!--hhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh-->
-                  <%  if(address!=0){%>
-                   <% for(let i=0;i<address.length;i++){%>
+                   <% if(address){%>
+                  <%  if(address!=='undefined'){%>
+                  <% address.forEach((address)=>{%>
+                  
                     <div class="d-flex rounded p-3 mt-3 border card text-white" 
                     style=" 
                       
@@ -48,20 +50,21 @@
                         <p> <input class="form-check-input ml-1"
                              type="radio"
                              name="address"
-                             value="<%= address[i].name %>,<%= address[i].mobile %>,<%= address[i].email %>,<%= address[i].housename %>,<%= address[i].city %>,<%= address[i].state %>,<%= address[i].pin %>  "
+                             value="<%= address.name %>,<%= address.mobile %>,<%= address.email %>,<%= address.housename %>,<%= address.city %>,<%= address.state %>,<%= address.pin %>  "
                                  id=""  >
                             
-                              <b class="m-l-30"> <%=address[i].name%> &nbsp; &nbsp; &nbsp; &nbsp; <%=address[i].mobile%>  </b></p>
+                              <b class="m-l-30"> <%=address.name%> &nbsp; &nbsp; &nbsp; &nbsp; <%=address.mobile%>  </b></p>
                             <p class="m-l-30">
-                               <%=address[i].housename%>   <%=address[i].state%>  <%=address[i].state%> - PIN:-<%=address[i].pin%> 
+                               <%=address.housename%>   <%=address.state%>  <%=address.state%> - PIN:-<%=address.pin%> 
                             </p>
                        </div>
-                    <%}%>
-               <% }else{%>
-                    <h1>huuu</h1>
-               <%  }%>
-
-
+                    <%})%>
+                  <% }%>
+                <%}else{%>
+                    <div class="text-center">
+                   <h2> EMPTY!!</h2>
+                </div>
+                <%}%>
 
 
 

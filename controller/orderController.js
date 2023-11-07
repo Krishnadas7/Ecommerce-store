@@ -5,7 +5,26 @@ const {ObjectId}=require('mongodb')
 const Order=require('../model/orderModel')
 const userAuth=require('../middlewares/userAuth')
 const Product=require('../model/productModel')
+const { render } = require('../routes/userRouter')
 
+const calculateTotalPrice=async (userId)=>{
+  try {
+      const cart=await Cart.findOne({user:userId}).populate('products.productId')
+      if (!cart) {
+        console.log("User does not have a cart.");
+      }
+      let totalPrice=0
+      for(const cartProduct of cart.products){
+        const {productId,quantity}=cartProduct
+        const productSubtotal=productId.price*quantity
+        totalPrice+=productSubtotal
+
+      }
+      return totalPrice
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 const placeOrder=async (req,res)=>{
   try {
@@ -16,22 +35,40 @@ const placeOrder=async (req,res)=>{
      const userData=await User.findOne({name:name})
      const userId=userData._id
      const cartData=await Cart.findOne({user:userId})
-     const products=cartData.products
+     
      const total=parseInt(req.body.Total)
      const paymentMethods=req.body.payment
      const uniNum = Math.floor(Math.random() * 900000) + 100000;
-     const status=paymentMethods=== 'COD'?'placed':'pending'
+     
+
+     const cartProducts=cartData.products.map((item)=>({
+      productId:item.productId,
+      quantity:item.quantity,
+      orderStatus:"Placed",
+      statusLevel:1,
+      paymentStatus:"pending",
+      "returnOrderStatus.status":"none",
+      "returnOrderStatus.reason":"none"
+     }))
+    //  const total=await calculateTotalPrice(userId)
+     const today=new Date()
+
+     const deliveryDate = new Date(today);
+      deliveryDate.setDate(today.getDate() + 7);
 
      const order=new Order({
         deliveryDetails:address,
-        uniqueId:uniNum,
+        
         userId:userId,
         userName:name,
-        paymentMethod:paymentMethods,
-        products:products,
+        
+        products:cartProducts,
         totalAmount:total,
+        paymentMethod:paymentMethods,
+        expectedDelivery:deliveryDate,
         date:new Date(),
-        status:status,
+        trackId:uniNum
+        
      })
     
 
@@ -40,13 +77,17 @@ const placeOrder=async (req,res)=>{
     const orderid=order._id
      
       
-     if(status=='placed'){
-      for(let i=0;i<products.length;i++){
-        const productId = products[i].productId
-        const quantity = products[i].quantity
-        await Product.findByIdAndUpdate(productId,{$inc : {stock:-quantity}})
-      }
-      await Cart.deleteOne({user:userId})
+     if(paymentMethods=='COD'){
+     for(const item of cartData.products){
+      const productId = item.productId
+      const quantity = item.quantity
+
+      await Product.findByIdAndUpdate({_id:productId},{
+        $inc:{stock:-quantity}
+      })
+
+     }
+     await Cart.findOneAndDelete({userid:req.body.user_id})
       res.json({placed:true})
       
 
@@ -72,38 +113,99 @@ const orderSuccess=async (req,res)=>{
   }
 }
 
-const loadDetails=async (req,res)=>{
-  try {
+// const loadDetails=async (req,res)=>{
+//   try {
     
-    const order_id = req.query._id
-    const orderData = await Order.findOne({_id:order_id}).populate('products.productId')
-    await orderData.populate('products.productId.category')
+//     const order_id = req.query._id
+//     const orderData = await Order.findOne({_id:order_id}).populate('products.productId')
+//     await orderData.populate('products.productId.category')
      
 
 
-    res.render('order-details',{orders:orderData,user:req.session.user})
+//     res.render('order-details',{orders:orderData,user:req.session.user})
+//   } catch (error) {
+//     console.log(error);
+//   }
+// }
+
+const cancelOrder=async (req,res)=>{
+  try {
+    
+    const name=req.session.user
+    const userData=await User.findOne({name:name})
+    const userId=userData._id
+    const proId=req.body.productId
+   console.log('llllll',req.body);
+    const orderId=req.body.orderId
+    
+    const order=await Order.findOne({_id:orderId})
+    console.log('///',order);
+
+    const productInfo= order.products.find(
+      (product)=>product.productId===proId
+    )
+    console.log('infooo',productInfo);
+    productInfo.orderStatus = "Cancelled";
+    productInfo.updatedAt = Date.now()
+    const result = await order.save();
+    
+  const quantity=productInfo.quantity
+  const productId=productInfo.productId
+
+  const updateQuantity=await Product.findByIdAndUpdate({_id:productId},
+    {$inc:{stock:quantity}})
+    
+    // for(let i=0;i<orderData.products.length;i++){
+    //   let product=orderData.products[i].productId
+    //   let quantity=orderData.products[i].quantity
+    //   await Product.updateOne({_id:product},{$inc:{stock:quantity}})
+    // }
+    res.json({cancel:true})
+
+    // res.redirect('/profile')
+
   } catch (error) {
     console.log(error);
   }
 }
 
-const cancelOrder=async (req,res)=>{
+const allOrders =async (req,res)=>{
   try {
     const name=req.session.user
     const userData=await User.findOne({name:name})
     const userId=userData._id
-    const orderId=req.body.orderid
-    const cancelReason=req.body.reason
-    const orderData=await Order.findByIdAndUpdate({_id:orderId},{$set:{status:'cancel',cancelReason:cancelReason}})
+    const orderData=await Order.find({userId:userId})
+    console.log('///////////',orderData);
+    res.render('all-orders',{
+      user:req.session.user,
+      orders:orderData
+    })  
+  } catch (error) {
+    console.log(error);
+  }
+}
+const loadOrderDetails=async (req,res)=>{
+  try {
+    const orderId=req.query.id
+    const name=req.session.user
+    const userData=await User.findOne({name:name})
+    const userId=userData._id
     
-    for(let i=0;i<orderData.products.length;i++){
-      let product=orderData.products[i].productId
-      let quantity=orderData.products[i].quantity
-      await Product.updateOne({_id:product},{$inc:{stock:quantity}})
+    let order 
+    if(orderId){
+     order=await Order.findOne({_id:orderId}).populate({path:'products.productId'}).sort({date:-1})
+    }else{
+    order =await Order.findOne({useerId:userId}).populate({path:'products.productId'}).sort({date:-1})
     }
 
-    res.redirect('/profile')
+   const products= await Cart.findOne({user:userId}).populate('products.productId')
+   
+    res.render('order-details',{
+      user:req.session.user,
+      products,
+      order
 
+    })
   } catch (error) {
     console.log(error);
   }
@@ -114,6 +216,8 @@ module.exports={
   
   orderSuccess,
     placeOrder,
-    loadDetails,
-    cancelOrder
+    
+    cancelOrder,
+    allOrders,
+    loadOrderDetails
 }

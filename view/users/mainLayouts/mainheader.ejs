@@ -47,7 +47,7 @@
 	<link rel="stylesheet" href="/public/userAssets/style.css">
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-<style>
+<!-- <style>
 	.btn-secondary:hover {
     /* color: #fff; */
     background-color: transparent;
@@ -60,12 +60,13 @@
     content: '\f197';
 	color: white;
 }
-</style>
+</style> -->
 
 	 <!-- Plugins CSS File -->
 	 <!-- <link rel="stylesheet" href="/public/userAssets/userAccount/assets/css/bootstrap.min.css">   -->
 	 <!-- Main CSS File -->
 	 <link rel="stylesheet" href="/public/userAssets/userAccount/assets/css/style.css">
+	 <link rel="stylesheet" href="/public/adminAssets/style.css">
          
 </head>
 <body class="animsition">
@@ -127,7 +128,7 @@
 										</button>
 										<div class="dropdown-menu" style="width: 256px;" aria-labelledby="dropdownMenuButton">
 										  <a class="dropdown-item" href="/profile">My profile</a>
-										  <a class="dropdown-item" href="#">Orders</a>
+										  <a class="dropdown-item" href="/all-orders">Orders</a>
 										  <a class="dropdown-item" href="#">Wishlist</a>
 										  <a class="dropdown-item" href="/logout"> Logout</a>
 										  <!-- <img  class="logout-icon" src="/public/userAssets/icons/logouticon.png" alt=""> -->
@@ -154,7 +155,9 @@
 							<!-- <div class="icon-header-item cl0 hov-cl1 trans-04 p-lr-11 icon-header-noti js-show-cart" data-notify="2"> -->
 							<a href="/view-cart"><img src="/public/logo/6007114_basket_business_buy_cart_market_icon.png" style="width: 34px;
 								height: 41px;
-								margin-left: 21px;" alt=""></a><span class="badge badge-danger">9</span>
+								margin-left: 21px;" alt=""></a><span style="margin-left: -10px;
+								 margin-top: -17px; 
+								 border-radius: 33px;" class="badge badge-danger"><%=count%></span>
 							</div>
 						</div>
 							

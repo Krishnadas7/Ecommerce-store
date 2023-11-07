@@ -1,0 +1,63 @@
+<%-include('../users/mainLayouts/mainheader.ejs')%>
+
+
+<div class=" p-b-140 align-items-center"  style="    margin-top: 83px; background-color: #f1f3f6;" >
+    <div class="container  ">
+       <div class="text-center"  style="margin-top: 83px; height: 57px; " >
+<p><h3> All orders</h3> </p>
+</div>
+
+<table class="table">
+    <thead class="thead-dark" style="background-color: black;">
+      <tr>
+        <th>No.</th>
+        <th>Order Date</th>
+        <th>Amount</th>
+        <th>Payment</th>
+        <th>Expected Delivery</th>
+        <th>Tracking Number</th>
+        <th>Details</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if (orders) { %>
+       <% if(orders.length>0){%>
+        <% for (let i = 0; i < orders.length; i++) { %>
+          <tr style="background-color:#f1f3f6; ">
+            <th scope="row"><%= i + 1 %></th>
+            <td><%= orders[i].date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: '2-digit' }).replace(/\//g, '-') %></td>
+            <td>Rs.<%= orders[i].totalAmount %></td>
+            <td><%= orders[i].paymentMethod %></td>
+           
+            <td><%=orders[i].expectedDelivery.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: '2-digit' }).replace(/\//g, '-')%></td>
+            <td><%= orders[i].trackId %></td>
+         
+            <td><a  href="/order-details?id=<%= orders[i]._id %>">view details</a></td>
+          </tr>
+          
+        <% } %>
+   <% }else{%>
+        <tr>
+            <td>
+              <p>No orders found</p>
+            </td>
+          </tr>
+   <%}%>
+      <% } else { %>
+        <tr>
+          <td>
+            <p>No orders found</p>
+          </td>
+        </tr>
+      <% } %>
+    </tbody>
+  </table>
+  
+  
+
+    </div>
+</div>
+  
+
+  <%-include('../users/mainLayouts/mainfooter.ejs')%>
+  

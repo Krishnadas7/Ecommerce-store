@@ -21,6 +21,7 @@ adminRouter.set('views','./view/admin')
 
  const multer=require('multer')
  const path = require('path')
+const { executionAsyncId } = require('async_hooks')
 const storage = multer.diskStorage({
     destination:function(req,file,cb){
         cb(null,path.join(__dirname, '../public/adminAssets/product-images'))
@@ -110,8 +111,16 @@ adminRouter.get('/orders',adminAuth.isLogin,adminControllers.loadOrders)
 
 //view order details
 adminRouter.get('/order-details',adminAuth.isLogin,adminControllers.orderDetails)
-   
 
+// update order
+// adminRouter.post('/updateOrder',adminAuth.isLogin,adminControllers.updateOrder)
 
+// ===============================MAANAGEMENT=================================================
+
+adminRouter.get('/order-managment',adminAuth.isLogin,adminControllers.orderManagement)
+
+adminRouter.post('/change-status',adminAuth.isLogin,adminControllers.changeStatus)
+
+adminRouter.post('/cancel-orderitem',adminAuth.isLogin,adminControllers.cancelOrderadmin)
 
 module.exports=adminRouter

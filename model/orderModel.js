@@ -8,9 +8,7 @@ const orderSchema = new mongoose.Schema({
   user: {
     type: mongoose.Types.ObjectId,
   },
-  uniqueId: {
-    type: Number,
-  },
+  
   userId: {
     type: String,
     required: true,
@@ -23,17 +21,41 @@ const orderSchema = new mongoose.Schema({
     {
       productId: {
         type: String,
-        required: true,
         ref: "Product",
+        required: true,
       },
       quantity: {
         type: Number,
         default: 1,
       },
+      cancelReason: {
+        type: String
+      },
+      orderStatus:{
+       type:String,
+       required:true
+      },
+      paymentStatus:{
+        type:String,
+        required:true
+      },
       
-      totalPrice: {
-        type: Number,
-        // required: true,
+      statusLevel:{
+        type:Number,
+        required:true
+      },
+      returnOrderStatus:{
+        status:{
+          type:String
+        },
+        reason:{
+          type:String
+        }
+        
+      },
+      updatedAt:{
+        type:Date,
+        default:Date.now
       }
     },
   ],
@@ -41,34 +63,26 @@ const orderSchema = new mongoose.Schema({
   deliveryDate: {
     type: Date,
   },
-  cancelReason: {
-    type: String
-  },
-  returnReason: {
-    type: String
+  date: {
+    type: Date,
+    default: Date.now,
   },
   totalAmount: {
     type: Number,
-    // required: true,
+    required: true,
   },
-  date: {
-    type: Date,
+  paymentMethod:{
+    type:String,
+    require:true
   },
-  status: {
-    type: String,
+  trackId:{
+    type:Number,
+    require:true
   },
-  paymentMethod: {
-    type: String,
+  expectedDelivery:{
+    type:Date,
+    required:true
   },
-  orderId: {
-    type: String,
-  },
-  paymentId: {
-    type: String
-  },
-  discount: {
-    type: String
-  }
 });
 
 module.exports = mongoose.model("order", orderSchema);

@@ -35,9 +35,9 @@
                         <div class="slick3 gallery-lb">
                             <% product.image.forEach((data, index) => { %>
                             <div class="item-slick3" data-thumb="/public/adminAssets/product-images/<%=data%>">
-                                <div class="wrap-pic-w pos-relative">
+                                <div class="wrap-pic-w pos-relative main-image-<%=product.image.indexOf(data)%>">
                                     <a class="popup-link" href="/public/adminAssets/product-images/<%=data%>">
-                                        <img src="/public/adminAssets/product-images/<%=data%>" alt="IMG-PRODUCT">
+                                        <img id="main-img-<%=product.image.indexOf(data)%>" src="/public/adminAssets/product-images/<%=data%>" alt="IMG-PRODUCT">
                                     </a>
                                 </div>
                             </div>

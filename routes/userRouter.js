@@ -7,6 +7,7 @@ const userAuth=require('../middlewares/userAuth')
 const userProfile=require('../controller/userProfile')
 const orderController=require('../controller/orderController')
 const cartController=require('../controller/cartController')
+const Count=require('../middlewares/cartMiddleware')
 // view engine setup
  userRouter.set('view engine','ejs')
  userRouter.set('views','./view/users')
@@ -21,7 +22,7 @@ userRouter.use(session({
     saveUninitialized: true,
     // cookie: { secure: true }
   }))
- 
+ userRouter.use(Count)
 userRouter.use(express.json());
 userRouter.use(express.urlencoded({ extended: true }));
 
@@ -88,10 +89,10 @@ userRouter.post('/profile',userAuth.isLogin,userProfile.resetPassword)
 userRouter.get('/checkout',userAuth.isLogin,userProfile.loadCheckout)
 userRouter.post('/place-order',userAuth.isLogin,orderController.placeOrder)
 userRouter.get('/order-placed',userAuth.isLogin,orderController.orderSuccess)
-userRouter.get('/order-details',userAuth.isLogin,orderController.loadDetails)
-userRouter.post('/orderCancel',userAuth.isLogin,orderController.cancelOrder)
+// userRouter.get('/order-details',userAuth.isLogin,orderController.loadDetails)
+userRouter.post('/cancel-order',userAuth.isLogin,orderController.cancelOrder)
 userRouter.post('/delete-address',userProfile.deleteAddress)
-
+userRouter.get('/order-details',userAuth.isLogin,orderController.loadOrderDetails)
 
 
 // ===============================RESET PASSWORD=============================================
@@ -99,7 +100,7 @@ userRouter.post('/delete-address',userProfile.deleteAddress)
 userRouter.post('/profile-password',userAuth.isLogin,userProfile.resetPassword)
 
 
-
+userRouter.get('/all-orders',userAuth.isLogin,orderController.allOrders)
 
 
 module.exports=userRouter

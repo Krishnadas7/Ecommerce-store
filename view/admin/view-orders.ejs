@@ -41,51 +41,80 @@
                         <thead>
   
   
-                          <th> No </th>
-                          <th> Order ID</th>
-                          <th> Order Date </th>
-                          <th> Payment </th>
-                          <th>Status</th>
-                          <th> View</th>
+                          <th> Product </th>
+                          <th> User </th>
+                          <th> Order Date</th>
+                          <th> Quantity</th>
+                          <th> Price</th>
+                          <th> Pyament Status</th>
+                          <th> Order Status</th>
+                          <th> Action</th>
   
                           </tr>
                         </thead>
                         <tbody>
                           
-  
-                          <%if(orders.length!=0){%>
-                          <% for(let i=0;i<orders.length;i++){%>
+                          <%for(let i=orders.length-1;i>=0;i--){%>
+                          
+                          
                               <tr>
 
 
                                 <td>
-                                 <%=i+1%>
+                                  <div class="product-image-container mb-2">
+                                  <img style="height: 100px; width: 100px; border-radius: 0%;" alt="image" src="/public/adminAssets/product-images/<%= orders[i].product.image[0]%>" />
+                                  </div>
+                                  <span >
+                                    <strong>  <%= orders[i].product.name %></strong>
+                                  </span>
+                              </td>
+                                <td>
+                                  <%=orders[i].user.email%>
+                                 
                                 </td>
                                 <td>
-                                  <%=orders[i].uniqueId%>
+                                  <span style="font-weight: 100;" class="pl-2 ">
+                                    <%= new Date(orders[i].orderDetails.date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })%>
+                                  </span>
                                 </td>
                                 <td>
-                                    <%= new Date(orders[i].date).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })%>
-                                    
+                                  <%= orders[i].orderDetails.quantity %>
                                 </td>
                                 <td>
-                                    <%=orders[i].paymentMethod%>
-                                </td>
-                                <td>
-                                <%=orders[i].status%>
+                                  ₹<%= orders[i].orderDetails.totalAmount %>
                             </td>
                             <td>
-                                <a style="height: 40px;
-                                width: 80px;
-                                padding: 12px;" class="btn btn-primary" href="/admin/order-details?id=<%= orders[i]._id %>">Details</a>
+                             <%= orders[i].orderDetails.paymentStatus%>
+                            </td>
+                            
+                              <td>
+                                <%if(orders[i].orderDetails.orderStatus == "Placed"){%>
+                                  <p class="text-success"><%=orders[i].orderDetails.orderStatus%></p>
+                               <% }%>
+                               <%if(orders[i].orderDetails.orderStatus == "Out for Delivery"){%>
+                                <p class="text-warning" > <%=orders[i].orderDetails.orderStatus%></p>
+                               <% }%>
+                               <%if(orders[i].orderDetails.orderStatus == "Cancelled"){%>
+                                <p class="text-danger" > <%=orders[i].orderDetails.orderStatus%></p>
+                               <% }%>
+                               <%if(orders[i].orderDetails.orderStatus == "Shipped"){%>
+                                <p class="text-success" > <%=orders[i].orderDetails.orderStatus%></p>
+                               <% }%>
+                               <%if(orders[i].orderDetails.orderStatus == "Delivered"){%>
+                                <p class="text-success" > <%=orders[i].orderDetails.orderStatus%></p>
+                               <% }%>
+                                
+                               
+                            </td>
+                            
+                            <td>
+                              <a href="/admin/order-managment?orderId=<%=orders[i].orderDetails._id%>&productId=<%=orders[i].product._id%>" class="btn btn-inverse-info">Manage</a>
                             </td>
                         </tr>
+                      
                                 <%}%>
-                          <%}else{%>
-                            <tr>
-                                <td>No Orders  Found</td>
-                              </tr>
-                          <%}%>
+                          
+                          
                                 
                         </tbody>
                       </table>
@@ -97,5 +126,18 @@
           </div>
         </div>
 
+        <style>
+          .product-image-container {
+          width: 100px; 
+          height: 100px; 
+          overflow: hidden; /
+      }
+     
+    img {
+      width: 30px;
+      height: 30px;
+      border-radius: 0%;
+    }
+      </style>
 
 <%-include('../admin/adminhomeLayouts/admin-footer.ejs')%>

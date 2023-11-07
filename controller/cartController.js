@@ -92,7 +92,7 @@ const getCartProducts = async (req, res) => {
                 for (const product of cartData.products) {
                     totalPrice += product.quantity * product.productId.price;
                 }
-                console.log('totalprice  ', totalPrice);
+                
 
                 res.render('view-cart', {
                     user: req.session.user,

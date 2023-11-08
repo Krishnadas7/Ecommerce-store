@@ -99,6 +99,8 @@ userRouter.get('/order-details',userAuth.isLogin,orderController.loadOrderDetail
 
 userRouter.post('/profile-password',userAuth.isLogin,userProfile.resetPassword)
 
+userRouter.post('/verify-payment',userAuth.isLogin,orderController.verifyPayment)
+
 
 userRouter.get('/all-orders',userAuth.isLogin,orderController.allOrders)
 

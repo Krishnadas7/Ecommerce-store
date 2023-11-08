@@ -70,7 +70,9 @@
 
 
                     </div><!-- End .col-lg-9 -->
-                    <aside class="col-lg-3">
+                    <aside class="col-lg-3 ">
+                        <div class="card ">
+                            <div class="card-body">
                         <div class="summary " style="margin-left: -155px;">
                             <h3 class="summary-title">Your Order</h3><!-- End .summary-title -->
 
@@ -107,8 +109,9 @@
                             </table><!-- End .table table-summary -->
 
                             <div class="accordion-summary" id="accordion-payment">
-                                <label class="d-flex">
+                                <label class="d-flex" >
                                     <input type="radio"
+                                    required
                                      id="COD"
                                      name="payment"
                                      value="COD">&nbsp;&nbsp;
@@ -117,9 +120,10 @@
                         
                                 <label class="d-flex">
                                     <input type="radio"
+                                    required
                                      id="online"
                                      name="payment"
-                                     value="online">&nbsp;&nbsp;
+                                     value="online" >&nbsp;&nbsp;
                                     Online
                                 </label>
 
@@ -136,6 +140,8 @@
                                 <span class="btn-hover-text btn btn-primary">Proceed to Checkout</span>
                             </button>
                         </div><!-- End .summary -->
+                    </div>
+                </div>
                     </aside><!-- End .col-lg-3 -->
                 </div><!-- End .row -->
             </form>
@@ -148,6 +154,7 @@
     </div>
 </div>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
 <script>
    $("#checkout-form").submit((e)=>{
@@ -162,15 +169,87 @@
         method:"post",
         data:{Total:total,address:address,payment:payment},
         success: (response)=>{
-            if(response){
+            if(response.success===true){
                 // swal('order placed')
                 location.href='/order-placed'
             }else{
-                swal('failed')
+               razorPayment(response.order)
             }
         }
     })
    })
+
+   function razorPayment(order) {
+    
+    // console.log(process.env.RazorId);
+    var options = {
+      key: "rzp_test_49DsJEEbScMJdv", // Enter the Key ID generated from the Dashboard
+      amount: order.totalAmount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+      currency: "INR",
+      name: "shuecrops", //your business name
+      description: "Test Transaction",
+      image: "/user/images/icons/logo.png",
+      order_id: order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+      handler: function (response) {
+        verifyPayment(response, order);
+      },
+      prefill: {
+        //We recommend using the prefill parameter to auto-fill customer's contact information especially their phone number
+        name: "Shoe crops", //your customer's name
+        email: "shuecrops007store@example.com",
+        contact: "9778019887", //Provide the customer's phone number for better conversion rates
+      },
+      notes: {
+        address: "Razorpay Corporate Office",
+      },
+      theme: {
+        color: "#c96",
+      },
+    };
+
+    var rzp1 = new Razorpay(options);
+    rzp1.open();
+  }
+         
+  function verifyPayment(payment, order) {
+    const amount2 = document.getElementById("total1").innerHTML;
+    $.ajax({
+      url: "/verify-payment",
+      method: "post",
+      encoded:true,
+      data: {
+        payment: payment,
+        amount2: amount2,
+        order: order,
+      },
+      success: (response) => {
+        console.log('rrrr',response);
+        if (response.codsuccess == true) {
+            
+            Swal.fire({
+            positon: "center",
+            icon: "success",
+            title: "Payment successfully",
+            showConfirmButton: false,
+            timer: 1500,
+          }).then(()=>{
+            window.location.href='/all-orders'
+          })
+
+
+            // location.href='/all-orders'
+        } else {
+          Swal.fire({
+            positon: "center",
+            icon: "error",
+            title: "Payment failed",
+            showConfirmButton: false,
+            timer: 1500,
+          });
+        }
+      },
+    });
+  }
 </script>
 
 <%-include('../users/mainLayouts/mainfooter.ejs')%>

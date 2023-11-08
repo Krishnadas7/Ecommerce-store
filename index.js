@@ -2,6 +2,8 @@ const mongoose=require('mongoose')
 const express=require('express')
 const app=express()
 const path=require('path')
+const dotenv=require('dotenv')
+dotenv.config()
 
 mongoose.connect('mongodb://0.0.0.0:27017/ecommerce');
  
@@ -38,7 +40,7 @@ app.use('/',userRouter)
 const adminRouter=require('./routes/adminRouter')
 app.use('/admin',adminRouter)
 
-const PORT=process.env.PORT||3000
-app.listen(PORT,()=>{
+
+app.listen(process.env.PORT,()=>{
     console.log('server connected');
 })

@@ -138,8 +138,12 @@ const insertAddress = async (req, res) => {
         const cartData=await Cart.findOne({user:userId}).populate('products.productId')
         console.log('addressdata',addressData);
         let address
-        let Products=cartData.products
-        
+        let Products
+        if(cartData){
+       Products=cartData.products
+      }else{
+        Products=[]
+      }
         
         if(addressData){
           address=addressData.address

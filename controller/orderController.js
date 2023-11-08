@@ -6,6 +6,14 @@ const Order=require('../model/orderModel')
 const userAuth=require('../middlewares/userAuth')
 const Product=require('../model/productModel')
 const { render } = require('../routes/userRouter')
+const Razorpay=require('razorpay')
+const crypto=require('crypto')
+// key_id,key_secret
+// rzp_test_49DsJEEbScMJdv,oIo905FGjFAr6eEZfkNhmDEU
+
+var instance = new Razorpay({ key_id: 'rzp_test_49DsJEEbScMJdv', key_secret: 'oIo905FGjFAr6eEZfkNhmDEU' })
+
+
 
 const calculateTotalPrice=async (userId)=>{
   try {
@@ -28,6 +36,7 @@ const calculateTotalPrice=async (userId)=>{
 
 const placeOrder=async (req,res)=>{
   try {
+
    
      const name=req.session.user
      const address=req.body.address
@@ -75,9 +84,10 @@ const placeOrder=async (req,res)=>{
    
     const orderdata= await order.save()
     const orderid=order._id
-     
+     if(orderdata){
       
      if(paymentMethods=='COD'){
+     
      for(const item of cartData.products){
       const productId = item.productId
       const quantity = item.quantity
@@ -87,20 +97,91 @@ const placeOrder=async (req,res)=>{
       })
 
      }
-     await Cart.findOneAndDelete({userid:req.body.user_id})
-      res.json({placed:true})
-      
+    
+      res.json({success:true,orderid})
+    }else{
+      const orderId=orderdata._id
+      const totalAmount=orderdata.totalAmount
+    
 
       // res.json({ codSuccess: true });
      
-     }else {
+     if(paymentMethods=='online') {
+      
        console.log('not added');
+       var options = {
+        amount: total*100,  // amount in the smallest currency unit
+        currency: "INR",
+        receipt: ""+orderid
+      };
+
+      instance.orders.create(options, function(err, order) {
+        console.log('///',order);
+        res.json({order})
+      });
      }
-        
     
+        
+    }
+  }
    
 
   } catch (error) {
+    console.log(error);
+  }
+}
+
+const verifyPayment = async(req,res)=>{
+  try{
+    const name=req.session.user
+    const userData= await User.findOne({name:name})
+    const userId=userData._id
+    
+    const cartData = await Cart.findOne({user:userId})
+    const products = cartData.products
+    const details = req.body;
+    const hmac = crypto.createHmac("sha256", "oIo905FGjFAr6eEZfkNhmDEU");
+
+    hmac.update(
+      details.payment.razorpay_order_id +
+        "|" +
+        details.payment.razorpay_payment_id
+    );
+    const hmacValue = hmac.digest("hex");
+
+    if (hmacValue === details.payment.razorpay_signature) {
+      console.log('details/////',details.payment.razorpay_signature);
+      for (let i = 0; i < products.length; i++) {
+        const productId = products[i].productId;
+        const quantity = products[i].quantity;
+        await Product.findByIdAndUpdate(
+          { _id: productId },
+          { $inc: { stock: -quantity } }
+        );
+      }
+      await Cart.findOneAndDelete({user:userId})
+      await Order.findByIdAndUpdate(
+        { _id: details.order.receipt },
+        { $set: {  orderStatus : "Placed" , statusLevel: 1 } }
+      );
+
+      await Order.findByIdAndUpdate(
+        { _id: details.order.receipt },
+        { $set: { paymentId: details.payment.razorpay_payment_id } }
+      );
+    
+      const orderid = details.order.receipt;
+
+      
+     
+      res.json({ codsuccess: true, orderid });
+
+    }else {
+      await Order.findByIdAndRemove({ _id: details.order.receipt });
+      res.json({ success: false });
+    }
+
+  }catch(error){
     console.log(error);
   }
 }
@@ -219,5 +300,6 @@ module.exports={
     
     cancelOrder,
     allOrders,
-    loadOrderDetails
+    loadOrderDetails,
+    verifyPayment
 }

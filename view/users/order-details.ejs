@@ -45,8 +45,9 @@
                     <td class="align-middle">
                       <%=products.quantity%>
                     </td>
+                    <% var totalPoductPrice = products.productId.price * products.quantity; %>
                     <td class="align-middle">  
-                        $<%=order.totalAmount%>
+                        $<%=totalPoductPrice%>
                       </td>
                       <td class="align-middle status-cell">
                         <span class="product-status"><%= products.orderStatus %></span>

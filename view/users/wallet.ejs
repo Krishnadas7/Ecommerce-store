@@ -1,0 +1,160 @@
+<%-include('../users/mainLayouts/mainheader.ejs')%>
+
+<main class="main">
+    <div class="page-header text-center" style="background-image: url('user/images/page-header-bg.jpg')">
+        <div class="container">
+            <h1 class="page-title text-white"><i class="fa-thin fa-wallet"></i> My Wallet</h1>
+        </div><!-- End .container -->
+    </div><!-- End .page-header -->
+    <nav aria-label="breadcrumb" class="breadcrumb-nav">
+        <div class="container">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Wallet</li>
+            </ol>
+        </div><!-- End .container -->
+    </nav><!-- End .breadcrumb-nav -->
+    
+    <!-- <body> -->
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-6">
+                    <div class="card">
+                        
+                        <div class="card-body">
+                            <div class="text-center">
+                                <h2>Your Wallet Balance:<br>₹  9999</h2>
+                               
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <a href="/walletHistory"><button class="btn rounded" style="background-color: rgb(81, 86, 238); color: white;" >Transaction History</button></a>
+                            <button class="btn btn-success rounded float-right" data-bs-toggle="modal" data-bs-target="#form" >Add Wallet</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center mt-3">
+                <a href="/shop"><button class="btn rounded" style="margin-bottom: 12px; background-color: rgb(81, 86, 238); color: white;">Continue Shopping</button></a>
+            </div>
+        </div>
+   <!-- ==================================================================modal walletAdd=================================================================== -->
+
+<div class="modal fade" id="form" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content" style="margin-top: 154px;">
+        <div class="modal-header">
+          <h4 class="modal-title " id="exampleModalLabel">Add amount to wallet</h4>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="wallet-form">
+            <div class="modal-body">
+              <div class="form-group">
+                <label for="email1">Enter Amount</label>
+                <input type="Number" class="form-control" id="amount" aria-describedby="emailHelp" placeholder="eg:1000" required>
+                <p id="err" class="text-danger"></p>
+              </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn rounded" style="background-color: grey;" data-bs-dismiss="modal">CANCEL</button>
+          <button type="submit" class="btn rounded" style="background-color: rgb(0, 104, 179);">ADD</button>
+        </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</main>
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+    const err = document.getElementById('err')
+    document.getElementById('wallet-form').addEventListener('submit',(e) =>{
+        console.log('button c;iked');
+        e.preventDefault()
+
+        const amount = document.getElementById('amount').value.trim()
+        if( !amount ) {
+            console.log('not amount');
+            e.preventDefault()
+        }
+        if( amount < 0 ) {
+            e.preventDefault()
+            console.log('amount is nefative');
+            err.innerHTML = 'Amount cannot be negative!'
+        }
+
+
+        $.ajax({
+            url: '/add-wallet',
+            method: 'post',
+            data: { amount },
+            success: (res) => {
+                if(res.status){
+                    console.log('opening razorpay');
+                    razorpay(res.payment)
+                }else{
+                    alert('failed')
+                    // console.log('status false redirecting to walletHistory');
+                    // location.href = '/view-wallet'
+                }
+            }
+         });
+  
+    });
+    function razorpay(order) {
+        console.log(order);
+    console.log('razzzzzzzzzzzzz');
+    // console.log(process.env.RazorId);
+    var options = {
+      key: "rzp_test_49DsJEEbScMJdv", // Enter the Key ID generated from the Dashboard
+      amount: order.amount, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+      currency: "INR",
+      name: "shuecrops", //your business name
+      description: "Test Transaction",
+      image: "/user/images/icons/logo.png",
+      order_id: order.id, //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+      handler: function (response) {
+        verifyPayment(response, order);
+      },
+      prefill: {
+        //We recommend using the prefill parameter to auto-fill customer's contact information especially their phone number
+        name: "Shoe crops", //your customer's name
+        email: "shuecrops007store@example.com",
+        contact: "9778019887", //Provide the customer's phone number for better conversion rates
+      },
+      notes: {
+        address: "Razorpay Corporate Office",
+      },
+      theme: {
+        color: "#c96",
+      },
+    };
+
+    var rzp1 = new Razorpay(options);
+    rzp1.open();
+  }
+        function verifyPayment(payment, order) {
+                console.log(payment,order);
+                $.ajax({
+                    url: '/verifyWalletpayment',
+                    method: 'post',
+                    data: {
+                        payment,
+                        order
+                    },
+                    success: (res) => {
+                        if (res.status) {
+                            location.href = '/walletHistory'
+                        } else{
+                            location.href = '/view-wallet'
+                            alert('Payment Failed');
+                        }
+                    }
+                })
+            }
+  </script>
+<%-include('../users/mainLayouts/mainfooter.ejs')%>

@@ -84,24 +84,29 @@
                                   ₹<%= orders[i].orderDetails.totalAmount %>
                             </td>
                             <td>
-                             <%= orders[i].orderDetails.paymentStatus%>
+                            <%  if(orders[i].orderDetails.paymentStatus==="Completed"){%>
+                                <p class="text-success"><b><%= orders[i].orderDetails.paymentStatus%></b></p>
+                            <%  }else{%>
+                                <p class="text-warning "><b><%= orders[i].orderDetails.paymentStatus%></b></p>
+                           <% }%>
+                             
                             </td>
                             
                               <td>
                                 <%if(orders[i].orderDetails.orderStatus == "Placed"){%>
-                                  <p class="text-success"><%=orders[i].orderDetails.orderStatus%></p>
+                                  <p class="text-success"><b><%=orders[i].orderDetails.orderStatus%></b></p>
                                <% }%>
                                <%if(orders[i].orderDetails.orderStatus == "Out for Delivery"){%>
-                                <p class="text-warning" > <%=orders[i].orderDetails.orderStatus%></p>
+                                <p class="text-warning" ><b> <%=orders[i].orderDetails.orderStatus%></b></p>
                                <% }%>
                                <%if(orders[i].orderDetails.orderStatus == "Cancelled"){%>
-                                <p class="text-danger" > <%=orders[i].orderDetails.orderStatus%></p>
+                                <p class="text-danger" ><b> <%=orders[i].orderDetails.orderStatus%></b></p>
                                <% }%>
                                <%if(orders[i].orderDetails.orderStatus == "Shipped"){%>
-                                <p class="text-success" > <%=orders[i].orderDetails.orderStatus%></p>
+                                <p class="text-success" ><b> <%=orders[i].orderDetails.orderStatus%></b></p>
                                <% }%>
                                <%if(orders[i].orderDetails.orderStatus == "Delivered"){%>
-                                <p class="text-success" > <%=orders[i].orderDetails.orderStatus%></p>
+                                <p class="text-success" ><b> <%=orders[i].orderDetails.orderStatus%></b></p>
                                <% }%>
                                 
                                

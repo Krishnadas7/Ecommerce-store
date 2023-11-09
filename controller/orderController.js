@@ -162,7 +162,7 @@ const verifyPayment = async(req,res)=>{
       await Cart.findOneAndDelete({user:userId})
       await Order.findByIdAndUpdate(
         { _id: details.order.receipt },
-        { $set: {  orderStatus : "Placed" , statusLevel: 1 } }
+        { $set: {  "products.$[].paymentStatus":"Completed"} }
       );
 
       await Order.findByIdAndUpdate(
@@ -216,11 +216,10 @@ const cancelOrder=async (req,res)=>{
     const userData=await User.findOne({name:name})
     const userId=userData._id
     const proId=req.body.productId
-   console.log('llllll',req.body);
     const orderId=req.body.orderId
     
     const order=await Order.findOne({_id:orderId})
-    console.log('///',order);
+   console.log('body',req.body);
 
     const productInfo= order.products.find(
       (product)=>product.productId===proId
@@ -236,15 +235,8 @@ const cancelOrder=async (req,res)=>{
   const updateQuantity=await Product.findByIdAndUpdate({_id:productId},
     {$inc:{stock:quantity}})
     
-    // for(let i=0;i<orderData.products.length;i++){
-    //   let product=orderData.products[i].productId
-    //   let quantity=orderData.products[i].quantity
-    //   await Product.updateOne({_id:product},{$inc:{stock:quantity}})
-    // }
+    
     res.json({cancel:true})
-
-    // res.redirect('/profile')
-
   } catch (error) {
     console.log(error);
   }

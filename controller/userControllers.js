@@ -10,13 +10,20 @@ const Cart = require('../model/cartModel')
 const Address=require('../model/addressModel')
 const { ObjectId } = require("mongodb")
 const Order=require('../model/orderModel')
+const dotenv=require('dotenv')
+dotenv.config()
 
 const mongoose = require('mongoose')
 function isValidObjectId(id) {
     return mongoose.Types.ObjectId.isValid(id);
+    
 }
+const Razorpay=require('razorpay')
+const crypto=require('crypto')
+// key_id,key_secret
+// rzp_test_49DsJEEbScMJdv,oIo905FGjFAr6eEZfkNhmDEU
 
-
+var instance = new Razorpay({ key_id: process.env.KEY_ID, key_secret: process.env.KEY_SECRET })
 
 const securePassword = async (password) => {
     try {
@@ -410,6 +417,99 @@ const loadContact = async (req, res) => {
 //     }
 // }
 
+// ===========================WALLET===================================
+
+const loadWallet=async (req,res)=>{
+  try {
+    res.render('wallet',{
+        user:req.session.user
+    })
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+const addMoneyWallet = async (req,res)=>{
+    try {
+        console.log("monry comong");
+
+    const {amount}=req.body
+    console.log('amount',amount);
+    const id=crypto.randomBytes(8).toString('hex')
+    console.log(id);
+    var options={ 
+        amount:amount*100,
+        currency:'INR',
+        receipt:""+id
+    }
+    
+    instance.orders.create(options, (err, order) => {
+        if(err){
+            console.log('err');
+            res.json({status: false})
+        }else{
+            console.log('stts');
+            res.json({ status: true, payment:order })
+        }
+    
+    })
+    
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+const verifyWalletpayment = async(req,res)=>{
+    try{
+  
+      console.log("entered into post verify wallet payment");
+  
+      const name=req.session.user
+      const userData=await User.findOne({name:name})
+      const userId=userData._id
+  
+      const details = req.body;
+      const amount = parseInt(details.order.amount)/100
+          let hmac = crypto.createHmac('sha256',process.env.KEY_SECRET)
+  
+  
+          hmac.update(
+            details.payment.razorpay_order_id + '|' + details.payment.razorpay_payment_id
+        )
+        hmac = hmac.digest('hex')
+        if(hmac == details.payment.razorpay_signature){
+            
+          const walletHistory = {
+            transactionDate: new Date(),
+            transactionDetails: 'Deposited via Razorpay',
+            transactionType: 'Credit',
+            transactionAmount: amount,
+            currentBalance: !isNaN(userId.wallet) ? userId.wallet + amount : amount
+        }
+            await User.findByIdAndUpdate(
+                {_id: userId},
+                {
+                    $inc:{
+                        wallet: amount
+                    },
+                    $push:{
+                        walletHistory
+                    }
+                }
+            );
+            console.log('udddd')
+            res.json({status: true})
+        }else{
+            res.json({status: false})
+        }
+  
+  
+    }catch(error){
+      console.log(error);
+    }
+  }
+
+
 module.exports = {
     loadSignup,
     loadLogin,
@@ -426,6 +526,9 @@ module.exports = {
     resetPassword,
     viewProfile,
     loadContact,
+    loadWallet,
+    addMoneyWallet,
+    verifyWalletpayment
     
     // loadAddress
 }

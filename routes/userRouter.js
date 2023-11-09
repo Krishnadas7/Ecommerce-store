@@ -104,5 +104,11 @@ userRouter.post('/verify-payment',userAuth.isLogin,orderController.verifyPayment
 
 userRouter.get('/all-orders',userAuth.isLogin,orderController.allOrders)
 
+// ==================================WALLET=================================================
+
+userRouter.get('/view-wallet',userAuth.isLogin,userControllers.loadWallet)
+userRouter.post('/add-wallet',userAuth.isLogin,userControllers.addMoneyWallet)
+userRouter.post('/verifyWalletpayment',userAuth.isLogin,userControllers.verifyWalletpayment)
+
 
 module.exports=userRouter

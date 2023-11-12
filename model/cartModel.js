@@ -5,6 +5,10 @@ const cartSchema=mongoose.Schema({
         ref: "User",
         required : true
     },
+    applied:{
+        type: String,
+        default: "not"
+      },
     products : [{
         productId :{
             type:String,

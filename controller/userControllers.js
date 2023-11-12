@@ -10,6 +10,7 @@ const Cart = require('../model/cartModel')
 const Address=require('../model/addressModel')
 const { ObjectId } = require("mongodb")
 const Order=require('../model/orderModel')
+const Coupon=require('../model/couponModel')
 const dotenv=require('dotenv')
 dotenv.config()
 
@@ -381,14 +382,19 @@ const viewProfile = async (req, res) => {
         const userId=user._id
         const userData = await User.findOne({ _id:userId });
         const address=await Address.findOne({user:userId})
-        const orderData=await Order.find({userId:userId})
+        const orderData=await Order.find({userId:userId})  
+        const coupons = await Coupon.find({
+            status: true,
+            expiryDate: { $gte: new Date() }
+          })
 
         res.render('profile', {
              user: req.session.user,
              data:user,
              address:address,
              name,
-             orders:orderData
+             orders:orderData,
+             coupons:coupons
              
             })
 
@@ -421,8 +427,15 @@ const loadContact = async (req, res) => {
 
 const loadWallet=async (req,res)=>{
   try {
+    const name=req.session.user
+    const userData=await User.findOne({name:name})
+    const userId=userData._id
+     
+    const wallet=await User.findOne({_id:userId})
+
     res.render('wallet',{
-        user:req.session.user
+        user:req.session.user,
+        wallet:wallet
     })
   } catch (error) {
     console.log(error);
@@ -509,6 +522,18 @@ const verifyWalletpayment = async(req,res)=>{
     }
   }
 
+  const loadHistory=async (req,res)=>{
+    try {
+        const name = req.session.user
+        const userData=await User.findOne({name:name})
+        const userId=userData._id
+        const details=await User.findOne({_id:userId})
+        
+        res.render('wallet-history',{user:req.session.user,wallet:details})
+    } catch (error) {
+        console.log(error);
+    }
+  }
 
 module.exports = {
     loadSignup,
@@ -528,7 +553,9 @@ module.exports = {
     loadContact,
     loadWallet,
     addMoneyWallet,
-    verifyWalletpayment
+    verifyWalletpayment,
+    loadHistory
+
     
     // loadAddress
 }

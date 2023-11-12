@@ -1,0 +1,61 @@
+<%-include('../users/mainLayouts/mainheader.ejs')%>
+  
+
+<main class="main">
+    <div  class="page-header text-center" style="margin-top: 82px; background-image: url('user/images/page-header-bg.jpg')">
+        <div class="container">
+            <h1 class="page-title text-white"><i class="fa-thin fa-wallet"></i> wallet history</h1>
+        </div><!-- End .container -->
+    </div><!-- End .page-header -->
+
+<div class=" p-b-140 align-items-center"  style="     background-color: #f1f3f6;" >
+    <div class="container  " style="margin-left: -39px;">
+      
+
+<table class="table" style="margin-left: 139px;">
+    <thead class="thead-dark" style="background-color: black;">
+      <tr>
+        <th>No.</th>
+        <th> Date</th>
+        <th>Details</th>
+        <th>Type</th>
+        <th>Amount</th>
+        <th>Current Balance</th> 
+      </tr>
+    </thead>
+    <tbody>
+       <% if(wallet && wallet.walletHistory.length>0){%>
+          <% wallet.walletHistory.forEach((data,index)=>{%>
+          <tr style="background-color:#f1f3f6; ">
+            <th scope="row"><%=index+1%></th>
+            <td><%= new Date(data.transactionDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })%></td>
+            <td><%=data.transactionDetails%></td>
+           <% if(data.transactionType=='Debit'){%>
+              <td><p class="text-danger" >-<%=data.transactionType%></p></td>
+          <%  }else{ %>
+              <td><p class="text-success">+<%=data.transactionType%></p></td>
+          <%}%>
+            
+            <td>Rs.<%=data.transactionAmount%></td>
+            <td><span style="margin-left: 43px;"><%=wallet.wallet%></span></td>
+          </tr>
+       <% })%>
+    <%}else{%>
+        <tr>
+            <td>
+              <p>No transaction History</p>
+            </td>
+          </tr>
+    <%}%>
+
+    </tbody>
+  </table>
+  
+  
+
+    </div>
+</div>
+</main>
+     
+
+<%-include('../users/mainLayouts/mainfooter.ejs')%>

@@ -23,12 +23,12 @@
                         
                         <div class="card-body">
                             <div class="text-center">
-                                <h2>Your Wallet Balance:<br>₹  9999</h2>
+                                <h2>Your Wallet Balance:<br>₹  <%=wallet.wallet%></h2>
                                
                             </div>
                         </div>
                         <div class="card-footer">
-                            <a href="/walletHistory"><button class="btn rounded" style="background-color: rgb(81, 86, 238); color: white;" >Transaction History</button></a>
+                            <a href="/wallet-history"><button class="btn rounded" style="background-color: rgb(81, 86, 238); color: white;" >Transaction History</button></a>
                             <button class="btn btn-success rounded float-right" data-bs-toggle="modal" data-bs-target="#form" >Add Wallet</button>
                         </div>
                     </div>
@@ -124,7 +124,7 @@
         //We recommend using the prefill parameter to auto-fill customer's contact information especially their phone number
         name: "Shoe crops", //your customer's name
         email: "shuecrops007store@example.com",
-        contact: "9778019887", //Provide the customer's phone number for better conversion rates
+        contact: "9778019889", //Provide the customer's phone number for better conversion rates
       },
       notes: {
         address: "Razorpay Corporate Office",
@@ -148,7 +148,7 @@
                     },
                     success: (res) => {
                         if (res.status) {
-                            location.href = '/walletHistory'
+                            location.href = '/view-wallet'
                         } else{
                             location.href = '/view-wallet'
                             alert('Payment Failed');

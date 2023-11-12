@@ -1,4 +1,5 @@
 <%-include('../users/mainLayouts/mainheader.ejs')%>
+<link rel="stylesheet" href="/public/userAssets/userAccount/assets/css/style.css">
 
 
 <div class="bg0 m-t-23 p-b-140 align-items-center"  >
@@ -14,8 +15,51 @@
         </ol>
     </div><!-- End .container -->
 </nav><!-- End .breadcrumb-nav -->
+<form  id="checkout-form" >
 <div class="text-center">
 <h1>CHECKOUT</h1>
+</div>
+<div class="">
+  <label for="checkout-discount-input" class="text-truncate"
+    >Have a coupon? <span>Enter your code below.</span></label
+  >
+</div>
+<div class="cart-discount">
+  
+    <div class="input-group mb-5">
+      <input
+        type="text"
+        class="form-control"
+        
+        name="code"
+        id="code"
+        placeholder="coupon code"
+        style="
+          height: 40px;
+          border: 1px dotted #000;
+          padding-left: 10px;
+        "
+      />
+      
+      <button
+      id="unApply"
+        class="btn btn-outline-dark"
+        style="margin: 0; width: 70px; height: 40px; display: none;"
+        onclick="unApplycoupon($('#code').val())"
+      >
+      <i class="fa-solid fa-trash"></i>
+      </button>
+      
+        <button
+        id="apply"
+        class="btn btn-outline-dark"
+        style="margin: 0; width: 70px; height: 40px; "
+        onclick="applycoupon($('#code').val())"
+      >
+        <i class="icon-long-arrow-right"></i>
+      </button>
+      
+    </div>
 </div>
 <div class=" text-center w-50 card border-0" >
     
@@ -28,10 +72,15 @@
 <div class="page-content">
     <div class="checkout">
         <div class="container">
+
+        
+          
+
+
             <div class="checkout-discount">
                
             </div><!-- End .checkout-discount -->
-            <form  id="checkout-form" >
+           
                 <div class="row" style="margin-left: -19px;
                 margin-right: -10px;">
                     <div class="col-lg-9" >
@@ -42,7 +91,7 @@
                   <% address.forEach((address)=>{%>
                   
                     <div class="d-flex rounded p-3 mt-3 border card text-white" 
-                    style=" 
+                    style="
                       
                       margin-right: 234px; " >
                         <div class="card-body"> </div>
@@ -70,79 +119,70 @@
 
 
                     </div><!-- End .col-lg-9 -->
-                    <aside class="col-lg-3 ">
-                        <div class="card ">
-                            <div class="card-body">
-                        <div class="summary " style="margin-left: -155px;">
-                            <h3 class="summary-title">Your Order</h3><!-- End .summary-title -->
-
-                            <table class="table table-summary">
-                                <thead>
-                                    <tr>
-                                        <th>Product</th>
-                                        <th>Total</th>
-                                    </tr>
-                                </thead>
-
-                                <tbody>
-                                    <%product.forEach((data)=>{%>
-                                    <tr>
-                                        <td><a href="#"><%=data.productId.name%></a></td>
-                                        <td  >&#8377 <%=data.productId.price%></td>
-                                    </tr>
-                                <%})%>
-
-                                   
-                                    <tr class="summary-subtotal">
-                                        <td>Subtotal:</td>
-                                        <td id="total1" > <%=total%></td>
-                                    </tr><!-- End .summary-subtotal -->
-                                    <tr>
-                                        <td>Shipping:</td>
-                                        <td>Free shipping</td>
-                                    </tr>
-                                    <tr class="summary-total">
-                                        <td>Total:</td>
-                                        <td id="total1"> <%=total%></td>
-                                    </tr><!-- End .summary-total -->
-                                </tbody>
-                            </table><!-- End .table table-summary -->
-
-                            <div class="accordion-summary" id="accordion-payment">
-                                <label class="d-flex" >
-                                    <input type="radio"
-                                    required
-                                     id="COD"
-                                     name="payment"
-                                     value="COD">&nbsp;&nbsp;
-                                    Cash on Delivery
-                                </label>
-                        
-                                <label class="d-flex">
-                                    <input type="radio"
-                                    required
-                                     id="online"
-                                     name="payment"
-                                     value="online" >&nbsp;&nbsp;
-                                    Online
-                                </label>
-
-                         
+                    <aside class="col-lg-3 col-md-6 mb-4" style="background-color: #e5dddd; border-radius: 10px;">
+                      <div class="card"  style="background-color: #e5dddd;">
+                          <div class="card-body">
+                              <div class="summary border-0 rounded-3" >
 
                                 
-                            </div><!-- End .accordion -->
+                                  <h3 class="summary-title">Your Order</h3><!-- End .summary-title -->
+                  
+                                  <table class="table table-summary">
+                                      <thead>
+                                          <tr>
+                                              <th>Product</th>
+                                              <th>Total</th>
+                                          </tr>
+                                      </thead>
+                  
+                                      <tbody>
+                                          <%product.forEach((data)=>{%>
+                                          <tr>
+                                              <td><a href="#"><%=data.productId.name%></a></td>
+                                              <td>&#8377 <%=data.productId.price%></td>
+                                          </tr>
+                                          <%})%>
+                  
+                                          <tr class="summary-subtotal">
+                                              <td>Subtotal:</td>
+                                              <td><%=total%></td>
+                                          </tr><!-- End .summary-subtotal -->
+                                          <tr>
+                                              <td>Shipping:</td>
+                                              <td>Free shipping</td>
+                                          </tr>
+                                          <tr class="summary-total">
+                                              <td>Total:</td>
+                                              <td id="total1"><%=total%></td>
+                                          </tr><!-- End .summary-total -->
+                                      </tbody>
+                                  </table><!-- End .table table-summary -->
+                  
+                                  <div class="accordion-summary mt-3" id="accordion-payment">
+                                      <label class="d-flex">
+                                          <input type="radio" required id="COD" name="payment" value="COD">&nbsp;&nbsp;
+                                          Cash on Delivery
+                                      </label>
+                  
+                                      <label class="d-flex">
+                                          <input type="radio" required id="online" name="payment" value="online">&nbsp;&nbsp;
+                                          Online
+                                      </label>
 
-                            <!-- <a type="su" style="    margin-left: 134px;" class=" btn btn-success" href="/checkout">Proceed to checkout</a> -->
-                            
-
-                            <button type="submit" class="btn btn-outline-primary-2 btn-order btn-block">
-                                <span class="btn-text btn btn-primary">Place Order</span>
-                                <span class="btn-hover-text btn btn-primary">Proceed to Checkout</span>
-                            </button>
-                        </div><!-- End .summary -->
-                    </div>
-                </div>
-                    </aside><!-- End .col-lg-3 -->
+                                      <label class="d-flex">
+                                        <input type="radio" required id="wallet" name="payment" value="wallet">&nbsp;&nbsp;
+                                        Wallet
+                                    </label>
+                                  </div><!-- End .accordion -->
+                  
+                                  <button type="submit" class="btn btn-outline-primary-2 btn-order btn-block mt-3">
+                                      <span class="btn-text btn btn-primary">Place Order</span>
+                                      <span class="btn-hover-text btn btn-primary">Proceed to Checkout</span>
+                                  </button>
+                              </div><!-- End .summary -->
+                          </div>
+                      </div>
+                  </aside><!-- End .col-lg-3 -->
                 </div><!-- End .row -->
             </form>
         </div><!-- End .container -->
@@ -160,6 +200,8 @@
    $("#checkout-form").submit((e)=>{
     console.log('button clicked');
     e.preventDefault();
+    let codes = document.getElementById('code').value;
+    let code = codes ? codes : 0
     let address = $("input[name=address]:checked").val()
     let total=document.getElementById("total1").innerHTML;
     
@@ -167,13 +209,20 @@
     $.ajax({
         url:"/place-order",
         method:"post",
-        data:{Total:total,address:address,payment:payment},
+        data:{Total:total,address:address,payment:payment,code:code},
         success: (response)=>{
-            if(response.success===true){
+            if(response.success===true || response.wallet==true){
                 // swal('order placed')
                 location.href='/order-placed'
+            }else if(response.wallet==false){
+              Swal.fire({
+                    icon: 'error',
+                    title: 'Insufficient Wallet Balance',
+                    text: 'Your wallet balance is insufficient. Please choose a different payment method or recharge your wallet.',
+                    });
+               
             }else{
-               razorPayment(response.order)
+              razorPayment(response.order)
             }
         }
     })
@@ -250,6 +299,85 @@
       },
     });
   }
+</script>
+<script>
+   //=========delete applied coupon=========
+   function unApplycoupon(code) {
+    const amount = document.getElementById('total1').innerHTML;
+    $.ajax({
+      url: "/deleteAppliedCoupon",
+      data:{
+        code:code,
+        amount: amount
+      },
+      method: "post",
+      success: (response)=>{
+        if(response.success){
+          document.getElementById('total1').innerHTML = response.disTotal
+          
+          document.getElementById('apply').style.display = "block"
+          document.getElementById('unApply').style.display = "none"
+          Swal.fire({
+            icon: 'warning',
+            title: 'Deleted !!',
+            text: 'Applied coupon is deleted.'
+          })
+        }
+      }
+    })
+  }
+
+
+  function applycoupon(code) {
+    
+    const amount = document.getElementById('total1').innerHTML;
+   
+    
+    $.ajax({
+      url: "/applyCoupon",   
+      data: {
+        code: code,
+        amount: amount
+      },
+      method: "post",
+      success: (response) => {
+        if (response.user) {
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops !!',
+            text: 'This coupon already used!'
+          })
+        }else if (response.cartAmount) {
+          Swal.fire({
+            icon: 'warning',
+            title: 'Oops !!',
+            text: 'You cant use the coupon...Buy more'
+          })
+        } else if (response.amountOkey) {
+         console.log(response);
+          document.getElementById('total1').innerHTML = response.disTotal
+          
+          document.getElementById('apply').style.display = "none"
+          document.getElementById('unApply').style.display = ""
+          Swal.fire({
+            position: 'center',
+            icon: 'success',
+            title: 'Discount redeemed',
+            showConfirmButton: false,
+            timer: 1500
+          })
+          
+        } else {
+          Swal.fire({
+            icon: 'error',
+            title: 'Oops !!!',
+            text: 'Invalid Coupon!!!'
+          })
+        }
+      }
+    })
+  }
+
 </script>
 
 <%-include('../users/mainLayouts/mainfooter.ejs')%>

@@ -1,0 +1,69 @@
+<%-include('../admin/adminhomeLayouts/admin-header.ejs')%>
+<%-include('../admin/adminhomeLayouts/admin-sidebar.ejs')%>
+<%-include('../admin/adminhomeLayouts/admin-navbar.ejs')%>
+
+<div class="main-panel">
+    <div class="content-wrapper">
+  <div class="row">
+      
+      <div class="col-lg-12 grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Coupon Management</h4>
+            
+            <p class="card-description"> All FurniCube Coupons</p>
+            <div class="table-responsive">
+              <table class="table ">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Code</th>
+                    <th>Discount Amount</th>
+                    <th>Amount<br>Criteria</th>
+                    <th>Activation<br>Date</th>
+                    <th>Expiry Date</th>
+                    <th>User Limit</th>
+                    <th>Used Users</th>
+                    <th>Edit</th>
+                    <th>Action</th>
+                    <a href="/admin/add-coupon" class="btn btn-outline-primary btn-rounded">Add Coupons</a>
+                  </tr>
+                </thead>
+                <tbody>
+                 
+                  <% if(coupons.length > 0){ %>
+                      <% coupons.forEach((coupons)=> { %>
+                  <tr>
+                      <td><%= coupons.couponName %></td>
+                      <td><%= coupons.couponCode %></td>
+                      <td><%= coupons.discountAmount %></td>
+                      <td><%= coupons.criteriaAmount %></td>
+                      <td><%= coupons.activationDate.toLocaleDateString('en-US', { year:
+                          'numeric', month: 'short', day: '2-digit'
+                          }).replace(/\//g, '-') %></td>
+                          <td><%= coupons.expiryDate.toLocaleDateString('en-US', { year:
+                              'numeric', month: 'short', day: '2-digit'
+                              }).replace(/\//g, '-') %></td>
+                              
+                      <td><%= coupons.usersLimit %></td>
+                      <td><%= coupons.usedUsers.length %></td>
+                      <td><a href="/admin/edit-coupon-page?id=<%= coupons._id %>" class="badge badge-warning">Update</a></td>
+                      <% if(coupons.status == true ){ %>
+                          <td><a href="/admin/block-coupons?id=<%= coupons._id %>" class="badge badge-danger" onclick="return confirm('Are you sure you? Do you want to Block ?')">Block</a></td>
+                      <%}else if(coupons.status == false ){%>
+                          <td><a href="/admin/block-coupons?id=<%= coupons._id %>" class="badge badge-success" onclick="return confirm('Are you sure you? Do you want to Unblock ?')">Unblock</a></td>
+                          <% } %>
+                  </tr>
+                  <% }) %>
+                  <% } %>
+               
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
+  </div>
+
+<%-include('../admin/adminhomeLayouts/admin-footer.ejs')%>

@@ -12,31 +12,38 @@
               <h4 class="card-title">EDIT PRODUCT</h4>
               <!-- <p class="card-description"> Basic form elements </p> -->  
               <hr class="white-line">
-              <form class="forms-sample" action="/admin/edit-product" enctype="multipart/form-data" method="post">
-
+              <form class="forms-sample" action="/admin/edit-product" enctype="multipart/form-data" method="post" id="productForm">
+             
                 <input type="hidden" name="id" value="<%=product._id%>">
     
                   <div class="form-group  row">
                       <div class="col-12 col-md-9 mt-2">
-                         
+                         <label for="">Product name</label>
                           <input type="text" class="form-control  text-light mb-3 " name="name" value="<%=product.name%>"
-                              id="exampleInputName1" placeholder="product name" required>
-  
+                              id="exampleInputName1" placeholder="product name" >
+                              <div class="error-message text-danger"  id="name-error"></div>
+                                
+                              <label for="">Category</label>
                               <input type="text" class="form-control  text-light mb-3 " name="category" value="<%=product.category%>"
-                              id="exampleInputName1" placeholder="category" required>
-  
-                              <input type="text" class="form-control  text-light mb-3 " name="description" value="<%=product.description%>"
-                              id="exampleInputName1" placeholder="description" required>
-  
-  
-                              <input type="text" class="form-control  text-light mb-3 " name="price" value="<%=product.price%>"
-                              id="exampleInputName1" placeholder="price" required>
-  
-                              <input type="text" class="form-control  text-light mb-3 " name="stock" value="<%=product.stock%>"
-                              id="exampleInputName1" placeholder="stock" required>
+                              id="exampleInputName1" placeholder="category" >
+                              <div class="error-message text-danger" id="category-error"></div>
                                  
-                              <!-- <input type="file" class="font-weight-bold form-control  text-light mb-3 " name="" 
-                              id="exampleInputName1"  placeholder="choosefile...." required> -->
+                              <label for="">Description</label>
+                              <input type="text" class="form-control  text-light mb-3 " name="description" value="<%=product.description%>"
+                              id="exampleInputName1" placeholder="description" >
+                              <div class="error-message text-danger" id="description-error"></div>
+  
+                               <label for="">Price</label>
+                              <input type="text" class="form-control  text-light mb-3 " name="price" value="<%=product.price%>"
+                              id="exampleInputName1" placeholder="price" >
+                              <div class="error-message text-danger" id="price-error"></div>
+  
+                              <label for="">Stock</label>
+                              <input type="text" class="form-control  text-light mb-3 " name="stock" value="<%=product.stock%>"
+                              id="exampleInputName1" placeholder="stock" >
+                              <div class="error-message text-danger" id="stock-error"></div>
+                                 
+                              
                               <label class="upload__btn ms-3">
                                 <p>Upload images</p>
                                 <input type="file" id="formFile" name="image"
@@ -51,14 +58,14 @@
                                         <img id="imageView<%= i %>" src="/public/adminAssets/product-images/<%= product.image[i] %>" alt="Existing Image" style="width: 100px; height: 100px;" class="product-image">
                                         <label class="upload__btn ms-3" for="formFile<%= i %>">
                                             <p>Upload images</p>
-                                            <input type="file" id="formFile <%= i %>" name="image" onchange="viewImage(event, <%=i %>)" multiple data-max_length="20" class="upload__inputfile">
+                                            <input type="file" id="formFile <%= i %>" name="image" onchange="viewImage(event, <%=i %>)" multiple data-max_length="20" class="upload__inputfile" require>
                                         </label>
                                         <input style="margin-left: 100px;" type="checkbox" name="deleteImages" value="<%= product.image[i] %>"> Delete
                                     </div>
                                 <% } %>
                             </div>
                               
-                          <button type="submit" class="btn btn-lg btn-inverse-primary mr-2 mt-2">ADD</button>
+                            <button type="submit" class="btn btn-lg btn-inverse-primary mr-2 mt-2">ADD</button>
                       </div>
     
                   </div>
@@ -121,6 +128,67 @@
       });
     });
   </script>
+<script>
+  document.getElementById('productForm').addEventListener('submit', function (event) {
+    // Initialize error flag
+    let hasError = false;
+
+    // Function to display error message
+    function displayError(inputName, errorMessage) {
+      const errorElement = document.getElementById(`${inputName}-error`);
+      errorElement.innerHTML = errorMessage;
+      hasError = true;
+    }
+
+    // Function to hide error message
+    function hideError(inputName) {
+      const errorElement = document.getElementById(`${inputName}-error`);
+      errorElement.innerHTML = '';
+    }
+
+    // Function to validate each field
+    function validateField(inputName, inputValue, validationFunc) {
+      if (validationFunc(inputValue)) {
+        // Clear existing error message
+        hideError(inputName);
+      } else {
+        // Display error message
+        displayError(inputName, `Please enter a valid ${inputName}.`);
+      }
+    }
+
+    // Validate name
+    validateField('name', this.elements.name.value.trim(), value => value.length > 0);
+
+    // Validate category
+    validateField('category', this.elements.category.value.trim(), value => value.length > 0);
+
+    // Validate description
+    validateField('description', this.elements.description.value.trim(), value => value.length > 0);
+
+    // Validate price
+    validateField('price', this.elements.price.value.trim(), value => parseFloat(value) > 0);
+
+    // Validate stock
+    validateField('stock', this.elements.stock.value.trim(), value => parseInt(value) >= 0);
+
+    // Check if there are any errors
+    if (hasError) {
+      event.preventDefault(); // Prevent form submission if there are errors
+    }
+  });
+
+  // Add event listeners for input fields to hide errors on typing
+  const inputFields = document.querySelectorAll('.form-control');
+  inputFields.forEach((inputField) => {
+    inputField.addEventListener('input', function () {
+      const inputName = this.getAttribute('name');
+      hideError(inputName);
+    });
+  });
+</script>
+
+
   
 
 

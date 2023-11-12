@@ -1,9 +1,9 @@
 <%-include('../users/mainLayouts/mainheader.ejs')%>
 
-
+<link rel="stylesheet" href="/public/userAssets/userAccount/assets/css/style.css">
 <div class="container mt-8" style="background-color: gainsboro;" >
     <div class="row justify-content-center">
-      <div class="col-md-8">
+      <div class="col-md-8 " style="margin-top: 155px;" >
         <div class="card border-0 shadow">
           <div class="card-body text-center">
             <i class="bi bi-check2-circle-fill order-icon"></i>
@@ -45,27 +45,118 @@
                     <td class="align-middle">
                       <%=products.quantity%>
                     </td>
-                    <% var totalPoductPrice = products.productId.price * products.quantity; %>
+                   
                     <td class="align-middle">  
-                        $<%=totalPoductPrice%>
+                        $<%=order.totalAmount%>
                       </td>
                       <td class="align-middle status-cell">
                         <span class="product-status"><%= products.orderStatus %></span>
                       </td>
                       
                       <td class="align-middle">
+                        <%if(products.orderStatus=='Delivered'){%>
+
+                          <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                            Return
+                          </button>
+                          <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="margin-top: 152px;">
+                            <div class="modal-dialog">
+                              <div class="modal-content">
+                                <div class="modal-header">
+                                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                  <form action="/return-order?productId=<%=products.productId._id%>&orderId=<%=order._id%>" method="post">
+                                  <input type="hidden" name="totalprice" value="<%=order.totalAmount%>" >
+                                    <div class="mb-3 p-5"  >
+                                    
+                                      <select name="refund" class="form-select form-select-lg " aria-label=".form-select-lg example"
+                                       style=" width: 218px;
+                                      margin-left: -324px;
+                                      height: 50px;
+                                      background-color: white;
+                                      border: none;">
+                                        <option selected>Refund option</option>
+                                        <option value="wallet">Wallet</option>
+                                       
+                                      </select>
+                                    
+                                      <textarea name="reason" class="form-control" id="message-text" placeholder="eg: size is not match"></textarea>
+                                    </div>
+                                    <div class="modal-footer">
+                                      <button type="button" class="btn btn-primary" data-bs-dismiss="modal">No</button>
+                                      <button type="submit" class="btn btn-danger">Cancel</button>
+                                    </div>
+                                  </form>
+                                <div class="modal-footer">
+                                  
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+
+
+
+
+
+
+
+                          
+                        <%}%>
+                       <% if(products.orderStatus !== 'Delivered' && products.orderStatus !== 'Returned'){%>
                       <% if(products.orderStatus=='Cancelled'){%>
                         <button disabled class="btn btn-danger">Cancel</button>
                      <%  }else{%>
-                        <button onclick="cancelOrder('<%=products.productId._id%>','<%=order._id%>')" class="btn btn-danger">Cancel</button>
+                      
+                        <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                          Cancel
+                        </button>
+
+
+                        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="margin-top: 152px;">
+                          <div class="modal-dialog">
+                            <div class="modal-content">
+                              <div class="modal-header">
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                              </div>
+                              <div class="modal-body">
+                                <form action="/cancel-order?productId=<%=products.productId._id%>&orderId=<%=order._id%>" method="post">
+                                <input type="hidden" name="totalprice" value="<%=order.totalAmount%>" >
+                                  <div class="mb-3 p-5"  >
+                                   <% if(order.paymentMethod=='online'||order.paymentMethod=='wallet'){%>
+                                    <select name="refund" class="form-select form-select-lg " aria-label=".form-select-lg example"
+                                     style=" width: 218px;
+                                    margin-left: -324px;
+                                    height: 50px;
+                                    background-color: white;
+                                    border: none;">
+                                      <option selected>Refund option</option>
+                                      <option value="wallet">Wallet</option>
+                                     
+                                    </select>
+                                   <% }%>
+                                    <textarea name="reason" class="form-control" id="message-text" placeholder="eg: size is not match"></textarea>
+                                  </div>
+                                  <div class="modal-footer">
+                                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">No</button>
+                                    <button type="submit" class="btn btn-danger">Cancel</button>
+                                  </div>
+                                </form>
+                              <div class="modal-footer">
+                                
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                       <% }%>
                       </td>
-
+                        <%}%>
                   </tr>
                 </tbody>
               </table>
 
-                <% if(products.orderStatus!=='Cancelled'){%>
+                <% if(products.orderStatus!=='Cancelled' &&  products.orderStatus!=='Returned'){%>
               <div class="progress-track">
                 <ul id="progressbar">
                   <li class="step0 active " id="step1">Order placed</li>
@@ -197,28 +288,28 @@
 
 
 <script>
-  function cancelOrder(productId,orderId){
-    console.log(productId);
-    console.log(orderId);
-    $.ajax({
-      url:'/cancel-order',
-      method:'post',
-      encoded:true,
-      data:{
-        productId:productId,
-        orderId:orderId
-      }
-    }).done((data)=>{
-      if(data){
-      // $('#tableDiv').load('/order-details #tableDiv',function(){
-      //   console.log('reload successfilly');
-      // })
-      location.reload()
-      }else{
-  alert('failed')
-      }
-    })
-  }
+  // function cancelOrder(productId,orderId){
+  //   console.log(productId);
+  //   console.log(orderId);
+  //   $.ajax({
+  //     url:'/cancel-order',
+  //     method:'post',
+  //     encoded:true,
+  //     data:{
+  //       productId:productId,
+  //       orderId:orderId
+  //     }
+  //   }).done((data)=>{
+  //     if(data){
+  //     // $('#tableDiv').load('/order-details #tableDiv',function(){
+  //     //   console.log('reload successfilly');
+  //     // })
+  //     location.reload()
+  //     }else{
+  // alert('failed')
+  //     }
+  //   })
+  // }
 </script>
 
 <%-include('../users/mainLayouts/mainfooter.ejs')%>

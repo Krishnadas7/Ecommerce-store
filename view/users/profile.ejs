@@ -1,4 +1,5 @@
 <%-include('../users/mainLayouts/mainheader.ejs')%>
+<link rel="stylesheet" href="/public/userAssets/userAccount/assets/css/style.css">
 <style>
     .dashboard .btn {
     min-width: 60px;
@@ -48,7 +49,18 @@
                                     role="tab" aria-controls="tab-order" aria-selected="false">My Orders</a>
                             </li>
 
-
+                            <li class="nav-item">
+                                <a
+                                  class="nav-link"
+                                  id="tab-coupons-link"
+                                  data-toggle="tab"
+                                  href="#tab-coupons"
+                                  role="tab"
+                                  aria-controls="tab-coupons"
+                                  aria-selected="false"
+                                  >Coupons</a
+                                >
+                              </li>
 
 
                             <li class="nav-item">
@@ -121,21 +133,21 @@
                                          <label>Mobile </label>
                                     <input type="tel" class="form-control w-25 " value="<%=data.mobile%>" disabled>
                                 </form>
-                                             
-                                        <form action="/profile-password" method="post">
+                                             <label class="ml-5 mt-2" for=""><b>Change password</b></label>
+                                             <form class="mt-3" action="/profile-password" method="post" onsubmit="submitForm(event)">
                                             
-                                          <div class="d-flex flex-row justify-content-between">
-                                            <label class="mr-2">Current password</label>
-		            						<input type="password" name="currentpassword" class="form-control mt-1">
-                                            <p id="currentpassworderror"></p>
-		            						<label class="mr-2" style="    margin-left: 62px;" >New password </label>
+                                          <!-- <div class="d-flex flex-row justify-content-between"> -->
+                                            <label class="mr-2 ">Current password</label>
+		            						<input type="password" name="currentpassword" class="form-control mt-1 ml-2">
+                                            <p style="color: red;" id="currentpassworderror"></p>
+		            						<label  >New password </label>
 		            						<input type="password" name="newpassword" class="form-control mt-1">
-                                            <p id="newpassworderror"></p>
-                                        </div>
+                                            <p style="color: red;" id="newpassworderror"></p>
+                                        <!-- </div> -->
 		            						<label  >Confirm new password</label>
 		            						<input type="password" name="confirmpassword" class="form-control mt-1">
-                                            <p id="confirmpassworderror"></p>
-
+                                            <p style="color: red;" id="confirmpassworderror"></p>
+                                            <a class="btn btn-primary" href="/forgot-password">Forgot</a>
                                         
                                            
                                             <input type="submit" class="btn" id="submitButton" value="Save>">
@@ -154,6 +166,67 @@
                                         SHOP</span><i class="icon-long-arrow-right"></i></a>
                             </div><!-- .End .tab-pane -->
                             <!-- this you can use new fieldhhhhhh   END--> 
+
+                            <div
+                class="tab-pane fade"
+                id="tab-coupons"
+                role="tabpanel"
+                aria-labelledby="tab-coupons-link"
+              >
+                <div class="row">
+                  <% if(coupons.length > 0 ){ %>
+                    <% coupons.forEach((value)=>{ %>
+                        
+                  <div class="col-lg-6"  >
+                    <div class="card card-dashboard" style="border-radius: 30px; background-color: bisque;">
+                      <div class="card-body" >
+                        <h1 class="card-title"><b><%= value.couponName %>&nbsp;!!</b></h1>
+                        <!-- End .card-title -->
+                        
+
+                        <div class="col-8 col-sm-12 col-xl-8 my-auto">
+                          <p>Use Code:</p>
+                          <div
+                            class="d-flex d-sm-block d-md-flex align-items-center"
+                          >
+                          
+                            <h2 class="mb-0" style="
+                            width: 500px;
+                            height: 50px;
+                            border: 2px dotted #000;
+                            padding-left: 10px;
+                          "><%= value.couponCode %></h2>
+                          </div>
+                          <br>
+                          <p>If you buy&nbsp;₹ <%= value.criteriaAmount %>&nbsp;worth, You'll get&nbsp;₹ <%= value.discountAmount %>&nbsp;off! </p>
+                          
+                          
+                        
+
+                          <br />
+                          <p class="card-title">Validity:&nbsp;<%= value.activationDate.toLocaleDateString('en-US',
+                            { year: 'numeric', month: 'short', day: '2-digit'
+                            }).replace(/\//g, '-') %>&nbsp; To &nbsp;<%= value.expiryDate.toLocaleDateString('en-US',
+                            { year: 'numeric', month: 'short', day: '2-digit'
+                            }).replace(/\//g, '-') %></p>
+                          
+                            
+                        </div>
+                        <div
+                          class="col-4 col-sm-12 col-xl-4 text-center text-xl-right"
+                        >
+                          
+                        </div>
+                      </div>
+                    </div>
+                    <!-- End .card-body -->
+                  </div>
+                  <% }) %>
+                  <% } %>
+                  <!-- End .card-dashboard -->
+                </div>
+              </div>
+              <!-- .End .tab-pane -->
 
 
 
@@ -336,6 +409,46 @@ function deleteAddress(addressId){
     })
 
 }
+
+
+</script>
+
+<script>
+    
+  function submitForm(event) {
+    event.preventDefault(); // Prevent the default form submission
+
+    // Get form data
+    const currentPassword = $("input[name='currentpassword']").val();
+    const newPassword = $("input[name='newpassword']").val();
+    const confirmPassword = $("input[name='confirmpassword']").val();
+
+    // Make AJAX request
+    $.ajax({
+      type: "POST",
+      url: "/profile-password",
+      data: {
+        currentpassword: currentPassword,
+        newpassword: newPassword,
+        confirmpassword: confirmPassword
+      },
+      success: function(response) {
+        // Handle the response here
+        // You can update the error messages based on the response
+        $("#currentpassworderror").text(response.currentpassworderror);
+        $("#newpassworderror").text(response.newpassworderror);
+        $("#confirmpassworderror").text(response.confirmpassworderror);
+
+        // Optionally, you can redirect the user based on the response
+        if (response.redirect) {
+          window.location.href = response.redirect;
+        }
+      },
+      error: function(error) {
+        console.log(error);
+      }
+    });
+  }
 </script>
 
 

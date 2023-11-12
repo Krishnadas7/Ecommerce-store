@@ -96,7 +96,7 @@
                                 <%if(orders[i].orderDetails.orderStatus == "Placed"){%>
                                   <p class="text-success"><b><%=orders[i].orderDetails.orderStatus%></b></p>
                                <% }%>
-                               <%if(orders[i].orderDetails.orderStatus == "Out for Delivery"){%>
+                               <%if(orders[i].orderDetails.orderStatus == "outfordelivery"){%>
                                 <p class="text-warning" ><b> <%=orders[i].orderDetails.orderStatus%></b></p>
                                <% }%>
                                <%if(orders[i].orderDetails.orderStatus == "Cancelled"){%>
@@ -107,6 +107,9 @@
                                <% }%>
                                <%if(orders[i].orderDetails.orderStatus == "Delivered"){%>
                                 <p class="text-success" ><b> <%=orders[i].orderDetails.orderStatus%></b></p>
+                               <% }%>
+                               <%if(orders[i].orderDetails.orderStatus == "Returned"){%>
+                                <p class="text-danger" ><b> <%=orders[i].orderDetails.orderStatus%></b></p>
                                <% }%>
                                 
                                

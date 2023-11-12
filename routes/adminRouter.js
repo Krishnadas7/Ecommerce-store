@@ -5,6 +5,7 @@ const category=require('../controller/categoryController')
 const userManagement=require('../controller/userManagement')
 const productManagement=require('../controller/productManagement')
 const adminAuth=require('../middlewares/adminAuth')
+const couponController=require('../controller/couponController')
 
 const session=require('express-session')
 const config=require('../config/config')
@@ -122,5 +123,14 @@ adminRouter.get('/order-managment',adminAuth.isLogin,adminControllers.orderManag
 adminRouter.post('/change-status',adminAuth.isLogin,adminControllers.changeStatus)
 
 adminRouter.post('/cancel-orderitem',adminAuth.isLogin,adminControllers.cancelOrderadmin)
+
+// =================================COUPON==================================================
+
+adminRouter.get('/add-coupon',adminAuth.isLogin,couponController.loadAddCoupon)
+adminRouter.get('/view-coupon',adminAuth.isLogin,couponController.viewCoupon)
+adminRouter.post('/add-coupon',adminAuth.isLogin,couponController.addCoupon)
+adminRouter.get('/block-coupons',adminAuth.isLogin,couponController.blockCoupons)
+adminRouter.get('/edit-coupon-page',adminAuth.isLogin,couponController.showEditPage)
+adminRouter.post('/edit-coupon',adminAuth.isLogin,couponController.updateCoupon)
 
 module.exports=adminRouter

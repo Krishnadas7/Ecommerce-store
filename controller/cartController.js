@@ -45,15 +45,20 @@ const addToCart = async (req, res) => {
         const price = productData.price
         const total = price
         if (updatedProduct) {
-            await Cart.updateOne(
-                { user: userId, "products.productId": productId },
-                {
-                    $inc: {
-                        'products.$.quantity': 1,
-                        // "products.$.totalprice":total
-                    }
-                }
-            )
+            return res.json({
+                already: true,
+               
+
+            })
+            // await Cart.updateOne(
+            //     { user: userId, "products.productId": productId },
+            //     {
+            //         $inc: {
+            //             'products.$.quantity': 1,
+                       
+            //         }
+            //     }
+            // )
         } else {
             await cartData.products.push({
                 productId: productId,

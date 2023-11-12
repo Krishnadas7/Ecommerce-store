@@ -23,6 +23,8 @@
             <div class="col-lg-10 col-xl-7 m-lr-auto m-b-50">
                 <div class="m-l-25 m-r--38 m-lr-0-xl">
                     <div class="wrap-table-shopping-cart">
+
+                        <% if (cart && cart.length > 0) { %>
                         <table class="table-shopping-cart">
                             <td>
                             <tr class="table_head ">
@@ -38,7 +40,7 @@
                             </tr>
                         </td>
                             
-                            <% if (cart && cart.length > 0) { %>
+                           
                             <%cart.forEach((data,index)=>{%>
                                 <tbody>
                                 <tr class="table_row">
@@ -68,33 +70,31 @@
                                   </tr>
                                 
                               <%})%>
-                            
+                            </tbody>
+
+                        </table>
                             <% }else{%>
                                 <!-- <tr class="text-center"> -->
-                                    <tr>
+                                    
                                         
-                                       <img style="height: 200px; width: 200px; margin-left: 280px; "  src="/public/sample/cartempty.webp" alt="">
-                                       <a style="margin-left: 290px" class="rounded btn btn-primary" href="/all-product">Go shopping</a>
+                                       <img style="height: 258px;
+                                       width: 319px;
+                                       margin-left: 165px; "  src="/public/userAssets/icons/emptycart.webp" alt="">
+
+                                       <div class="text-center" style="margin-left: -49px;">
+                                       <h3> Your cart is empty!</h3>
+                                   Explore our wide selection and find something you like
+                                       </div>
+                                       <a style="margin-left: 231px" class="rounded btn btn-primary mt-2" href="/all-product">Go shopping</a>
                                             <!-- <p class="h1">Cart is empty</p> -->
                                         
-                                        </tr>
+                                        
                                 <!-- </tr> -->
                             <%}%>
                               
-                        </tbody>
-
-                        </table>
-
-
-
-
-                        
-
-
-
-
+                      
                     </div>
-
+                    <% if (cart && cart.length > 0) { %>
                     <div class="flex-w flex-sb-m bor15 p-t-18 p-b-15 p-lr-40 p-lr-15-sm">
                         <div class="flex-w flex-m m-r-20 m-tb-5">
                             <input class="stext-104 cl2 plh4 size-117 bor13 p-lr-20 m-r-10 m-tb-5" type="text" name="coupon" placeholder="Coupon Code">
@@ -188,7 +188,8 @@
                             </span>
                         </div>  
                     </div>
-                    <% if (cart && cart.length > 0) { %>
+
+                 
                        
                    
                         <a class="flex-c-m stext-101 cl0 size-116 bg3 bor14 hov-btn3 p-lr-15 trans-04 pointer" href="/checkout">
@@ -210,7 +211,7 @@
             encoded:true,
             data:{
                 product:proId
-            }
+            }   
            }).done((data)=>{
             if(data){
                 Swal.fire('Item deleted successfully')

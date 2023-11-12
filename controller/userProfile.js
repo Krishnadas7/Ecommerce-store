@@ -5,8 +5,7 @@ const Cart=require('../model/cartModel')
 const Products=require('../model/productModel')
 const Category=require('../model/categoryModel')
 const bcrypt=require('bcrypt')
-
-
+const coupons=require('../model/couponModel')
 
 
 const securePassword = async (password) => {
@@ -227,8 +226,45 @@ const insertAddress = async (req, res) => {
     }
   }
 
-  const resetPassword=async (req,res)=>{
+  // const resetPassword=async (req,res)=>{
+  //   try {
+  //     const currentpd=req.body.currentpassword
+  //     const newpd=req.body.newpassword
+  //     const confirmpd=req.body.confirmpassword
+          
+  //     const name=req.session.user
+  //     const userData=await User.findOne({name:name})
+  //     const userId=userData._id
+  //     console.log(userData);
+  //     const oldpd=userData.password
+  //     console.log(oldpd);
+
+  //       if(userData){
+  //         const passwordMatch=await bcrypt.compare(currentpd,oldpd)
+         
+  //         if(passwordMatch){
+  //             if(newpd===confirmpd){
+  //                  const secure=await securePassword(newpd)
+  //                  const store=await User.updateOne({_id:userId},{$set:{password:secure}})
+  //                  console.log('all matched');
+  //                  res.redirect('/profile')
+  //             }else{
+  //               console.log('new and confirm not matched');
+  //               res.redirect('/profile')
+  //             }
+  //         }else{
+  //           console.log('old and currnt is not matched');
+  //           res.redirect('/profile')
+  //         }
+  //       }
+
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // }
+  const resetPassword = async (req, res) => {
     try {
+      // ... your existing server-side code ...
       const currentpd=req.body.currentpassword
       const newpd=req.body.newpassword
       const confirmpd=req.body.confirmpassword
@@ -239,30 +275,36 @@ const insertAddress = async (req, res) => {
       console.log(userData);
       const oldpd=userData.password
       console.log(oldpd);
-
-        if(userData){
-          const passwordMatch=await bcrypt.compare(currentpd,oldpd)
-         
-          if(passwordMatch){
-              if(newpd===confirmpd){
-                   const secure=await securePassword(newpd)
-                   const store=await User.updateOne({_id:userId},{$set:{password:secure}})
-                   console.log('all matched');
-                   res.redirect('/profile')
-              }else{
-                console.log('new and confirm not matched');
-                res.redirect('/profile')
-              }
-          }else{
-            console.log('old and currnt is not matched');
-            res.redirect('/profile')
+      if (userData) {
+        const passwordMatch = await bcrypt.compare(currentpd, oldpd);
+  
+        if (passwordMatch) {
+          if (newpd === confirmpd) {
+            const secure = await securePassword(newpd);
+            const store = await User.updateOne({ _id: userId }, { $set: { password: secure } });
+  
+            // Send success response
+            res.json({ redirect: '/profile' });
+          } else {
+            // Send error response for new and confirm password mismatch
+            res.json({ newpassworderror: 'New and confirm passwords do not match' });
           }
+        } else {
+          // Send error response for old and current password mismatch
+          res.json({ currentpassworderror: 'Old and current passwords do not match' });
         }
-
+      } else {
+        // Send error response for user not found
+        res.json({ currentpassworderror: 'User not found' });
+      }
+  
     } catch (error) {
       console.log(error);
+      // Send a generic error response
+      res.status(500).json({ error: 'Internal server error' });
     }
   }
+  
 
   const deleteAddress=async (req,res)=>{
     try {

@@ -222,7 +222,7 @@ const changeStatus=async (req,res)=>{
 
      const statusMap = {
       Shipped: 2,
-      OutforDelivery: 3,
+      outfordelivery: 3,
       Delivered: 4,
     };
 

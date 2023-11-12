@@ -8,6 +8,7 @@ const userProfile=require('../controller/userProfile')
 const orderController=require('../controller/orderController')
 const cartController=require('../controller/cartController')
 const Count=require('../middlewares/cartMiddleware')
+const couponController= require('../controller/couponController')
 // view engine setup
  userRouter.set('view engine','ejs')
  userRouter.set('views','./view/users')
@@ -93,6 +94,7 @@ userRouter.get('/order-placed',userAuth.isLogin,orderController.orderSuccess)
 userRouter.post('/cancel-order',userAuth.isLogin,orderController.cancelOrder)
 userRouter.post('/delete-address',userProfile.deleteAddress)
 userRouter.get('/order-details',userAuth.isLogin,orderController.loadOrderDetails)
+userRouter.post('/return-order',userAuth.isLogin,orderController.returnOrder)
 
 
 // ===============================RESET PASSWORD=============================================
@@ -109,6 +111,10 @@ userRouter.get('/all-orders',userAuth.isLogin,orderController.allOrders)
 userRouter.get('/view-wallet',userAuth.isLogin,userControllers.loadWallet)
 userRouter.post('/add-wallet',userAuth.isLogin,userControllers.addMoneyWallet)
 userRouter.post('/verifyWalletpayment',userAuth.isLogin,userControllers.verifyWalletpayment)
+userRouter.get('/wallet-history',userAuth.isLogin,userControllers.loadHistory)
+
+userRouter.post('/applyCoupon',userAuth.isLogin,couponController.applyCoupon)
+userRouter.post('/deleteAppliedCoupon',userAuth.isLogin,couponController.deleteAppliedCoupon)
 
 
 module.exports=userRouter

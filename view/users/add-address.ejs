@@ -44,56 +44,159 @@
     </div>
 </div> -->
 
-<div class="bg0 m-t-23 p-b-140" style="margin-top: 80px;">
+<div class=" m-t-23 p-b-140" style="margin-top: 80px; background-color: rgb(201, 189, 189);">
     <div class="container py-5 mx-y m-r-40 m-l-40 p-b-140  ">
 
-        <form action="" method="post">
-
+        <form action="" method="post" onsubmit="return validateForm()">
             <!-- profile end -->
             <div class="row">
                 <div class="col-md-6 mb-3">
-                   <label class="font-weight-bold" for="name"> Name * </label>
-                    <input type="text" class="form-control " id="name" name="name" value="" required>
+                    <label class="font-weight-bold text-white" for="name"> Name * </label>
+                    <input type="text" class="form-control " id="name" name="name" value="" >
+                    <p id="nameError" style="color: red;"></p>
                 </div><!-- End .col-md-6 -->
-
+        
                 <div class="col-md-6 mb-3">
-                   <label class="font-weight-bold" for="email">Email *</label>
-                    <input type="text" class="form-control " id="email" name="email" value="" required>
+                    <label class="font-weight-bold text-white" for="email">Email *</label>
+                    <input type="text" class="form-control" id="email" name="email" value="" >
+                    <p id="emailError" style="color: red;"></p>
                 </div><!-- End .col-md-6 -->
             </div><!-- End .row -->
-
+        
             <div class="mb-3 w-50">
-                <label class="font-weight-bold" for="mobile">Mobile *</label>
-                <input type="tel" class="form-control " id="mobile" name="mobile" value="" required>
+                <label class="font-weight-bold text-white" for="mobile">Mobile *</label>
+                <input type="tel" class="form-control" id="mobile" name="mobile" pattern="[0-9]{10}" title="Only 10 digits are allowed" >
+                <p id="mobileError" style="color: red;"></p>
             </div>
-
+        
             <div class="mb-3 w-50">
-                <label class="font-weight-bold" for="housename">House Name *</label>
-                <input type="text" class="form-control " id="housename" name="housename" value="" required>
+                <label class="font-weight-bold text-white" for="housename">House Name *</label>
+                <input type="text" class="form-control" id="housename" name="housename" value="" >
+                <p id="housenameError" style="color: red;"></p>
             </div>
-
+        
             <div class="row">
                 <div class="col-md-6 mb-3">
-                    <label class="font-weight-bold" for="city">City *</label>
-                    <input type="text" class="form-control " id="city" name="city" value="" required>
+                    <label class="font-weight-bold text-white" for="city">City *</label>
+                    <input type="text" class="form-control" id="city" name="city" value="" >
+                    <p id="cityError" style="color: red;"></p>
                 </div><!-- End .col-md-6 -->
-
+        
                 <div class="col-md-6 mb-3">
-                 <label class="font-weight-bold" for="state">State *</label>
-                    <input type="text" class="form-control " id="state" name="state" value="" required>
+                    <label class="font-weight-bold text-white" for="state">State *</label>
+                    <input type="text" class="form-control" id="state" name="state" value="" >
+                    <p id="stateError" style="color: red;"></p>
                 </div><!-- End .col-md-6 -->
             </div><!-- End .row -->
-
+        
             <div class="mb-3">
-                <label class="font-weight-bold" for="pin">Pin *</label>
-                <input type="text" class="form-control w-25 " id="pin" name="pin" value="" required>
+                <label class="font-weight-bold text-white" for="pin">Pin *</label>
+                <input type="text" class="form-control w-25" id="pin" name="pin" pattern="[0-9]+" title="Only numbers are allowed" >
+                <p id="pinError" style="color: red;"></p>
             </div>
-
-            <button type="submit" class="btn btn-primary " style="background-color:#717fe0;;">ADD +</button>
+        
+            <button type="submit" class="btn btn-primary" style="background-color:#717fe0;">ADD +</button>
         </form>
 
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Add input event listeners to hide error messages on input
+        const inputFields = document.querySelectorAll('.form-control');
+        inputFields.forEach(inputField => {
+            inputField.addEventListener('input', function () {
+                const errorId = inputField.id + 'Error';
+                const errorElement = document.getElementById(errorId);
+                errorElement.innerHTML = ''; // Clear the error message
+            });
+        });
+    });
+
+    function validateForm() {
+        // Reset all error messages
+        resetErrors();
+
+        // Flag to track if there are any validation errors
+        let hasErrors = false;
+
+        // Example validation for name field
+        const nameInput = document.getElementById('name');
+        const nameError = document.getElementById('nameError');
+
+        if (!nameInput.value.trim()) {
+            nameError.innerHTML = 'Name is required';
+            hasErrors = true;
+        }
+
+        // Example validation for email field
+        const emailInput = document.getElementById('email');
+        const emailError = document.getElementById('emailError');
+
+        if (!emailInput.value.trim()) {
+            emailError.innerHTML = 'Email is required';
+            hasErrors = true;
+        }
+
+        // Example validation for mobile field
+        const mobileInput = document.getElementById('mobile');
+        const mobileError = document.getElementById('mobileError');
+
+        if (!/^[0-9]{10}$/.test(mobileInput.value)) {
+            mobileError.innerHTML = 'Mobile should have exactly 10 digits';
+            hasErrors = true;
+        }
+
+        // Example validation for housename field
+        const housenameInput = document.getElementById('housename');
+        const housenameError = document.getElementById('housenameError');
+
+        if (!housenameInput.value.trim()) {
+            housenameError.innerHTML = 'House Name is required';
+            hasErrors = true;
+        }
+
+        // Example validation for city field
+        const cityInput = document.getElementById('city');
+        const cityError = document.getElementById('cityError');
+
+        if (!cityInput.value.trim()) {
+            cityError.innerHTML = 'City is required';
+            hasErrors = true;
+        }
+
+        // Example validation for state field
+        const stateInput = document.getElementById('state');
+        const stateError = document.getElementById('stateError');
+
+        if (!stateInput.value.trim()) {
+            stateError.innerHTML = 'State is required';
+            hasErrors = true;
+        }
+
+        // Example validation for pin field
+        const pinInput = document.getElementById('pin');
+        const pinError = document.getElementById('pinError');
+
+        if (!/^[0-9]+$/.test(pinInput.value)) {
+            pinError.innerHTML = 'Pin should contain only numbers';
+            hasErrors = true;
+        }
+
+        // Prevent form submission if there are validation errors
+        return !hasErrors;
+    }
+
+    // Helper function to reset all error messages
+    function resetErrors() {
+        const errorElements = document.querySelectorAll('[id$="Error"]');
+        errorElements.forEach(errorElement => {
+            errorElement.innerHTML = '';
+        });
+    }
+</script>
+
 
 
 <%-include('../users/mainLayouts/mainfooter.ejs')%>

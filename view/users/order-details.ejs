@@ -55,10 +55,12 @@
                       
                       <td class="align-middle">
                         <%if(products.orderStatus=='Delivered'){%>
-
+                      </td>
+                      <td>
                           <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">
                             Return
                           </button>
+                        </td>
                           <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="margin-top: 152px;">
                             <div class="modal-dialog">
                               <div class="modal-content">
@@ -150,7 +152,7 @@
                           </div>
                         </div>
                       <% }%>
-                      </td>
+                      
                         <%}%>
                   </tr>
                 </tbody>
@@ -195,20 +197,25 @@
             <h2 class="mb-4">Delivery Information</h2>
             <div class="row">
               <div class="col-md-6">
+                <h5>Delivery By:</h5>
+                
+                <p>
+                  
+                  <%=order.date.toLocaleDateString('en-US', { year: 'numeric' , month: 'short' ,
+                  day: '2-digit' }).replace(/\//g,'-')%>
+                </p>
+                
+              </div>
+        
+              <div class="col-md-6">
                 <h5>Delivery Date:</h5>
                 <p>
+                  
                   <%=order.expectedDelivery.toLocaleDateString('en-US', { year: 'numeric' , month: 'short' ,
                   day: '2-digit' }).replace(/\//g,'-')%>
                 </p>
               </div>
-              <div class="col-md-6">
-                <h5>Delivery By:</h5>
-                
-                <p>
-                  <%=order.date.toLocaleDateString('en-US', { year: 'numeric' , month: 'short' ,
-                  day: '2-digit' }).replace(/\//g,'-')%>
-                </p>
-              </div>
+             
             </div>
           </div>
         </div>

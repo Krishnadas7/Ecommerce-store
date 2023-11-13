@@ -2,7 +2,19 @@
 <%-include('../admin/adminhomeLayouts/admin-header.ejs')%>
 <%-include('../admin/adminhomeLayouts/admin-sidebar.ejs')%>
 <%-include('../admin/adminhomeLayouts/admin-navbar.ejs')%>
+<style>
+  .uploaded-images {
+      margin-top: 20px;
+  }
 
+  .uploaded-image {
+      
+      width: 200px;
+      height: 200px;
+      margin-bottom: 10px;
+      margin-left: 10px;
+  }
+</style>
 
 <div class="main-panel">
   <div class="content-wrapper">
@@ -49,12 +61,14 @@
           
                       <label class="upload__btn ms-3">
                           <p>Upload images</p>
-                          <input type="file" id="formFile" name="image" multiple data-max_length="20" class="upload__inputfile">
-                      </label>
+                          <!-- <input type="file" id="formFile" name="image" multiple data-max_length="20" class="upload__inputfile"> -->
+                          <input type="file" id="formFile" name="image" multiple data-max_length="20" class="upload__inputfile" onchange="displaySelectedImages()">
+                        </label>
                       <div class="error-message" id="image-error"></div>
           
                       <button type="submit" class="btn btn-lg btn-inverse-primary mr-2 mt-2">ADD</button>
                   </div>
+                  <div class="uploaded-images " style="margin-left: 10px;"  id="uploadedImagesContainer"></div>
               </div>
           </form>
   
@@ -66,6 +80,25 @@
 
 </div>
 </div>
+
+<script>
+  function displaySelectedImages() {
+      const fileInput = document.getElementById('formFile');
+      const uploadedImagesContainer = document.getElementById('uploadedImagesContainer');
+
+      // Clear the previously displayed images
+      uploadedImagesContainer.innerHTML = '';
+
+      // Display selected images
+      for (const file of fileInput.files) {
+          const imageElement = document.createElement('img');
+          imageElement.src = URL.createObjectURL(file);
+          imageElement.alt = 'Selected Image';
+          imageElement.className = 'uploaded-image';
+          uploadedImagesContainer.appendChild(imageElement);
+      }
+  }
+</script>
     
 
 <script>

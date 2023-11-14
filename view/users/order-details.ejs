@@ -206,15 +206,20 @@
                 </p>
                 
               </div>
-        
+              <% if (order && order.products && order.products.length> 0) {%>
+               <% order.products.forEach((products) => { %>
+                <%  if(products.orderStatus!='Cancelled'){%>
               <div class="col-md-6">
                 <h5>Delivery Date:</h5>
                 <p>
                   
-                  <%=order.expectedDelivery.toLocaleDateString('en-US', { year: 'numeric' , month: 'short' ,
-                  day: '2-digit' }).replace(/\//g,'-')%>
+                 Delivery with in (3 or 4 days)
                 </p>
               </div>
+                  <%}%>
+                <%})%>
+          <%}%>
+
              
             </div>
           </div>

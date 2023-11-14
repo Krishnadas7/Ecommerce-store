@@ -42,8 +42,10 @@ const addCoupon = async (req, res) => {
         res.json({expDate:true})
       }else if(req.body.userLimit <= 0){
         res.json({limit:true})
+      }else if(req.body.criteriaAmount<=req.body.discount){
+        res.json({greater:true,message:'discount amount must be greather than criteria amount'})
       }else{
-          const data = new Coupon({
+        const data = new Coupon({
           couponName: req.body.name,
           couponCode: req.body.code,
           discountAmount: req.body.discount,
@@ -68,10 +70,22 @@ const addCoupon = async (req, res) => {
       const code = req.body.code;
       req.session.code = code;
       const amount = Number(req.body.amount);
+      const cartData = await Cart.findOne({ user: userId }).populate('products.productId')
+      let totalPrice=0
       const userExist = await Coupon.findOne({
         couponCode: code,
         usedUsers: { $in: [userId] },
       });
+      if (cartData) {
+        if (cartData.products.length > 0) {
+            const products = cartData.products
+            
+
+            for (const product of cartData.products) {
+                totalPrice += product.quantity * product.productId.price;
+            }
+          }
+        }
       
       if (userExist) {
         res.json({ user: true });
@@ -98,7 +112,8 @@ const addCoupon = async (req, res) => {
                     const disAmount = couponData.discountAmount;
                     
                     
-                    const disTotal = Math.round(amount - disAmount);
+                    const disTotal = Math.round(totalPrice - disAmount);
+                    req.session.Amount=disTotal
                       console.log('dissss',disTotal);
                     await Cart.updateOne({user:userId},{$set:{applied:"applied"}})
                                   

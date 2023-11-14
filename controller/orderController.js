@@ -46,7 +46,8 @@ const placeOrder=async (req,res)=>{
      const userId=userData._id
      const cartData=await Cart.findOne({user:userId})
      const wallatBalance=userData.wallet
-     const total=parseInt(req.body.Total)
+     const total=parseInt(req.session.Amount)||req.body.Total
+     
      const paymentMethods=req.body.payment
      const uniNum = Math.floor(Math.random() * 900000) + 100000;
      const code = req.body.code;
@@ -54,6 +55,11 @@ const placeOrder=async (req,res)=>{
      console.log('code',code);
      console.log('body',req.body);
      const couponData = await Coupon.findOne({ couponCode: code });
+     if(couponData){
+     if(couponData.status==false){
+      res.json({couponBlock:true})
+     }
+    }
 
 
 
@@ -96,6 +102,7 @@ const placeOrder=async (req,res)=>{
       deliveryDate.setDate(today.getDate() + 7);
 
      const order=new Order({
+      user:userId,
         deliveryDetails:address,
         
         userId:userId,
@@ -393,7 +400,11 @@ const allOrders =async (req,res)=>{
     const name=req.session.user
     const userData=await User.findOne({name:name})
     const userId=userData._id
-    const orderData=await Order.find({userId:userId,"products.orderStatus": { $ne: "NOT" }})
+    const orderData=await Order.find({userId:userId,"products.orderStatus": { $ne: "NOT" }}).populate('user').populate({
+      path:'products.productId',
+      model:'Product',
+      select:'name'
+    })
     console.log('///////////',orderData);
     res.render('all-orders',{
       user:req.session.user,
@@ -420,6 +431,7 @@ const loadOrderDetails=async (req,res)=>{
     const deliveryDate = order.expectedDelivery;
     const timeDiff = currentDate - deliveryDate;
     const daysDiff = Math.floor(timeDiff / (24 * 60 * 60 * 1000));
+    console.log('diff',daysDiff);
 
    const products= await Cart.findOne({user:userId}).populate('products.productId')
    

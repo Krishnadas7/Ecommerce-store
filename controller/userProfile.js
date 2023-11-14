@@ -153,7 +153,7 @@ const insertAddress = async (req, res) => {
                       totalPrice+=product.quantity*product.productId.price
                     }            
       res.render('checkout',{user:req.session.user,
-        address,
+        address, 
         product:Products,
         total:totalPrice})
     }else{

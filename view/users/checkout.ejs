@@ -220,7 +220,8 @@
                     title: 'Insufficient Wallet Balance',
                     text: 'Your wallet balance is insufficient. Please choose a different payment method or recharge your wallet.',
                     });
-               
+              }else if(response.couponBlock){  
+                Swal.fire('coupon is  not available');
             }else{
               razorPayment(response.order)
             }

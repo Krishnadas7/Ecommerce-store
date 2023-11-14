@@ -66,6 +66,7 @@
 
     <script>
         //=============COUPON VALIDATION==================
+        document.addEventListener('DOMContentLoaded', function() {
 document.getElementById('submitBtn').addEventListener('click', function(event){
     event.preventDefault()
     const name = document.getElementById('name').value;
@@ -99,6 +100,15 @@ document.getElementById('submitBtn').addEventListener('click', function(event){
         },
         method: "post",
         success: (response) => {
+          console.log({
+        name: name,
+        code: code,
+        discount: discount,
+        activeDate: active,
+        expDate: expiry,
+        criteriaAmount: amount,
+        userLimit: limit
+    });
           if ((response.require)) {
             nameError.style.display = "block";
             nameError.textContent = "Must fillout all fields."
@@ -108,7 +118,10 @@ document.getElementById('submitBtn').addEventListener('click', function(event){
           }else if(response.codeAlready){
             codeError.style.display = "block";
             codeError.textContent = "Give unique Code for coupon."
-          }else if(response.disMinus){
+          }else if(response.greater){
+            disError.style.display = "block";
+            disError.textContent = "discount amount must be greater than criteria amount"
+        }else if(response.disMinus){
             disError.style.display = "block";
             disError.textContent = "Discount not contain negative or zero value."
           }else if(response.amountMinus){
@@ -129,6 +142,7 @@ document.getElementById('submitBtn').addEventListener('click', function(event){
         },
       });
 })
+});
 
 
     </script>

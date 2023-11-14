@@ -51,9 +51,7 @@ const userSchema=new mongoose.Schema({
         transactionAmount: {
             type: Number
         },
-        currentBalance: {
-            type: Number
-        },
+        
     }],
 },
     {

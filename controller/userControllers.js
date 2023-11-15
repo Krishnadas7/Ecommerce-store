@@ -11,6 +11,8 @@ const Address=require('../model/addressModel')
 const { ObjectId } = require("mongodb")
 const Order=require('../model/orderModel')
 const Coupon=require('../model/couponModel')
+const Refferal=require('../model/refferalModel')
+
 const dotenv=require('dotenv')
 dotenv.config()
 
@@ -174,7 +176,9 @@ const insertUser = async (req, res) => {
             res.render("signup",{message:'user already exist'});
         }
         else {
+           
             const spassword = await securePassword(req.body.password);
+             req.session.refferalCode=req.body.refferalCode
             req.session.name = req.body.name;
             req.session.email = req.body.email;
             req.session.mobile = req.body.mobile
@@ -185,6 +189,12 @@ const insertUser = async (req, res) => {
                         code: otpDigit,
                         expire: expirationTime
                     }
+                    // if (referringUser) {
+                    //     const referral = new Refferal({
+                    //       referredUserId: req.session.name._id,
+                    //       referringUserId: referringUser._id,
+                    //     });
+                    //     await referral.save();
                     sendVerifyMail(req.session.name, req.session.email, req.session.otp.code);
 
                     res.render("otp-verification");
@@ -225,6 +235,19 @@ const showverifyOTPPage = async (req, res) => {
 const verifyOTP = async (req, res) => {
 
     try {
+        function generateReferralCode() {
+            const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            let referralCode = '';
+          
+            for (let i = 0; i < 8; i++) {
+              const randomIndex = Math.floor(Math.random() * characters.length);
+              referralCode += characters.charAt(randomIndex);
+            }
+           console.log('refff',typeof referralCode);
+            return referralCode;
+          }
+        let referralCode=req.session.refferalCode
+        const referringUser = await User.findOne({ referralCode });
         const currentTime = Date.now() / 1000
         if (req.body.otp === req.session.otp.code && currentTime <= req.session.otp.expire) {
 
@@ -233,10 +256,38 @@ const verifyOTP = async (req, res) => {
                 email: req.session.email,
                 mobile: req.session.mobile,
                 password: req.session.password,
+                referralCode: generateReferralCode(),
                 isverified: 1,
                
             });
-            const result = await user.save();
+            await user.save();
+            const userId=user._id
+            console.log('iddddddddddd',userId);
+            if (referringUser) {
+                const referral = new Refferal({
+                    referralUserId: userId,
+                  referringUserId: referringUser._id,
+                });
+                await referral.save();
+          
+                const result=await User.findOneAndUpdate({_id:userId},
+                    {
+                      $inc:{wallet:referral.amount},
+                      $push:{
+                        walletHistory:{
+                          transactionDate:new Date(),
+                          transactionDetails:"your Refferal is credited",
+                          transactionType:"Credit",
+                          transactionAmount:referral.amount
+                        }
+                      }
+                    }
+                    )
+                // Add the referral amount to the user's wallet or perform any desired action
+                user.wallet += referral.amount;
+                await user.save();
+              }
+            // const result = await user.save();
             res.redirect("/login")
         }
         else {

@@ -173,6 +173,41 @@
                 role="tabpanel"
                 aria-labelledby="tab-coupons-link"
               >
+
+              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#ref">
+                click for thank you
+              </button>
+              
+              <!-- Modal -->
+              <div class="modal fade" id="ref" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLabel">Refferal</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body p-4">
+                        <p class="text-white bg-success p-2 rounded">
+                            When someone signs up using your referral code, <br>
+                            they receive an instant <br> 
+                             100rs bonus added to their wallet as a special welcome gift>  </p>
+                       <p class="d-flex justify-content-center text-danger" style="    font-size: 43px;
+                       font-family: 'Montserrat-Bold';
+                   "><%=data.referralCode%></p>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+                      <button type="button" class="btn btn-primary">okay</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+
+
+              
                 <div class="row">
                   <% if(coupons.length > 0 ){ %>
                     <% coupons.forEach((value)=>{ %>

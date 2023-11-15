@@ -64,12 +64,9 @@ const placeOrder=async (req,res)=>{
 
 
     
-    const minus= await Coupon.updateOne({couponCode:code},{$inc:{usersLimit: -1 }})
-     
-    const pushing= await Coupon.updateOne({couponCode:code},{$push:{usedUsers:userId}})
+  
 
-    console.log('minus ',minus);
-    console.log('pushong ',pushing);
+   
  let cartProducts
        if(paymentMethods=='online'){
          cartProducts=cartData.products.map((item)=>({
@@ -121,10 +118,13 @@ const placeOrder=async (req,res)=>{
    
     const orderdata= await order.save()
     const orderid=order._id
+    
      if(orderdata){
       
      if(paymentMethods=='COD'){
+      const minus= await Coupon.updateOne({couponCode:req.session.code},{$inc:{usersLimit: -1 }})
      
+      const pushing= await Coupon.updateOne({couponCode:req.session.code},{$push:{usedUsers:userId}})
      for(const item of cartData.products){
       const productId = item.productId
       const quantity = item.quantity
@@ -165,6 +165,10 @@ const placeOrder=async (req,res)=>{
       });
      }
      if(paymentMethods=='wallet'){
+
+      const minus= await Coupon.updateOne({couponCode:code},{$inc:{usersLimit: -1 }})
+     
+    const pushing= await Coupon.updateOne({couponCode:code},{$push:{usedUsers:userId}})
         if(wallatBalance >= total){
           console.log('///',wallatBalance >= total);
          const result= await User.findByIdAndUpdate({_id:userId},
@@ -251,7 +255,9 @@ const verifyPayment = async(req,res)=>{
         { _id: details.order.receipt },
         { $set: {  "products.$[].paymentStatus":"Completed","products.$[].orderStatus":"Placed"} }
       );
-
+      const minus= await Coupon.updateOne({couponCode:req.session.code},{$inc:{usersLimit: -1 }})
+     
+      const pushing= await Coupon.updateOne({couponCode:req.session.code},{$push:{usedUsers:userId}})
       await Order.findByIdAndUpdate(
         { _id: details.order.receipt },
         { $set: { paymentId: details.payment.razorpay_payment_id } }
@@ -495,6 +501,60 @@ const returnOrder=async(req,res)=>{
   }
 }
 
+const checkoutAddress=async (req,res)=>{
+  try {
+   
+    const name = req.session.user
+    const userData = await User.findOne({name:name});
+    const userId=userData._id;
+    console.log('mnjhchds',req.body);
+
+    const addressData = await Address.findOne({ user:userId });
+
+    if (addressData) {
+      const update = await Address.updateOne(
+        { user: userId },
+        {
+          $push: {
+            address: {
+              name: req.body.name,
+              mobile: req.body.mobile,
+              email: req.body.email,
+              housename: req.body.housename,
+              city: req.body.city,
+              state: req.body.state,
+              pin: req.body.pin,
+            },
+          },
+        }
+      );
+     
+     res.json({success:true})
+    } else {
+      const data = new Address({
+        user: userId,
+        address: [
+          {
+            name: req.body.name,
+            mobile: req.body.mobile,
+            email: req.body.email,
+            housename: req.body.housename,
+            city: req.body.city,
+            state: req.body.state,
+            pin: req.body.pin,
+          },
+        ],
+      });
+      await data.save();
+      res.json({success:true})
+    }
+
+
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 module.exports={
   
   orderSuccess,
@@ -504,5 +564,6 @@ module.exports={
     allOrders,
     loadOrderDetails,
     verifyPayment,
-    returnOrder
+    returnOrder,
+    checkoutAddress
 }

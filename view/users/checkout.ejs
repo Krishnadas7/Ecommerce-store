@@ -63,7 +63,76 @@
 </div>
 <div class=" text-center w-50 card border-0" >
     
-    <a class="btn btn-primary" style="margin-top: 55px;" href="/new-address"> + ADD A NEW ADDRESS </a>
+  <button class="btn btn-primary" style="margin-top: 55px;" data-toggle="modal" data-target="#addAddressModal">+ ADD A NEW ADDRESS</button>
+   <!-- Add this at the end of your HTML, just before the closing </body> tag -->
+<div class="modal fade" id="addAddressModal" tabindex="-1" role="dialog" aria-labelledby="addAddressModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+      <div class="modal-content" style="background-color: black;
+      padding: 33px;
+  ">
+          <div class="modal-header">
+              <h5 class="modal-title" id="addAddressModalLabel">Add a New Address</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+              </button>
+          </div>
+          <div class="modal-body">
+              <!-- Your form goes here -->
+              <form id="addressForm" action="" method="post">
+                <!-- profile end -->
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="font-weight-bold text-white" for="name"> Name * </label>
+                        <input type="text" class="form-control " id="name" name="name"  >
+                        <p id="nameError" style="color: red;"></p>
+                    </div><!-- End .col-md-6 -->
+            
+                    <div class="col-md-6 mb-3">
+                        <label class="font-weight-bold text-white" for="email">Email *</label>
+                        <input type="text" class="form-control" id="email" name="email"  >
+                        <p id="emailError" style="color: red;"></p>
+                    </div><!-- End .col-md-6 -->
+                </div><!-- End .row -->
+            
+                <div class="mb-3 w-50">
+                    <label class="font-weight-bold text-white" for="mobile">Mobile *</label>
+                    <input type="tel" class="form-control" id="mobile" name="mobile" pattern="[0-9]{10}" title="Only 10 digits are allowed" >
+                    <p id="mobileError" style="color: red;"></p>
+                </div>
+            
+                <div class="mb-3 w-50">
+                    <label class="font-weight-bold text-white" for="housename">House Name *</label>
+                    <input type="text" class="form-control" id="housename" name="housename"  >
+                    <p id="housenameError" style="color: red;"></p>
+                </div>
+            
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label class="font-weight-bold text-white" for="city">City *</label>
+                        <input type="text" class="form-control" id="city" name="city"  >
+                        <p id="cityError" style="color: red;"></p>
+                    </div><!-- End .col-md-6 -->
+            
+                    <div class="col-md-6 mb-3">
+                        <label class="font-weight-bold text-white" for="state">State *</label>
+                        <input type="text" class="form-control" id="state" name="state"  >
+                        <p id="stateError" style="color: red;"></p>
+                    </div><!-- End .col-md-6 -->
+                </div><!-- End .row -->
+            
+                <div class="mb-3">
+                    <label style="margin-left: -381px;" class="font-weight-bold text-white" for="pin">Pin *</label>
+                    <input type="text" class="form-control w-25" id="pin" name="pin" pattern="[0-9]+" title="Only numbers are allowed" >
+                    <p id="pinError" style="color: red;"></p>
+                </div>
+            
+                <button type="button" id="submitBtn" class="btn btn-primary" style="background-color:#717fe0;">ADD +</button>
+            </form>
+          </div>
+      </div>
+  </div>
+</div>
+
 </div>
 
 
@@ -378,6 +447,39 @@
       }
     })
   }
+
+</script>
+<script>
+  
+    $(document).ready(function () {
+        $('#submitBtn').on('click', function () {
+          
+            var formData = {
+            name: $('#name').val(),
+            email: $('#email').val(),
+            mobile: $('#mobile').val(),
+            housename: $('#housename').val(),
+            city: $('#city').val(),
+            state: $('#state').val(),
+            pin: $('#pin').val(),
+        };
+            // Make an AJAX request
+            $.ajax({
+                url: '/checkout-address', // Replace with the actual server-side endpoint
+                method: 'post',
+                contentType: 'application/json',
+                data: JSON.stringify(formData),
+                dataType: 'json',
+                
+            }).done((response)=>{
+              if(response.success){
+                 location.reload()
+              }else{
+                alert('failed')
+              }
+            })
+        });
+    });
 
 </script>
 

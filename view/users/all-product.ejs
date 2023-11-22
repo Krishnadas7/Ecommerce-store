@@ -202,29 +202,58 @@
                 <% product.forEach((data) => { %>
                     <div class="col-sm-6 col-md-4 col-lg-3 p-b-35 isotope-item women category-categoryname">
                         <div class="block2 border p-1">
-                            <div class="block2-pic hov-img0">
+                            <% if(data.discount > 0) { %>
+                            <div class="discount-badge " style="background-color: #ff5733;
+                           color: #f8f8f8;
+                         
+                             position: absolute;
+                             z-index: 1;
+                            width: 74px;">
+                               
+                                    <span class="stext-103 size-102">
+                                        <%= data.discount %> % OFF
+                                    </span>
+                                
+                            </div>
+                            <% } %>
+                            <div class="block2-pic hov-img0" >
+                               
                                 <img style=" width: 244px;
                                 height: 270px;
-                                padding: 1px;
-                                margin-left: 1px;" src="/public/adminAssets/product-images/<%= data.image[0] %>" alt="IMG-PRODUCT">
+                               position: relative;
+                               margin-left: 11px;
+                               
+                                " src="/public/adminAssets/product-images/<%= data.image[0] %>" alt="IMG-PRODUCT">
+                                
                                 <a href="/product-view?id=<%=data._id%>" class="block2-btn  flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 ">
                                     Quick View
                                 </a>
                             </div>
                             <div class="block2-txt flex-w flex-t p-t-14">
                                 <div class="block2-txt-child1 flex-col-l">
-                                    <span class="stext-105 cl3">
+                                    <span class="stext-105 cl3 ml-4" >
                                         <%= data.brand %>
                                     </span>
-                                    <a href="" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
+                                    <a href="" class="stext-104 ml-4 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
                                         <%= data.name %>
                                     </a>
-                                    <span class="stext-105 cl3">
-                                        $<%= data.price %>
+                                   <% if(data.discount>0){%>
+                                    <div class="d-flex">
+                                    <span class="stext-105 cl3 ml-4">
+                                        <del>$<%= data.price %> </del>  
+                                    </span>
+                                    <span class="stext-105 cl3 " style="margin-left: 130px;">
+                                     <p style="color: #ff5733;">  <b> $<%= data.discountedAmount %>  </b> </p>
                                     </span>
                                 </div>
+                               <% }else{%>
+                                <span class="stext-105 cl3 ml-4">
+                                    $<%= data.price %>  
+                                </span>
+                              <% }%>
+                                </div>
                                 <div class="block2-txt-child2 flex-r p-t-3">
-                                    <a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
+                                    <a onclick="addWish('<%=data._id%>')" class="mr-4 btn-addwish-b2 dis-block pos-relative ">
                                         <img class="icon-heart1 dis-block trans-04" src="/public/userAssets/images/icons/icon-heart-01.png" alt="ICON">
                                         <img class="icon-heart2 dis-block trans-04 ab-t-l" src="/public/userAssets/images/icons/icon-heart-02.png" alt="ICON">
                                     </a>
@@ -352,6 +381,27 @@
 //         }
 //     })
 //    }
+function addWish(productId){
+    $.ajax({
+        url:'/add-to-wishlist',
+        method:'post',
+        encoded:true,
+        data:{productId:productId}
+
+    }).done((response)=>{
+        if(response.success){
+         
+            Swal.fire({
+  title: "Good job!",
+  text: "item added to wishlist",
+  icon: "success"
+});
+
+        }else if(response.already){
+            Swal.fire('product already in your wishlist')
+        }
+    })
+}
 </script>
 
 

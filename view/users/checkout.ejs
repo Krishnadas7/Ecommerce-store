@@ -15,9 +15,67 @@
         </ol>
     </div><!-- End .container -->
 </nav><!-- End .breadcrumb-nav -->
-<form  id="checkout-form" >
+
 <div class="text-center">
 <h1>CHECKOUT</h1>
+</div>
+<!-- Button trigger modal -->
+<button type="button" style="margin-left: 0px;
+margin-bottom: 12px;" class="btn btn-danger rounded" data-bs-toggle="modal" data-bs-target="#exampleModal">
+  Available offers
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content" style="    margin-top: 177px;
+    margin-left: 61px;
+    width: 355px;">
+      <div class="modal-header">
+       
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body p-2">
+        <div class="card" style="background-color: cadetblue;">
+          <% if(coupons.length > 0 ){ %>
+            <% coupons.forEach((value)=>{ %>
+              <div class="col-8 col-sm-12 col-xl-8 my-auto">
+                <!-- <p>Use Code:</p> -->
+                <div
+                  class="d-flex d-sm-block d-md-flex align-items-center"
+                >
+                
+                  <h2 class="mb-0 mt-1" style="
+                 
+                  border: 2px dotted #000;
+                  margin-left: 35px;
+                "><%= value.couponCode %></h2>
+                </div>
+                <br>
+                <p style="font-size: 11px; color: aliceblue;">If you buy&nbsp;₹ <%= value.criteriaAmount %>&nbsp;worth, You'll get&nbsp;₹ <%= value.discountAmount %>&nbsp;off! </p>
+                
+                
+              
+
+                <br />
+                <p style="font-size: 11px; color: aliceblue;" class="card-title">Validity:&nbsp;<%= value.activationDate.toLocaleDateString('en-US',
+                  { year: 'numeric', month: 'short', day: '2-digit'
+                  }).replace(/\//g, '-') %>&nbsp; To &nbsp;<%= value.expiryDate.toLocaleDateString('en-US',
+                  { year: 'numeric', month: 'short', day: '2-digit'
+                  }).replace(/\//g, '-') %></p>
+                
+                  
+              </div>
+        <%})%>
+      <%}%>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-danger btn-sm" data-bs-dismiss="modal">Okay</button>
+        <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
+      </div>
+    </div>
+  </div>
 </div>
 <div class="">
   <label for="checkout-discount-input" class="text-truncate"
@@ -25,8 +83,7 @@
   >
 </div>
 <div class="cart-discount">
-  
-    <div class="input-group mb-5">
+   <div class="input-group mb-5">
       <input
         type="text"
         class="form-control"
@@ -50,19 +107,27 @@
       <i class="fa-solid fa-trash"></i>
       </button>
       
-        <button
-        id="apply"
-        class="btn btn-outline-dark"
-        style="margin: 0; width: 70px; height: 40px; "
-        onclick="applycoupon($('#code').val())"
-      >
-        <i class="icon-long-arrow-right"></i>
-      </button>
-      
+      <button
+      id="apply"
+      class="btn btn-outline-dark"
+      style="margin: 0; width: 70px; height: 40px; "
+      onclick="applyCouponAndPreventFormSubmission($('#code').val())"
+  >
+      <i class="icon-long-arrow-right"></i>
+  </button>
+
+  
+
+
     </div>
-</div>
-<div class=" text-center w-50 card border-0" >
+
+
     
+</div>
+
+
+<div class=" text-center w-50 card border-0" >
+  
   <button class="btn btn-primary" style="margin-top: 55px;" data-toggle="modal" data-target="#addAddressModal">+ ADD A NEW ADDRESS</button>
    <!-- Add this at the end of your HTML, just before the closing </body> tag -->
 <div class="modal fade" id="addAddressModal" tabindex="-1" role="dialog" aria-labelledby="addAddressModalLabel" aria-hidden="true">
@@ -137,7 +202,7 @@
 
 
 
-
+<form  id="checkout-form" >
 <div class="page-content">
     <div class="checkout">
         <div class="container">
@@ -159,7 +224,7 @@
                   <%  if(address!=='undefined'){%>
                   <% address.forEach((address)=>{%>
                   
-                    <div class="d-flex rounded p-3 mt-3 border card text-white" 
+                    <div class="d-flex rounded shadow p-3 mt-3 border border-black card text-white" 
                     style="
                       
                       margin-right: 234px; " >
@@ -188,6 +253,7 @@
 
 
                     </div><!-- End .col-lg-9 -->
+                    
                     <aside class="col-lg-3 col-md-6 mb-4" style="background-color: #e5dddd; border-radius: 10px;">
                       <div class="card"  style="background-color: #e5dddd;">
                           <div class="card-body">
@@ -208,7 +274,12 @@
                                           <%product.forEach((data)=>{%>
                                           <tr>
                                               <td><a href="#"><%=data.productId.name%></a></td>
+                                              <%if(data.productId.discount>0){%>
+                                                <td> <del>&#8377 <%=data.productId.price%> </del></td>
+                                              <td>&#8377 <%=data.productId.discountedAmount%></td>
+                                            <%}else{%>
                                               <td>&#8377 <%=data.productId.price%></td>
+                                            <%}%>    
                                           </tr>
                                           <%})%>
                   
@@ -243,7 +314,7 @@
                                         Wallet
                                     </label>
                                   </div><!-- End .accordion -->
-                  
+                                   
                                   <button type="submit" class="btn btn-outline-primary-2 btn-order btn-block mt-3">
                                       <span class="btn-text btn btn-primary">Place Order</span>
                                       <span class="btn-hover-text btn btn-primary">Proceed to Checkout</span>
@@ -266,9 +337,9 @@
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
 <script>
-   $("#checkout-form").submit((e)=>{
-    console.log('button clicked');
-    e.preventDefault();
+ $(document).ready(function() {
+    $("#checkout-form").submit((event) => {
+        event.preventDefault();
     let codes = document.getElementById('code').value;
     let code = codes ? codes : 0
     let address = $("input[name=address]:checked").val()
@@ -297,6 +368,7 @@
         }
     })
    })
+  })
 
    function razorPayment(order) {
     
@@ -398,60 +470,62 @@
   }
 
 
-  function applycoupon(code) {
-    
-    const amount = document.getElementById('total1').innerHTML;
-   
-    
+  function applyCouponAndPreventFormSubmission(code) {
+    // Apply coupon
     $.ajax({
-      url: "/applyCoupon",   
-      data: {
-        code: code,
-        amount: amount
-      },
-      method: "post",
-      success: (response) => {
-        if (response.user) {
-          Swal.fire({
-            icon: 'error',
-            title: 'Oops !!',
-            text: 'This coupon already used!'
-          })
-        }else if (response.cartAmount) {
-          Swal.fire({
-            icon: 'warning',
-            title: 'Oops !!',
-            text: 'You cant use the coupon...Buy more'
-          })
-        } else if (response.amountOkey) {
-         console.log(response);
-          document.getElementById('total1').innerHTML = response.disTotal
-          
-          document.getElementById('apply').style.display = "none"
-          document.getElementById('unApply').style.display = ""
-          Swal.fire({
-            position: 'center',
-            icon: 'success',
-            title: 'Discount redeemed',
-            showConfirmButton: false,
-            timer: 1500
-          })
-          
-        } else {
-          Swal.fire({
-            icon: 'error',
-            title: 'Oops !!!',
-            text: 'Invalid Coupon!!!'
-          })
+        url: "/applyCoupon",
+        data: {
+            code: code,
+            amount: $('#total1').text()
+        },
+        method: "post",
+        success: function (response) {
+            if (response.user) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops !!',
+                    text: 'This coupon has already been used!'
+                });
+            } else if (response.cartAmount) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Oops !!',
+                    text: 'You cannot use the coupon. Buy more.'
+                });
+            } else if (response.amountOkey) {
+                console.log(response);
+                $('#total1').text(response.disTotal);
+
+                $('#apply').hide();
+                $('#unApply').show();
+
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: 'Discount redeemed',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops !!!',
+                    text: 'Invalid Coupon!!!'
+                });
+            }
         }
-      }
-    })
-  }
+    });
+    
+    // Prevent form submission
+    return false;
+}
+
+
 
 </script>
 <script>
   
-    $(document).ready(function () {
+    $(document).ready(function () { 
         $('#submitBtn').on('click', function () {
           
             var formData = {

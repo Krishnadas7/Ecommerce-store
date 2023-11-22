@@ -1,0 +1,90 @@
+<%-include('../admin/adminhomeLayouts/admin-header.ejs')%>
+<%-include('../admin/adminhomeLayouts/admin-sidebar.ejs')%>
+<%-include('../admin/adminhomeLayouts/admin-navbar.ejs')%>
+<style>
+    .banner-image{
+      border-radius: 0px;
+       width: 214px;
+        height: 108px;
+    }
+    table th img{
+      border-radius: 0px;
+       width: 214px;
+        height: 108px;
+    }
+    img {
+        width: 250px;
+        height: 100px;
+        border-radius: 0;
+      }
+      
+  </style>
+
+<div class="main-panel">
+    <div class="content-wrapper">
+  <div class="row">
+      
+      <div class="col-lg-12 grid-margin stretch-card">
+        <div class="card">
+          <div class="card-body">
+            <h4 class="card-title">Banner Management</h4>
+            
+            <p class="card-description"> shoe crops</p>
+            <div class="table-responsive">
+              <table class="table ">
+                <thead>
+                  <tr>
+                    
+                    <th>Images</th>
+                    <th>Title</th>
+                    <th>Description</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                    <a href="/admin/add-banner" class="btn btn-outline-primary btn-rounded">Add Banners</a>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% if(banner.length > 0){ %>
+                      <% banner.forEach((banner)=> { %>
+                 
+                  <tr>
+                    
+                    <td>
+                      <img style="border-radius: 0px; width: 250px; height: 100px;" src="/public/banner/<%= banner.image %>" alt="">
+                    </td>
+                    <td><%= banner.title %></td>
+                    <td><%= banner.description %></td>
+                    <% if(banner.status == true){ %>
+                      <td class="text-success">Active</td>
+                      <td><a href="/admin/block-banner?id=<%= banner._id %>" class="badge badge-danger" onclick="return confirm('Are you sure? Do you want to Block ?')">Block</a></td>
+                     <% }else{ %>
+                      <td class="text-danger">Blocked</td>
+                      <td><a href="/admin/block-banner?id=<%= banner._id %>" class="badge badge-success" onclick="return confirm('Are you sure you? Do you want to Unblock ?')">Unblock</a></td>
+                    
+  
+                      <% } %>
+                      <td><a href="/admin/edit-banner?id=<%= banner._id %>" class="badge badge-warning">Update</a></td>
+  
+                  </tr>
+                  
+                    <!-- <tr>
+                        <td colspan="5">Products Not Found</td>
+                   </tr> -->
+                   <% }) %>
+                 <% }else{ %>
+                  <tr>
+                    <td colspan="5">Banners Not Found</td>
+                  </tr>
+                  <% } %>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+  </div>
+  </div>
+
+
+
+<%-include('../admin/adminLoginLayouts/adminFooter.ejs')%>

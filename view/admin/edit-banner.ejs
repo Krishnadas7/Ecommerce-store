@@ -1,0 +1,42 @@
+<%-include('../admin/adminhomeLayouts/admin-header.ejs')%>
+<%-include('../admin/adminhomeLayouts/admin-sidebar.ejs')%>
+<%-include('../admin/adminhomeLayouts/admin-navbar.ejs')%>
+
+
+
+<div class="main-panel">
+    <div class="content-wrapper">
+  <div class="col-12 grid-margin stretch-card">
+      <div class="card">
+        <div class="card-body">
+          <h4 class="card-title">Update Banner Details</h4>
+          
+          <form class="forms-sample" action="/admin/edit-banner?id=<%= banner._id %>" method="post" enctype="multipart/form-data">
+              <div class="col-lg-3 col-md-6 rounded-image-preview ">
+                  <label for="imageInput1" class="image-label ">Banner Image
+                    <div class="rounded-image-preview">
+                      <img id="imagePreview1" style="width: 300px; height: 150px;"
+                      src="/public/banner/<%= banner.image %>"
+                        alt="Preview" />
+                    </div>
+                    <input name="image" type="file" accept="image/*" id="imageInput1" class="imageInput" >
+                  </label>
+                </div>
+            <div class="form-group">
+              <label for="exampleInputName1">Banner Title</label>
+              <input type="text" class="form-control" id="exampleInputName1" value="<%= banner.title %>" name="title">
+            </div>
+            
+            <div class="form-group">
+              <label for="exampleTextarea1">Description</label>
+              <textarea class="form-control" id="exampleTextarea1"  name="description" rows="4"><%= banner.description %></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary mr-2">Submit</button>
+            <button class="btn btn-inverse-danger"><a href="/admin/bannerDetails">Cancel</a></button>
+          </form>
+        </div>
+      </div>
+    </div>
+    </div>
+
+<%-include('../admin/adminLoginLayouts/adminFooter.ejs')%>

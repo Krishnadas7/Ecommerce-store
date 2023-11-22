@@ -54,38 +54,39 @@ const loadAddproduct = async (req, res) => {
                //   ADD PRODUCT
 
 
-const addProduct = async (req, res) => {
-    try {
-        const name = req.body.name
-        const category = req.body.category
-        const description = req.body.description
-        const stock = req.body.stock
-        const price = req.body.price
-        const brand=req.body.brand
-
-        const image = [];
-        for (i = 0; i < req.files.length; i++) {
-            image[i] = req.files[i].filename;
-        }
-
-        const data = new Product({
-            name: name,
-            category: category,
-            description: description,
-            stock: stock,
-            brand:brand,
-            price: price,
-            image: image
-        })
-
-        const result = await data.save()
-        console.log(result);
-        res.redirect('/admin/add-product')
-
-    } catch (error) {
-        console.log(error);
-    }
-}
+               const addProduct = async (req, res) => {
+                try {
+                    const name = req.body.name;
+                    const category = req.body.category;
+                    const description = req.body.description;
+                    const stock = req.body.stock;
+                    const price = req.body.price;
+                    const brand = req.body.brand;
+            
+                    const image = [];
+                    for (let i = 0; i < req.files.length; i++) {
+                        image[i] = req.files[i].filename;
+                    }
+            
+                    const data = new Product({
+                        name: name,
+                        category: category,
+                        description: description,
+                        stock: stock,
+                        brand: brand,
+                        price: price,
+                        image: image
+                    });
+            
+                    const result = await data.save();
+                    console.log(result);
+                    res.redirect('/admin/add-product');
+                } catch (error) {
+                    console.error(error);
+                    res.status(500).send('Internal Server Error'); // Send a proper error response
+                }
+            };
+            
 
                //    EDIT PRODUCT
 

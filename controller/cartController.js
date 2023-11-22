@@ -74,7 +74,10 @@ const addToCart = async (req, res) => {
         res.status(500).json({ error: 'An error occurred' });
     }
 };
-
+ function calculateDiscountedPrice(originalPrice, discountPercentage) {
+                    const discountAmount = (discountPercentage / 100) * originalPrice;
+                    return originalPrice - discountAmount;
+                }
 
 const getCartProducts = async (req, res) => {
     try {
@@ -92,10 +95,11 @@ const getCartProducts = async (req, res) => {
         if (cartData) {
             if (cartData.products.length > 0) {
                 const products = cartData.products
-                
-
+            
+               
                 for (const product of cartData.products) {
-                    totalPrice += product.quantity * product.productId.price;
+                    let total=  calculateDiscountedPrice(product.productId.price, product.productId.discount);
+                    totalPrice += product.quantity * total;
                 }
                 
 

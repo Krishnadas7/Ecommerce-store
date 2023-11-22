@@ -9,6 +9,7 @@ const orderController=require('../controller/orderController')
 const cartController=require('../controller/cartController')
 const Count=require('../middlewares/cartMiddleware')
 const couponController= require('../controller/couponController')
+const wishlistController=require('../controller/wishlistController')
 // view engine setup
  userRouter.set('view engine','ejs')
  userRouter.set('views','./view/users')
@@ -116,6 +117,12 @@ userRouter.get('/wallet-history',userAuth.isLogin,userControllers.loadHistory)
 
 userRouter.post('/applyCoupon',userAuth.isLogin,couponController.applyCoupon)
 userRouter.post('/deleteAppliedCoupon',userAuth.isLogin,couponController.deleteAppliedCoupon)
+
+// ====================================WISHLIST========================================================
+
+userRouter.get('/view-wishlist',userAuth.isLogin,wishlistController.loadWishlist)
+userRouter.post('/add-to-wishlist',userAuth.isLogin,wishlistController.addWishlist)
+userRouter.post('/remove-wishlist',userAuth.isLogin,wishlistController.removeWishlist)
 
 
 module.exports=userRouter

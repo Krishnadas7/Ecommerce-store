@@ -12,6 +12,7 @@ const { ObjectId } = require("mongodb")
 const Order=require('../model/orderModel')
 const Coupon=require('../model/couponModel')
 const Refferal=require('../model/refferalModel')
+const Banner=require('../model/banner')
 
 const dotenv=require('dotenv')
 dotenv.config()
@@ -176,6 +177,10 @@ const insertUser = async (req, res) => {
             res.render("signup",{message:'user already exist'});
         }
         else {
+            const userMob=await User.findOne({mobile:req.body.mobile})
+            if(userMob){
+                res.render("signup",{message:'Mobile number already exist'});
+            }else{
            
             const spassword = await securePassword(req.body.password);
              req.session.refferalCode=req.body.refferalCode
@@ -205,7 +210,7 @@ const insertUser = async (req, res) => {
             else {
                 res.render("signup", { message: "Please enter all details" })
             }
-
+        }
         }
     }
     catch (error) {
@@ -342,12 +347,17 @@ const loginVerify = async (req, res) => {
     }
 }
 const loadHome = async (req, res) => {
+    const products = await Product
+    .find({
+        blocked: false 
+    })
 
     try {
+        const banners = await Banner.find({status: true})
         if (req.session.user) {
-            res.render('home', { user: req.session.user })
+            res.render('home', { user: req.session.user ,products:products,banners:banners})
         } else {
-            res.render('home', { message: "user logged" })
+            res.render('home', { message: "user logged",products:products,banners:banners })
         }
 
 

@@ -3,6 +3,271 @@ const bcrypt=require('bcrypt')
 const Order=require('../model/orderModel')
 const Product=require('../model/productModel')
 const User=require('../model/userModel')
+const dashboardHelper=require('../helpers/orderHelpers')
+const reportController=require('../controller/reportController')
+
+
+
+
+
+
+        // LOAD ADMIN HOMEPAGE
+
+
+        const loadHomepage = async (req, res) => {
+          try {
+            let users = await User.find({});
+            const TransactionHistory = await Order.find();
+            const countOfCod = await Order.countDocuments({ paymentMethod: "COD" });
+            const countOfOnline = await Order.countDocuments({ paymentMethod: "online" });
+            const countOfWallet = await Order.countDocuments({ paymentMethod: "wallet" });
+        
+            const totalrevenue=await Order.aggregate([
+              {$match:{'products.paymentStatus':'Completed'}},
+              {$group:{_id:null,total:{$sum:'$totalAmount'}}}
+            ])
+            console.log('jhjghjghjhg',totalrevenue);
+        
+            const orders = await recentOrder();
+            const result = await createSalesReport("year");
+            console.log(result);
+        
+            if (result !== null) {
+              const report = {
+                totalSalesAmount: result.totalSalesAmount,
+                sales: result.totalProductsSold,
+                amount: result.profit,
+              };
+        
+              res.render('admin-homepage', {
+                users: users,
+                paymentHistory: TransactionHistory,
+                paymentChart: { countOfCod, countOfOnline, countOfWallet },
+                orders,
+                report,
+                totalrevenue
+                
+              });
+            } else {
+              console.log("No sales data found for the specified interval.");
+              res.render('admin-homepage', {
+                users: users,
+                orders,
+                totalrevenue,
+                paymentHistory: TransactionHistory,
+                paymentChart: { countOfCod, countOfOnline, countOfWallet },
+                
+                report: { totalSalesAmount: 0, sales: 0, amount: 0 },
+              });
+            }
+          } catch (error) {
+            console.log(error);
+            res.status(500).send('Internal Server Error');
+          }
+        };
+        
+    // const result = await createSalesReport("year")
+    
+    
+    // const report = {
+    //   totalSalesAmount:result.totalSalesAmount,
+    //   sales: result.totalProductsSold,
+    //   amount: result.profit,
+    // };
+            
+    //       res.render('admin-homepage',{
+    //         users: users,
+    //   paymentHistory: TransactionHistory,
+    //   paymentChart,
+
+    //       }
+          
+    //       )
+
+    //       } catch (error) {
+    //          console.log(error); 
+    //       }
+    //   }
+
+
+   
+const createSalesReport = async (interval) => {
+  try {
+    let startDate, endDate;
+
+    if (interval === "day") {
+      const today = new Date();
+      startDate = new Date(today);
+      startDate.setHours(0, 0, 0, 0); // Start of the day
+      endDate = new Date(today);
+      endDate.setHours(23, 59, 59, 999); // End of the day
+    } else {
+      startDate = getStartDate(interval);
+      endDate = getEndDate(interval);
+    }
+
+
+   
+    const orderDataData = await Order.aggregate([
+      {
+        $match: {
+          date: {
+            $gte: new Date(startDate),
+            $lte: new Date(endDate),
+          },
+        },
+      },
+      {
+        $unwind: "$products",
+      },
+      {
+        $lookup: {
+          from: 'products',
+          localField: 'products.productId',
+          foreignField: '_id',
+          as: 'populatedProduct',
+        },
+      },
+      {
+        $unwind: {
+          path: '$populatedProduct',
+          preserveNullAndEmptyArrays: true,
+        },
+      },
+      {
+        $match: {
+          'populatedProduct.paymentStatus': 'Completed',
+        },
+      },
+      {
+        $group: {
+          _id: '$populatedProduct._id',
+          productName: { $first: '$populatedProduct.name' },
+          totalSalesAmount: {
+            $sum: { $multiply: [{ $toDouble: '$populatedProduct.price' }, '$products.quantity'] },
+          },
+          totalProductsSold: { $sum: '$products.quantity' },
+        },
+      },
+      {
+        $group: {
+          _id: null,
+          totalSalesAmount: { $sum: '$totalSalesAmount' },
+          totalProductsSold: { $sum: '$totalProductsSold' },
+        },
+      },
+    ]).exec();
+    console.log('orderdata',orderDataData);
+    if (orderDataData.length > 0) {
+     
+      const { totalSalesAmount, totalProductsSold } = orderDataData[0];
+
+      const profit = Math.floor(totalSalesAmount * 0.3);
+
+      const salesReport = {
+        profit,
+        totalSalesAmount,
+        totalProductsSold,
+      };
+     
+
+      return salesReport;
+    } else {
+      console.error("No sales data found for the specified interval");
+      return null; // or handle this case according to your requirements
+    }
+    
+
+  } catch (error) {
+    console.error("Error generating the sales report:", error.message);
+  }
+};
+
+
+
+// ==========================RECENT ORDERS========================================
+const recentOrder = async () => {
+  try {
+    const orders = await Order.find();
+    // console.log('my orders',orders);
+
+    const productWiseOrdersArray = [];
+
+    for (const order of orders) {
+      for (const productInfo of order.products) {
+        const productId = productInfo.productId;
+        // console.log("id",productId );
+
+       const product = await Product.findById(productId).select(
+          "name image price"
+        );
+        // console.log("produc",product);
+        const userDetails = await User.findById(order.user).select(
+          "email"
+        );
+        // console.log("user",userDetails);
+        if (product) {
+          // Push the order details with product details into the array
+          orderDate = await formatDate(order.date);
+          productWiseOrdersArray.push({
+            user: userDetails,
+            product: product,
+            orderDetails: {
+              _id: order._id,
+              userId: order.user,
+              shippingAddress: order.deliveryDetails,
+              orderDate: orderDate,
+              totalAmount: productInfo.quantity * product.price,
+              OrderStatus: productInfo.orderStatus,
+              StatusLevel: productInfo.statusLevel,
+              paymentMethod: order.paymentMethod,
+              paymentStatus: productInfo.paymentStatus,
+              quantity: productInfo.quantity,
+            },
+          });
+        }  
+      }
+    }
+
+    
+    return productWiseOrdersArray.slice(0,10);
+  } catch (error) {}
+};
+// =======================================================
+
+// ======== This Function used to formmate date from new Date() function ====
+function formatDate(date) {
+  const options = {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  };
+  return date.toLocaleDateString("en-US", options);
+}
+
+
+
+// ===== setting start date and end date ========
+const getStartDate = (interval) => {
+  const start = new Date();
+  if (interval === "week") {
+    start.setDate(start.getDate() - start.getDay()); // Start of the week
+  } else if (interval === "year") {
+    start.setMonth(0, 1); // Start of the year
+  }
+  return start;
+};
+
+const getEndDate = (interval) => {
+  const end = new Date();
+  if (interval === "week") {
+    end.setDate(end.getDate() - end.getDay() + 6); // End of the week
+  } else if (interval === "year") {
+    end.setMonth(11, 31); // End of the year
+  }
+  return end;
+};
 
 
     //    LOAD ADMIN LOGIN
@@ -42,16 +307,7 @@ const loginVerify=async (req,res)=>{
         console.log(error);
     }
 }
-         // LOAD ADMIN HOMEPAGE
-
-
-const loadHomepage=(req,res)=>{
-    try {
-        res.render('admin-homepage')
-    } catch (error) {
-       console.log(error); 
-    }
-}
+ 
              // LOAD CATEGORY PAGE
 
 
@@ -254,6 +510,7 @@ const cancelOrderadmin=async (req,res)=>{
     )
     
     productInfo.orderStatus = "Cancelled";
+    productInfo.paymentStatus = "Refunded";
     productInfo.updatedAt = Date.now()
     const result = await order.save();
     
@@ -270,6 +527,23 @@ const cancelOrderadmin=async (req,res)=>{
     console.log(error);
   }
 }
+//     console.log(orderDataData);
+    
+    
+//     const { totalSalesAmount, totalProductsSold } = orderDataData[0];
+
+//     const profit =Math.floor(totalSalesAmount*0.3) 
+
+// const salesReport = {
+//   profit,
+//   totalSalesAmount,
+//   totalProductsSold
+// };
+
+
+//     return salesReport;
+
+
 
 module.exports={
     loadLogin,
@@ -281,6 +555,7 @@ module.exports={
     orderDetails,
     orderManagement,
     changeStatus,
-    cancelOrderadmin
+    cancelOrderadmin,
+    
 
 }

@@ -350,6 +350,7 @@ if(result){
 const productInfo= order.products.find(
        (product)=>product.productId===proId )
         productInfo.orderStatus = "Cancelled";
+        productInfo.paymentStatus="Refunded"
         productInfo.cancelReason = cancelreason
        productInfo.updatedAt = Date.now()
        const data = await order.save();
@@ -365,6 +366,7 @@ const productInfo= order.products.find(
       const productInfo= order.products.find(
       (product)=>product.productId===proId )
        productInfo.orderStatus = "Cancelled";
+       productInfo.paymentStatus="Refunded"
       productInfo.updatedAt = Date.now()
        const result = await order.save();
        const quantity=productInfo.quantity

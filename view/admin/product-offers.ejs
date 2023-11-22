@@ -1,0 +1,142 @@
+<%-include('../admin/adminhomeLayouts/admin-header.ejs')%>
+<%-include('../admin/adminhomeLayouts/admin-sidebar.ejs')%>
+<%-include('../admin/adminhomeLayouts/admin-navbar.ejs')%>
+
+
+<div class="main-panel" id="reloadDiv" >
+    <div class="content-wrapper" style="background-color:#191C24 ;">
+
+<button type="button" class="btn btn-primary mb-3" style="margin-left: 900px;" data-toggle="modal" data-target="#exampleModal">
+    add offers
+  </button>
+  
+  <!-- Modal -->
+  <div class="modal fade " id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <div class="container mt-5" id="offerFormContainer">
+                <h1 class="mb-4">Add Offer</h1>
+              
+                    <form action="" method="post">
+        
+                    <!-- Product Selection -->
+                    <div class="form-group">
+                        <label for="product">Select Product:</label>
+                        <select class="form-control" name="productId" id="product" required>
+                            <!-- Iterate through products and populate dropdown options -->
+                           <% nonOffer.forEach((data)=>{%>
+                            <option  value="<%=data._id%>" ><p class="text-white"><%=data.name%></p></option>
+                           <% })%>
+                            <!-- Add more options as needed -->
+                        </select>
+                    </div>
+        
+                    <!-- Discount Input -->
+                    <div class="form-group">
+                        <label for="discount">Discount (%):</label>
+                        <input class="form-control" type="number" name="discount" id="discount" min="0" max="100" required>
+                    </div>
+        
+                    <!-- Start Date Input -->
+                    <div class="form-group">
+                        <label for="startDate">Start Date:</label>
+                        <input class="form-control" type="date" name="startDate" id="startDate" required>
+                    </div>
+        
+                    <!-- Expiry Date Input -->
+                    <div class="form-group">
+                        <label for="expiryDate">Expiry Date:</label>
+                        <input class="form-control" type="date" name="expiryDate" id="expiryDate" required>
+                    </div>
+        
+                    <!-- Submit Button -->
+                    <button class="btn btn-primary" type="submit" >Add Offer</button>
+
+
+        
+                </form>
+            </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+    <table class="table">
+        <thead class="thead-dark">
+          <tr>
+            <th scope="col">No.</th>
+            <th scope="col">Product</th>
+            <th scope="col">Name</th>
+            <th scope="col">Price</th>
+            <th scope="col">Offer Price</th>
+          </tr>
+        </thead>
+        <tbody>
+
+            <% for(let i=0;i<offer.length;i++){%>
+          <tr>
+            <th scope="row"><%=i+1%></th>
+            <td>
+                <img style="width: 100px; height: 100px; border-radius: 0%;" src="/public/adminAssets/product-images/<%=offer[i].image[0]%>" alt="sxx">
+            </td>
+            <td>
+                <p >&nbsp;&nbsp;<b><%=offer[i].name%></b></p>
+            </td>
+            <td>
+                <p >Rs.&nbsp;&nbsp;<b><%=offer[i].price%></b></p>
+            </td>
+            <td>
+                <p >Rs.&nbsp;&nbsp;<b><%=offer[i].discount%></b></p>
+            </td>
+            <td>
+              <a class="btn btn-danger" onclick="removeOffer('<%=offer[i]._id%>')" >REmove Offer</a>
+            </td>
+          </tr>
+          <%}%>
+        </tbody>
+      </table>
+      
+      
+
+    </div>
+</div>
+ 
+<script>
+ function removeOffer (proId){
+  $.ajax({
+    url:'/admin/remove-offer',
+    method:'post',
+    encoded:true,
+    data:{
+      productId:proId
+    }
+  }).done((response)=>{
+    if(response.success){
+     
+      $("#reloadDiv").load("/admin/product-offers #reloadDiv")
+    }else{
+      alert('failed')
+    }
+  })
+ }
+</script>
+
+
+
+
+<%-include('../admin/adminhomeLayouts/admin-footer.ejs')%>

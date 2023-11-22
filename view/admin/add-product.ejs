@@ -3,17 +3,19 @@
 <%-include('../admin/adminhomeLayouts/admin-sidebar.ejs')%>
 <%-include('../admin/adminhomeLayouts/admin-navbar.ejs')%>
 <style>
-  .uploaded-images {
-      margin-top: 20px;
-  }
+ /* CSS code */
+.selected-images-container {
+  display: flex;
+  flex-wrap: nowrap; /* Ensure images are in a single row */
+  overflow-x: auto; /* Enable horizontal scrolling if needed */
+}
 
-  .uploaded-image {
-      
-      width: 200px;
-      height: 200px;
-      margin-bottom: 10px;
-      margin-left: 10px;
-  }
+.selected-image {
+  max-width: 200px; /* Adjust max-width as needed */
+  max-height: 200px; /* Adjust max-height as needed */
+  margin-right: 10px; /* Adjust margin as needed */
+}
+
 </style>
 
 <div class="main-panel">
@@ -59,11 +61,28 @@
                       <input type="text" class="form-control text-light mb-3" name="stock" placeholder="Stock">
                       <div class="error-message" id="stock-error"></div>
           
-                      <label class="upload__btn ms-3">
-                          <p>Upload images</p>
-                          <!-- <input type="file" id="formFile" name="image" multiple data-max_length="20" class="upload__inputfile"> -->
-                          <input type="file" id="formFile" name="image" multiple data-max_length="20" class="upload__inputfile" onchange="displaySelectedImages()">
-                        </label>
+                     <!-- HTML code -->
+                     <div id="selectedImagesContainer" style="width: 751px;" class="selected-images-container"></div>
+                     <label class="upload__btn ms-3 mt-3">
+                       <p>Upload Image 1</p>
+                       <input type="file" id="formFile1" name="image" data-max_length="20" class="upload__inputfile" onchange="displaySelectedImage(1)">
+                     </label>
+                     
+                     <label class="upload__btn ms-3 mt-3">
+                       <p>Upload Image 2</p>
+                       <input type="file" id="formFile2" name="image" data-max_length="20" class="upload__inputfile" onchange="displaySelectedImage(2)">
+                     </label>
+                     
+                     <label class="upload__btn ms-3">
+                       <p>Upload Image 3</p>
+                       <input type="file" id="formFile3" name="image" data-max_length="20" class="upload__inputfile" onchange="displaySelectedImage(3)">
+                     </label>
+                     
+                     <label class="upload__btn ms-3">
+                       <p>Upload Image 4</p>
+                       <input type="file" id="formFile4" name="image" data-max_length="20" class="upload__inputfile" onchange="displaySelectedImage(4)">
+                     </label>
+
                       <div class="error-message" id="image-error"></div>
           
                       <button type="submit" class="btn btn-lg btn-inverse-primary mr-2 mt-2">ADD</button>
@@ -82,22 +101,69 @@
 </div>
 
 <script>
-  function displaySelectedImages() {
-      const fileInput = document.getElementById('formFile');
-      const uploadedImagesContainer = document.getElementById('uploadedImagesContainer');
+// JavaScript code
+// JavaScript code
+function displaySelectedImage(index) {
+  const inputElement = document.getElementById(`formFile${index}`);
+  const container = document.getElementById('selectedImagesContainer');
 
-      // Clear the previously displayed images
-      uploadedImagesContainer.innerHTML = '';
+  // Check if a file is selected
+  if (inputElement.files.length > 0) {
+    const selectedImage = inputElement.files[0];
+    const imageElement = document.createElement('img');
 
-      // Display selected images
-      for (const file of fileInput.files) {
-          const imageElement = document.createElement('img');
-          imageElement.src = URL.createObjectURL(file);
-          imageElement.alt = 'Selected Image';
-          imageElement.className = 'uploaded-image';
-          uploadedImagesContainer.appendChild(imageElement);
-      }
+    // Create a FileReader to read the selected image
+    const reader = new FileReader();
+
+    reader.onload = function (e) {
+      const img = new Image();
+
+      img.onload = function () {
+        // Resize the image to 200x200 using a canvas
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = 200;
+        canvas.height = 200;
+        ctx.drawImage(img, 0, 0, 200, 200);
+
+        // Create a container for the image and delete button
+        const imageContainer = document.createElement('div');
+        imageContainer.classList.add('image-container');
+
+        // Create a new image element with the resized image
+        const resizedImageElement = document.createElement('img');
+        resizedImageElement.src = canvas.toDataURL('image/jpeg'); // Change to 'image/png' if needed
+        resizedImageElement.alt = `Image ${index}`;
+        resizedImageElement.classList.add('selected-image');
+
+        // Create a delete button
+        const deleteButton = document.createElement('button');
+        deleteButton.textContent = 'Delete';
+        deleteButton.addEventListener('click', () => removeSelectedImage(imageContainer));
+
+        // Append the resized image and delete button to the container
+        imageContainer.appendChild(resizedImageElement);
+        imageContainer.appendChild(deleteButton);
+
+        // Append the container to the main container
+        container.appendChild(imageContainer);
+      };
+
+      img.src = e.target.result;
+    };
+
+    // Read the selected image as a data URL
+    reader.readAsDataURL(selectedImage);
   }
+}
+
+function removeSelectedImage(imageContainer) {
+  const container = document.getElementById('selectedImagesContainer');
+  container.removeChild(imageContainer);
+}
+
+
+
 </script>
     
 

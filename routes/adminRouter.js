@@ -6,6 +6,9 @@ const userManagement=require('../controller/userManagement')
 const productManagement=require('../controller/productManagement')
 const adminAuth=require('../middlewares/adminAuth')
 const couponController=require('../controller/couponController')
+const offers=require('../controller/offers')
+const reportController=require('../controller/reportController')
+const bannerController=require('../controller/bannerController')
 
 const session=require('express-session')
 const config=require('../config/config')
@@ -23,6 +26,7 @@ adminRouter.set('views','./view/admin')
  const multer=require('multer')
  const path = require('path')
 const { executionAsyncId } = require('async_hooks')
+
 const storage = multer.diskStorage({
     destination:function(req,file,cb){
         cb(null,path.join(__dirname, '../public/adminAssets/product-images'))
@@ -52,7 +56,30 @@ const upload = multer({
     }
   },
 });
- 
+const uploadImages = (req, res, next) => {
+  const uploadMiddleware = upload.array('image', 4);
+
+  uploadMiddleware(req, res, (err) => {
+    if (err) {
+      // Handle errors
+      return res.status(400).json({ error: err.message });
+    }
+    
+    // All images are uploaded successfully
+    next();
+  });
+};
+const bannerStorage = multer.diskStorage({
+  destination:function(req,file,cb){
+      cb(null,path.join(__dirname, '../public/banner'))
+  },
+  filename:function(req,file,cb){
+      const name = Date.now()+'-'+file.originalname;
+      cb(null,name)
+  }
+})
+
+const bannerUpload=multer({storage:bannerStorage})
 
 
 adminRouter.get('/',adminAuth.isLogout,adminControllers.loadLogin)
@@ -93,7 +120,7 @@ adminRouter.get('/view-products',adminAuth.isLogin,productManagement.loadProduct
 adminRouter.get('/add-product',adminAuth.isLogin,productManagement.loadAddproduct)
 
 // add product
-adminRouter.post('/add-product',upload.array("image",4),productManagement.addProduct)
+adminRouter.post('/add-product',uploadImages,productManagement.addProduct)
 
 // edit product
 adminRouter.get('/edit-product',upload.array("image",4),productManagement.editProduct)
@@ -132,5 +159,25 @@ adminRouter.post('/add-coupon',adminAuth.isLogin,couponController.addCoupon)
 adminRouter.get('/block-coupons',adminAuth.isLogin,couponController.blockCoupons)
 adminRouter.get('/edit-coupon-page',adminAuth.isLogin,couponController.showEditPage)
 adminRouter.post('/edit-coupon',adminAuth.isLogin,couponController.updateCoupon)
+
+// ===============offers======================
+adminRouter.get('/offers',adminAuth.isLogin,offers.loadOffers)
+adminRouter.get('/product-offers',adminAuth.isLogin,offers.loadProductOffers)
+adminRouter.post('/product-offers',adminAuth.isLogin,offers.addProductOffer)
+adminRouter.post('/remove-offer',adminAuth.isLogin,offers.removeOffer)
+
+
+// ===============SALES REPORT===================
+adminRouter.get('/sales-report',adminAuth.isLogin,reportController.loadSalesReport)
+
+
+// =====================BANNER ===============================
+adminRouter.get('/add-banner',adminAuth.isLogin,bannerController.loadAddBanner)
+adminRouter.post('/add-banner',adminAuth.isLogin,bannerUpload.single('image'),bannerController.postBanner)
+adminRouter.get('/banner-detials',adminAuth.isLogin,bannerController.loadBannerDetails)
+adminRouter.get('/block-banner',adminAuth.isLogin,bannerController.blockBanner)
+adminRouter.get('/edit-banner',adminAuth.isLogin,bannerController.editBanner)
+adminRouter.post('/edit-banner',adminAuth.isLogin,bannerUpload.single('image'),bannerController.updateBanner)
+
 
 module.exports=adminRouter

@@ -5,7 +5,7 @@ const Cart=require('../model/cartModel')
 const Products=require('../model/productModel')
 const Category=require('../model/categoryModel')
 const bcrypt=require('bcrypt')
-const coupons=require('../model/couponModel')
+const Coupon=require('../model/couponModel')
 
 
 const securePassword = async (password) => {
@@ -135,6 +135,10 @@ const insertAddress = async (req, res) => {
         const userId=userData._id  
         const addressData=await Address.findOne({user:new ObjectId(userId)})  
         const cartData=await Cart.findOne({user:userId}).populate('products.productId')
+        const coupons = await Coupon.find({
+          status: true,
+          expiryDate: { $gte: new Date() }
+        })
         console.log('addressdata',addressData);
         let address
         let Products
@@ -147,12 +151,18 @@ const insertAddress = async (req, res) => {
         if(addressData){
           address=addressData.address
         }
-        console.log(address);
+       
                 let totalPrice=0    
                     for(const product of cartData.products){
-                      totalPrice+=product.quantity*product.productId.price
+                      if(product.productId.discount>0){
+                        totalPrice+=product.quantity*product.productId.discountedAmount
+                      }else{
+                        totalPrice+=product.quantity*product.productId.price
+                      }
+                      
                     }            
       res.render('checkout',{user:req.session.user,
+        coupons,
         address, 
         product:Products,
         total:totalPrice})

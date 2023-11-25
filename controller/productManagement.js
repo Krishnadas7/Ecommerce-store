@@ -83,7 +83,7 @@ const loadAddproduct = async (req, res) => {
                     res.redirect('/admin/add-product');
                 } catch (error) {
                     console.error(error);
-                    res.status(500).send('Internal Server Error'); // Send a proper error response
+                   
                 }
             };
             

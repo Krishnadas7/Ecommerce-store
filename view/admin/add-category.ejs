@@ -23,17 +23,15 @@
             <h4 class="card-title">Add New Category</h4>
             <!-- <p class="card-description"> Basic form elements </p> -->
             <hr class="white-line">
-            <form class="forms-sample" action="/admin/addcategory" method="post">
+            <form class="forms-sample" action="/admin/addcategory" method="post" onsubmit="return validateForm()">
   
                 <div class="form-group  row">
                     <div class="col-12 col-md-9 mt-5">
                         <label for="exampleInputName1">Category Name</label>
                         <input type="text" class="form-control  text-light mb-3 " name="categoryname"
-                            id="exampleInputName1" placeholder="name" required>
-                           
-                          <!-- <label for="exampleInputName1">Category Description</label>
-                        <input type="text" class="form-control  text-light " name="category_description"
-                            id="exampleInputDescription" placeholder="Description" required style="height: 100px;"> -->
+                            id="exampleInputName1" placeholder="name">
+                           <p id="err" style="color: red;"></p>
+                         
                         <button type="submit" class="btn btn-lg btn-inverse-primary mr-2 mt-2">Add
                             Category</button>
                     </div>
@@ -50,6 +48,24 @@
 
 </div>
 </div>
+
+<script>
+  function validateForm() {
+    var categoryName = document.getElementById('exampleInputName1').value;
+
+    // Check if the category name is empty or contains only letters
+    if (categoryName.trim() === '' || !/^[a-zA-Z]+$/.test(categoryName)) {
+      document.getElementById('err').innerText = 'Category name is required and should only contain letters.';
+      return false; // Prevent form submission
+    }
+
+    return true; // Allow form submission
+  }
+
+  function hideError() {
+    document.getElementById('err').innerText = ''; // Hide error message when user starts typing
+  }
+</script>
   
   
   

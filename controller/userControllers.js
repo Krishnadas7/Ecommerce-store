@@ -23,7 +23,8 @@ function isValidObjectId(id) {
     
 }
 const Razorpay=require('razorpay')
-const crypto=require('crypto')
+const crypto=require('crypto');
+const { tryCatch } = require("engine/utils");
 // key_id,key_secret
 // rzp_test_49DsJEEbScMJdv,oIo905FGjFAr6eEZfkNhmDEU
 
@@ -35,6 +36,9 @@ const securePassword = async (password) => {
         return passwordHash
     } catch (error) {
         console.log(error);
+
+        res.render('500')
+        res.render('500')
     }
 }
 
@@ -75,6 +79,7 @@ const sendVerifyMail = async (name, email, otp) => {
         })
     } catch (error) {
         console.log("error", error.message);
+        res.render('500')
     }
 }
 
@@ -108,6 +113,7 @@ const sendResetPasswordMail = async (name, email, token) => {
         })
     } catch (error) {
         console.log("error", error.message);
+        res.render('500')
     }
 }
 
@@ -143,6 +149,7 @@ const resendOtp = (req, res) => {
     }
     catch (error) {
         console.log(error.message);
+        res.render('500')
     }
 }
 
@@ -154,6 +161,7 @@ const loadSignup = async (req, res) => {
         res.render('signup')
     } catch (error) {
         console.log(error);
+        res.render('500')
     }
 }
 
@@ -215,6 +223,7 @@ const insertUser = async (req, res) => {
     }
     catch (error) {
         console.log(error);
+        res.render('500')
     }
 }
 
@@ -224,6 +233,7 @@ const loadLogin = async (req, res) => {
         res.render('login')
     } catch (error) {
         console.log(error.message);
+        res.render('500')
     }
 }
 // load  otp page
@@ -233,6 +243,7 @@ const showverifyOTPPage = async (req, res) => {
         res.render('otp-verification');
     } catch (error) {
         console.log(error);
+        res.render('500')
     }
 }
 
@@ -300,6 +311,7 @@ const verifyOTP = async (req, res) => {
         }
     } catch (error) {
         console.log(error);
+        res.render('500')
     }
 }
 
@@ -344,6 +356,7 @@ const loginVerify = async (req, res) => {
 
     } catch (error) {
         console.log(error.message);
+        res.render('500')
     }
 }
 const loadHome = async (req, res) => {
@@ -371,6 +384,7 @@ const logOut = async (req, res) => {
         res.redirect('/')
     } catch (error) {
         console.log(error);
+        res.render('500')
     }
 }
 
@@ -381,6 +395,7 @@ const forgotLoad = async (req, res) => {
         res.render('forgot')
     } catch (error) {
         console.log(error);
+        res.render('500')
     }
 }
 
@@ -403,6 +418,7 @@ const forgotPassword = async (req, res) => {
         }
     } catch (error) {
         console.log(error);
+        res.render('500')
     }
 }
 const resetLoad = async (req, res) => {
@@ -418,6 +434,7 @@ const resetLoad = async (req, res) => {
 
     } catch (error) {
         console.log(error);
+        res.render('500')
     }
 }
 
@@ -431,6 +448,7 @@ const resetPassword = async (req, res) => {
         res.redirect('/login')
     } catch (error) {
         console.log(error);
+        res.render('500')
     }
 }
 // load user profile
@@ -461,6 +479,8 @@ const viewProfile = async (req, res) => {
 
     } catch (error) {
         console.log(error);
+        res.render('500')
+        
     }
 }
 
@@ -470,6 +490,7 @@ const loadContact = async (req, res) => {
         res.render('contact', { user: user })
     } catch (error) {
         console.log(error);
+        res.render('500')
     }
 }
 
@@ -500,6 +521,7 @@ const loadWallet=async (req,res)=>{
     })
   } catch (error) {
     console.log(error);
+    res.render('500')
   }
 }
 
@@ -530,6 +552,7 @@ const addMoneyWallet = async (req,res)=>{
     
     } catch (error) {
         console.log(error);
+        res.render('500')
     }
 }
 
@@ -580,6 +603,7 @@ const verifyWalletpayment = async(req,res)=>{
   
     }catch(error){
       console.log(error);
+      res.render('500')
     }
   }
 
@@ -593,8 +617,10 @@ const verifyWalletpayment = async(req,res)=>{
         res.render('wallet-history',{user:req.session.user,wallet:details})
     } catch (error) {
         console.log(error);
+        res.render('500')
     }
   }
+
 
 module.exports = {
     loadSignup,
@@ -616,6 +642,7 @@ module.exports = {
     addMoneyWallet,
     verifyWalletpayment,
     loadHistory
+
 
     
     // loadAddress

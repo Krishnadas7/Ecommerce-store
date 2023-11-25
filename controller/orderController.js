@@ -1,5 +1,6 @@
 const User=require('../model/userModel')
 const Address=require('../model/addressModel')
+const mongoose=require('mongoose')
 const Cart=require('../model/cartModel')
 const {ObjectId}=require('mongodb')
 const Order=require('../model/orderModel')
@@ -41,7 +42,8 @@ const placeOrder=async (req,res)=>{
    
      const name=req.session.user
      const address=req.body.address
-   
+    const price=req.body.price
+    console.log('jkhdjhkdjkhdjkd');
      const userData=await User.findOne({name:name})
      const userId=userData._id
      const cartData=await Cart.findOne({user:userId})
@@ -61,17 +63,25 @@ const placeOrder=async (req,res)=>{
      }
     }
 
-
-
-    
-  
-
+    for (const item of cartData.products) {
+      const productId =item.productId
+      console.log('Constructed Product ID:',typeof productId);
+      const product = await Product.findById(productId);
+     console.log('pr',product);
+     console.log('item quantity',item.quantity);
+     console.log('stocj',product.stock);
+      if (!product || item.quantity > product.stock) {
+        res.json({quantity:true})
+        return
+      }
+    }
    
  let cartProducts
        if(paymentMethods=='online'){
          cartProducts=cartData.products.map((item)=>({
           productId:item.productId,
           quantity:item.quantity,
+          price:price,
           orderStatus:"NOT",
           statusLevel:1,
           paymentStatus:"pending",
@@ -83,6 +93,7 @@ const placeOrder=async (req,res)=>{
           productId:item.productId,
           quantity:item.quantity,
           orderStatus:"Placed",
+          price:price,
           statusLevel:1,
           paymentStatus:"pending",
           "returnOrderStatus.status":"none",
@@ -101,7 +112,7 @@ const placeOrder=async (req,res)=>{
      const order=new Order({
       user:userId,
         deliveryDetails:address,
-        
+        price:price,
         userId:userId,
         userName:name,
         
@@ -413,7 +424,7 @@ const allOrders =async (req,res)=>{
       model:'Product',
       select:'name'
     })
-    console.log('///////////',orderData);
+    
     res.render('all-orders',{
       user:req.session.user,
       orders:orderData
@@ -463,7 +474,6 @@ const returnOrder=async(req,res)=>{
    
     const proId=req.query.productId
     const orderId=req.query.orderId
-    console.log('ppppp',proId,orderId);
     const cancelreason=req.body.reason
     const refund=req.body.refund
     const total=req.body.totalprice

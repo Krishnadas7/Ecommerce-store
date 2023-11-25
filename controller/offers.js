@@ -1,4 +1,5 @@
 const Product=require('../model/productModel')
+const Category=require('../model/categoryModel')
 const loadOffers=async (req,res)=>{
     try {
 
@@ -46,7 +47,7 @@ const addProductOffer=async(req,res)=>{
 }
 const removeOffer=async (req,res)=>{
     try {
-        console.log('jkncjkjwcnjcwn',req.body.productId);
+       
         const productId=req.body.productId
         const product=await Product.findByIdAndUpdate({_id:productId},
             {
@@ -58,12 +59,95 @@ const removeOffer=async (req,res)=>{
         console.log(error);
     }
 }
+const loadCategoryOffer=async (req,res)=>{
+    try {
+        
+    const category=await Category.find({isListed:true})
+   
+    const offer=await Category.find({isListed:true,offer:{$gt:0}})
+    
+
+    
+    res.render('category-offers',{Category:category,offer:offer})
+
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+
+const addCategoryOffer=async (req,res)=>{
+    try {
+       
+        const catId=req.body.CatId
+        const discount=req.body.discount
+      
+        const categoryItem=await Category.findOne({_id:catId})
+        
+        categoryItem.offer = 1; 
+
+        
+        await categoryItem.save();
+        const products = await Product.find({ category: catId });
+        for (const product of products) {
+            const originalPrice = product.price;
+            const discountedAmount = calculateDiscountedPrice(originalPrice, discount);
+
+            // Update product fields
+            product.discountedAmount = discountedAmount;
+            product.discount = discount;
+
+            // Save the updated product
+            await product.save();
+        }
+       
+
+       
+       res.redirect('/admin/category-offers')
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+const categoryOfferDelete=async (req,res)=>{
+    try {
+       const categoryId=req.body.categoryId
+       const Cat=await Category.findOne({_id:categoryId})
+       Cat.offer=0
+       await Cat.save()
+
+   
+       const result = await Product.updateMany({ category: categoryId }, {
+        $set: {
+            discount: 0,
+            discountedAmount: 0
+        }
+    });
+
+    
+    res.json({success:true})
+    } catch (error) {
+        console.log(error);
+    }
+}
 
 module.exports={
     loadOffers,
     loadProductOffers,
     addProductOffer,
-    removeOffer
+    removeOffer,
+    loadCategoryOffer,
+    addCategoryOffer,
+    categoryOfferDelete
     
     
 }
+ //    const product=await Product.findOne({category:categoryId})
+    //    const categoryId=product.category
+       
+    //    const result = await Product.updateMany({ category: categoryId }, {
+    //     $set: {
+    //         discount: 0,
+    //         discountedAmount: 0
+    //     }
+    // });

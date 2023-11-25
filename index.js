@@ -8,7 +8,6 @@ dotenv.config()
 mongoose.connect('mongodb://0.0.0.0:27017/ecommerce');
  
  
- 
 app.use('/public',express.static(path.join(__dirname,'public')))
   
 app.use(express.json());
@@ -28,8 +27,8 @@ const disable = (req, res, next) => {
 }
 app.use(disable);
 
-// app.set('view engine','ejs')  
-// app.set('views','./view/users')
+app.set('view engine','ejs')  
+app.set('views','./view/users')
 
 
 // for user route
@@ -39,6 +38,14 @@ app.use('/',userRouter)
 // for admin Route
 const adminRouter=require('./routes/adminRouter')
 app.use('/admin',adminRouter)
+
+app.use('*',(req,res)=>{
+  try {
+    res.render('404')
+  } catch (error) {
+    console.log(error);
+  }
+})
 
 
 app.listen(process.env.PORT,()=>{

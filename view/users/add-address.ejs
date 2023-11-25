@@ -44,7 +44,7 @@
     </div>
 </div> -->
 
-<div class=" m-t-23 p-b-140" style="margin-top: 80px; background-color: rgb(201, 189, 189);">
+<div class=" m-t-23 p-b-140" style="margin-top: 80px; background-color: rgb(5, 4, 4);">
     <div class="container py-5 mx-y m-r-40 m-l-40 p-b-140  ">
 
         <form action="" method="post" onsubmit="return validateForm()">
@@ -102,99 +102,100 @@
 </div>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        // Add input event listeners to hide error messages on input
-        const inputFields = document.querySelectorAll('.form-control');
-        inputFields.forEach(inputField => {
-            inputField.addEventListener('input', function () {
-                const errorId = inputField.id + 'Error';
-                const errorElement = document.getElementById(errorId);
-                errorElement.innerHTML = ''; // Clear the error message
-            });
+  document.addEventListener('DOMContentLoaded', function () {
+    // Add input event listeners to hide error messages on input
+    const inputFields = document.querySelectorAll('.form-control');
+    inputFields.forEach(inputField => {
+        inputField.addEventListener('input', function () {
+            const errorId = inputField.id + 'Error';
+            const errorElement = document.getElementById(errorId);
+            errorElement.innerHTML = ''; // Clear the error message
         });
     });
+});
 
-    function validateForm() {
-        // Reset all error messages
-        resetErrors();
+function validateForm() {
+    // Reset all error messages
+    resetErrors();
 
-        // Flag to track if there are any validation errors
-        let hasErrors = false;
+    // Flag to track if there are any validation errors
+    let hasErrors = false;
 
-        // Example validation for name field
-        const nameInput = document.getElementById('name');
-        const nameError = document.getElementById('nameError');
+    // Example validation for name field
+    const nameInput = document.getElementById('name');
+    const nameError = document.getElementById('nameError');
 
-        if (!nameInput.value.trim()) {
-            nameError.innerHTML = 'Name is required';
-            hasErrors = true;
-        }
-
-        // Example validation for email field
-        const emailInput = document.getElementById('email');
-        const emailError = document.getElementById('emailError');
-
-        if (!emailInput.value.trim()) {
-            emailError.innerHTML = 'Email is required';
-            hasErrors = true;
-        }
-
-        // Example validation for mobile field
-        const mobileInput = document.getElementById('mobile');
-        const mobileError = document.getElementById('mobileError');
-
-        if (!/^[0-9]{10}$/.test(mobileInput.value)) {
-            mobileError.innerHTML = 'Mobile should have exactly 10 digits';
-            hasErrors = true;
-        }
-
-        // Example validation for housename field
-        const housenameInput = document.getElementById('housename');
-        const housenameError = document.getElementById('housenameError');
-
-        if (!housenameInput.value.trim()) {
-            housenameError.innerHTML = 'House Name is required';
-            hasErrors = true;
-        }
-
-        // Example validation for city field
-        const cityInput = document.getElementById('city');
-        const cityError = document.getElementById('cityError');
-
-        if (!cityInput.value.trim()) {
-            cityError.innerHTML = 'City is required';
-            hasErrors = true;
-        }
-
-        // Example validation for state field
-        const stateInput = document.getElementById('state');
-        const stateError = document.getElementById('stateError');
-
-        if (!stateInput.value.trim()) {
-            stateError.innerHTML = 'State is required';
-            hasErrors = true;
-        }
-
-        // Example validation for pin field
-        const pinInput = document.getElementById('pin');
-        const pinError = document.getElementById('pinError');
-
-        if (!/^[0-9]+$/.test(pinInput.value)) {
-            pinError.innerHTML = 'Pin should contain only numbers';
-            hasErrors = true;
-        }
-
-        // Prevent form submission if there are validation errors
-        return !hasErrors;
+    if (!nameInput.value.trim()) {
+        nameError.innerHTML = 'Name is required';
+        hasErrors = true;
     }
 
-    // Helper function to reset all error messages
-    function resetErrors() {
-        const errorElements = document.querySelectorAll('[id$="Error"]');
-        errorElements.forEach(errorElement => {
-            errorElement.innerHTML = '';
-        });
+    // Example validation for email field
+    const emailInput = document.getElementById('email');
+    const emailError = document.getElementById('emailError');
+
+    if (!emailInput.value.trim()) {
+        emailError.innerHTML = 'Email is required';
+        hasErrors = true;
     }
+
+    // Example validation for mobile field
+    const mobileInput = document.getElementById('mobile');
+    const mobileError = document.getElementById('mobileError');
+
+    if (!/^[1-9]\d{9}$/.test(mobileInput.value)) {
+        mobileError.innerHTML = 'Mobile should have exactly 10 digits, and the first digit cannot be zero';
+        hasErrors = true;
+    }
+
+    // Example validation for housename field
+    const housenameInput = document.getElementById('housename');
+    const housenameError = document.getElementById('housenameError');
+
+    if (!housenameInput.value.trim()) {
+        housenameError.innerHTML = 'House Name is required';
+        hasErrors = true;
+    }
+
+    // Example validation for city field
+    const cityInput = document.getElementById('city');
+    const cityError = document.getElementById('cityError');
+
+    if (!cityInput.value.trim()) {
+        cityError.innerHTML = 'City is required';
+        hasErrors = true;
+    }
+
+    // Example validation for state field
+    const stateInput = document.getElementById('state');
+    const stateError = document.getElementById('stateError');
+
+    if (!stateInput.value.trim()) {
+        stateError.innerHTML = 'State is required';
+        hasErrors = true;
+    }
+
+    // Example validation for pin field
+    const pinInput = document.getElementById('pin');
+    const pinError = document.getElementById('pinError');
+
+    if (!/^[0-9]{6}$/.test(pinInput.value)) {
+        pinError.innerHTML = 'Pin should contain exactly 6 numbers';
+        hasErrors = true;
+    }
+
+    // Prevent form submission if there are validation errors
+    return !hasErrors;
+}
+
+// Helper function to reset all error messages
+function resetErrors() {
+    const errorElements = document.querySelectorAll('[id$="Error"]');
+    errorElements.forEach(errorElement => {
+        errorElement.innerHTML = '';
+    });
+}
+
 </script>
 
 

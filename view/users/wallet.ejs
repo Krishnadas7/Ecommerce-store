@@ -52,20 +52,22 @@
             <div class="modal-body">
               <div class="form-group">
                 <label for="email1">Enter Amount</label>
-                <input type="Number" class="form-control" id="amount" aria-describedby="emailHelp" placeholder="eg:1000" required>
+                <input type="Number" class="form-control" id="amount" aria-describedby="emailHelp" placeholder="eg:1000" >
                 <p id="err" class="text-danger"></p>
               </div>
             </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn rounded" style="background-color: grey;" data-bs-dismiss="modal">CANCEL</button>
-          <button type="submit" class="btn rounded" style="background-color: rgb(0, 104, 179);">ADD</button>
+          <button type="submit" class="btn rounded" style="background-color: rgb(0, 104, 179);" onclick="validateForm()">ADD</button>
         </div>
         </form>
       </div>
     </div>
   </div>
 </main>
+
+
 
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -97,7 +99,7 @@
                     console.log('opening razorpay');
                     razorpay(res.payment)
                 }else{
-                    alert('failed')
+                    // alert('failed')
                     // console.log('status false redirecting to walletHistory');
                     // location.href = '/view-wallet'
                 }
@@ -156,5 +158,29 @@
                     }
                 })
             }
+  </script>
+  <script>
+    function validateForm() {
+      const amountInput = document.getElementById('amount');
+      const errMessage = document.getElementById('err');
+  
+      const amount = parseInt(amountInput.value);
+  
+      // Clear previous error message
+      errMessage.innerText = '';
+  
+      if (isNaN(amount) || amount <= 0 || amount >= 5000) {
+        // Show error message
+        errMessage.innerText = 'Please enter a valid amount';
+      } else {
+        // Valid input, submit the form or perform other actions
+        document.getElementById('wallet-form').submit();
+      }
+    }
+  
+    // Hide error message when user starts typing
+    document.getElementById('amount').addEventListener('input', function () {
+      document.getElementById('err').innerText = '';
+    });
   </script>
 <%-include('../users/mainLayouts/mainfooter.ejs')%>

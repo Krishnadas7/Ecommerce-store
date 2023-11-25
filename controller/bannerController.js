@@ -5,6 +5,7 @@ const loadAddBanner =async (req,res)=>{
         res.render('add-banner')
     } catch (error) {
         console.log(error);
+        res.render('500')
     }
 }
 const postBanner=async (req,res)=>{
@@ -24,6 +25,7 @@ const postBanner=async (req,res)=>{
        
     } catch (error) {
         console.log(error);
+        res.render('500')
     }
 }
 const loadBannerDetails =async (req,res)=>{
@@ -33,6 +35,7 @@ const loadBannerDetails =async (req,res)=>{
         res.render('banner-details',{banner:banner})
     } catch (error) {
         console.log(error);
+        res.render('500')
     }
 }
 const blockBanner=async(req,res)=>{
@@ -53,6 +56,7 @@ const blockBanner=async(req,res)=>{
     }
     } catch (error) {
         console.log(error);
+        res.render('500')
     }
 }
 const editBanner=async (req,res)=>{
@@ -63,6 +67,7 @@ const editBanner=async (req,res)=>{
         res.render('edit-banner',{banner:banner})
     } catch (error) {
         console.log(error);
+        res.render('500')
     }
 }
 const updateBanner =async (req,res)=>{
@@ -79,6 +84,7 @@ const updateBanner =async (req,res)=>{
         }
     } catch (error) {
         console.log(error);
+        res.render('500')
     }
 }
 module.exports={

@@ -62,7 +62,7 @@ const reportController=require('../controller/reportController')
             }
           } catch (error) {
             console.log(error);
-            res.status(500).send('Internal Server Error');
+            res.render('500')
           }
         };
         
@@ -180,6 +180,7 @@ const createSalesReport = async (interval) => {
 
   } catch (error) {
     console.error("Error generating the sales report:", error.message);
+    res.render('500')
   }
 };
 
@@ -279,6 +280,7 @@ const loadLogin=async (req,res)=>{
         res.render('admin-login')
     } catch (error) {
         console.log(error);
+        res.render('500')
     }
 }
             // ADMIN CHECKING
@@ -305,6 +307,7 @@ const loginVerify=async (req,res)=>{
 
     } catch (error) {
         console.log(error);
+        res.render('500')
     }
 }
  
@@ -316,6 +319,7 @@ const loadaddCategory=(req,res)=>{
         res.render('add-category')
     } catch (error) {
         console.log(error);
+        res.render('500')
     }
 }
              // LOAD ADMIN LOGOUT
@@ -327,6 +331,7 @@ const logOut=async (req,res)=>{
         res.redirect('/admin')
     } catch (error) {
         console.log(error);
+        res.render('500')
     }
 }
 //  =============================OEDER=============================================
@@ -373,6 +378,7 @@ const loadOrders=async (req,res)=>{
         res.render('view-orders',{orders:productWiseOrdersArray})
     } catch (error) {
         console.log(error);
+        res.render('500')
     }
 }
 
@@ -386,6 +392,7 @@ const orderDetails=async (req,res)=>{
         res.render('order-details',{orders:orderedProducts})
     } catch (error) {
         console.log(error);
+        res.render('500')
     }
 }
 
@@ -420,6 +427,7 @@ const updateOrder = async(req,res)=>{
     } catch (error) {
   
         console.log(error.message);
+        res.render('500')
   
     }
   }
@@ -463,6 +471,7 @@ try {
     res.render('order-management',{product:productOrder,orderId,productId})
 } catch (error) {
     console.log(error);
+    res.render('500')
 }
 }
 
@@ -496,7 +505,9 @@ const changeStatus=async (req,res)=>{
 
   } catch (error) {
     console.log(error);
+    res.render('500')
   }
+  
 }
 
 const cancelOrderadmin=async (req,res)=>{
@@ -525,6 +536,7 @@ const cancelOrderadmin=async (req,res)=>{
 
   } catch (error) {
     console.log(error);
+    res.render('500')
   }
 }
 //     console.log(orderDataData);
@@ -543,7 +555,14 @@ const cancelOrderadmin=async (req,res)=>{
 
 //     return salesReport;
 
-
+const errorrPage=async (req,res)=>{
+  try {
+    res.render('404')
+  } catch (error) {
+    console.log(error);
+    
+  }
+}
 
 module.exports={
     loadLogin,
@@ -556,6 +575,7 @@ module.exports={
     orderManagement,
     changeStatus,
     cancelOrderadmin,
+    errorrPage
     
 
 }

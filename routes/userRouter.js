@@ -125,4 +125,5 @@ userRouter.post('/add-to-wishlist',userAuth.isLogin,wishlistController.addWishli
 userRouter.post('/remove-wishlist',userAuth.isLogin,wishlistController.removeWishlist)
 
 
+
 module.exports=userRouter

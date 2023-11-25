@@ -33,6 +33,10 @@ const orderSchema = new mongoose.Schema({
       cancelReason: {
         type: String
       },
+      price:{
+        type:Number,
+        required:true,
+      },
       orderStatus:{
        type:String,
        required:true
@@ -65,6 +69,8 @@ const orderSchema = new mongoose.Schema({
   deliveryDate: {
     type: Date,
   },
+  
+  
   date: {
     type: Date,
     default: Date.now,

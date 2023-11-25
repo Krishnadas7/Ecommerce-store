@@ -10,6 +10,10 @@ const categorySchema=mongoose.Schema({
     isListed:{
         type:Boolean,
         required:true
+    },
+    offer: {
+        type: Number,
+        default: 0 // or any other default value you prefer
     }
 })
 

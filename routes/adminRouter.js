@@ -165,8 +165,9 @@ adminRouter.get('/offers',adminAuth.isLogin,offers.loadOffers)
 adminRouter.get('/product-offers',adminAuth.isLogin,offers.loadProductOffers)
 adminRouter.post('/product-offers',adminAuth.isLogin,offers.addProductOffer)
 adminRouter.post('/remove-offer',adminAuth.isLogin,offers.removeOffer)
-
-
+adminRouter.get('/category-offers',adminAuth.isLogin,offers.loadCategoryOffer)
+adminRouter.post('/category-offers',adminAuth.isLogin,offers.addCategoryOffer)
+adminRouter.post('/remove-Catoffer',adminAuth.isLogin,offers.categoryOfferDelete)
 // ===============SALES REPORT===================
 adminRouter.get('/sales-report',adminAuth.isLogin,reportController.loadSalesReport)
 
@@ -179,5 +180,7 @@ adminRouter.get('/block-banner',adminAuth.isLogin,bannerController.blockBanner)
 adminRouter.get('/edit-banner',adminAuth.isLogin,bannerController.editBanner)
 adminRouter.post('/edit-banner',adminAuth.isLogin,bannerUpload.single('image'),bannerController.updateBanner)
 
+// =============================ERROR PAGE==============================================
+adminRouter.get('/*',adminControllers.errorrPage)
 
 module.exports=adminRouter

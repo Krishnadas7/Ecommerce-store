@@ -271,17 +271,25 @@ margin-bottom: 12px;" class="btn btn-danger rounded" data-bs-toggle="modal" data
                                       </thead>
                   
                                       <tbody>
-                                          <%product.forEach((data)=>{%>
-                                          <tr>
-                                              <td><a href="#"><%=data.productId.name%></a></td>
-                                              <%if(data.productId.discount>0){%>
-                                                <td> <del>&#8377 <%=data.productId.price%> </del></td>
-                                              <td>&#8377 <%=data.productId.discountedAmount%></td>
-                                            <%}else{%>
-                                              <td>&#8377 <%=data.productId.price%></td>
-                                            <%}%>    
-                                          </tr>
-                                          <%})%>
+                                        <% var productId; %>
+                                        <% product.forEach((data) => { %>
+                                        
+                                            <tr>
+                                                <td><a href="#"><%= data.productId.name %></a></td>
+                                                <% if (data.productId.discount > 0) { %>
+                                                    <td><del>&#8377 <%= data.productId.price %> </del></td>
+                                                    <td>&#8377 <%= data.productId.discountedAmount %></td>
+                                                    <% productId = data.productId._id %>
+                                                    <input type="hidden"  class="productId" name="price" value="<%= data.productId.discountedAmount %>">
+                                                <% } else { %>
+                                                    <td>&#8377 <%= data.productId.price %></td>
+                                                    <% productId = data.productId._id %>
+                                                    <input type="hidden"  class="productId" name="price" value="<%= data.productId.price %>">
+                                                <% } %>    
+                                            </tr>
+                                        <% }); %>
+                                       
+                                        
                   
                                           <tr class="summary-subtotal">
                                               <td>Subtotal:</td>
@@ -344,12 +352,14 @@ margin-bottom: 12px;" class="btn btn-danger rounded" data-bs-toggle="modal" data
     let code = codes ? codes : 0
     let address = $("input[name=address]:checked").val()
     let total=document.getElementById("total1").innerHTML;
-    
+    let rice = document.querySelector(".productId").value;
+
+    let price=parseInt(rice)
     let payment=$("input[name=payment]:checked").val()
     $.ajax({
         url:"/place-order",
         method:"post",
-        data:{Total:total,address:address,payment:payment,code:code},
+        data:{Total:total,address:address,payment:payment,code:code,price:price},
         success: (response)=>{
             if(response.success===true || response.wallet==true){
                 // swal('order placed')
@@ -362,6 +372,8 @@ margin-bottom: 12px;" class="btn btn-danger rounded" data-bs-toggle="modal" data
                     });
               }else if(response.couponBlock){  
                 Swal.fire('coupon is  not available');
+              }else if(response.quantity){
+                Swal.fire('products is not available')
             }else{
               razorPayment(response.order)
             }

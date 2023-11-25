@@ -80,73 +80,74 @@
 
 
 <script>
-  document.getElementById("form").addEventListener("submit", function (event) {
-    // Validation for Full Name (required)
-    const name = document.getElementById("name").value;
-    if (name.trim() === "") {
-      document.getElementById("nameError").innerText = " Name is required";
-      event.preventDefault();
-    } else {
-      document.getElementById("nameError").innerText = "";
-    }
-
-    // Validation for Email (required)
-    const email = document.getElementById("email").value;
-    if (email.trim() === "") {
-      document.getElementById("emailError").innerText = "Email is required";
-      event.preventDefault();
-    } else {
-      document.getElementById("emailError").innerText = "";
-    }
-
-    // Validation for Mobile (only numbers, exactly 10 digits)
-    const mobile = document.getElementById("mobile").value;
-    if (!/^\d{10}$/.test(mobile)) {
-      document.getElementById("mobileError").innerText = "Mobile should contain exactly 10 digits";
-      event.preventDefault();
-    } else {
-      document.getElementById("mobileError").innerText = "";
-    }
-
-    // Validation for Password (at least 6 characters, including letters, numbers, and symbols)
-    const password = document.getElementById("password").value;
-    if (!/^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{6,}$/.test(password)) {
-      document.getElementById("passwordError").innerText = "Password should contain at least 6 characters, including letters apace not allowed, numbers, and symbols";
-      event.preventDefault();
-    } else {
-      document.getElementById("passwordError").innerText = "";
-    }
-
-    // Validation for Confirm Password (must match Password)
-    const cpassword = document.getElementById("Cpassword").value;
-    if (cpassword !== password) {
-      document.getElementById("cpasswordError").innerText = "Passwords do not match";
-      event.preventDefault();
-    } else {
-      document.getElementById("cpasswordError").innerText = "";
-    }
-  });
-
-  // Clear error messages when the user corrects the input
-  document.getElementById("name").addEventListener("input", function () {
+ document.getElementById("form").addEventListener("submit", function (event) {
+  // Validation for Full Name (required)
+  const name = document.getElementById("name").value;
+  if (name.trim() === "") {
+    document.getElementById("nameError").innerText = "Name is required";
+    event.preventDefault();
+  } else {
     document.getElementById("nameError").innerText = "";
-  });
+  }
 
-  document.getElementById("email").addEventListener("input", function () {
+  // Validation for Email (required)
+  const email = document.getElementById("email").value;
+  if (email.trim() === "") {
+    document.getElementById("emailError").innerText = "Email is required";
+    event.preventDefault();
+  } else {
     document.getElementById("emailError").innerText = "";
-  });
+  }
 
-  document.getElementById("mobile").addEventListener("input", function () {
+  // Validation for Mobile (only numbers, exactly 10 digits, first digit not zero)
+  const mobile = document.getElementById("mobile").value;
+  if (!/^[1-9]\d{9}$/.test(mobile)) {
+    document.getElementById("mobileError").innerText = "Mobile should contain exactly 10 digits, and the first digit cannot be zero";
+    event.preventDefault();
+  } else {
     document.getElementById("mobileError").innerText = "";
-  });
+  }
 
-  document.getElementById("password").addEventListener("input", function () {
+  // Validation for Password (at least 6 characters, including letters, numbers, and symbols)
+  const password = document.getElementById("password").value;
+  if (!/^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{6,}$/.test(password)) {
+    document.getElementById("passwordError").innerText = "Password should contain at least 6 characters, including letters, numbers, and symbols";
+    event.preventDefault();
+  } else {
     document.getElementById("passwordError").innerText = "";
-  });
+  }
 
-  document.getElementById("Cpassword").addEventListener("input", function () {
+  // Validation for Confirm Password (must match Password)
+  const cpassword = document.getElementById("Cpassword").value;
+  if (cpassword !== password) {
+    document.getElementById("cpasswordError").innerText = "Passwords do not match";
+    event.preventDefault();
+  } else {
     document.getElementById("cpasswordError").innerText = "";
-  });
+  }
+});
+
+// Clear error messages when the user corrects the input
+document.getElementById("name").addEventListener("input", function () {
+  document.getElementById("nameError").innerText = "";
+});
+
+document.getElementById("email").addEventListener("input", function () {
+  document.getElementById("emailError").innerText = "";
+});
+
+document.getElementById("mobile").addEventListener("input", function () {
+  document.getElementById("mobileError").innerText = "";
+});
+
+document.getElementById("password").addEventListener("input", function () {
+  document.getElementById("passwordError").innerText = "";
+});
+
+document.getElementById("Cpassword").addEventListener("input", function () {
+  document.getElementById("cpasswordError").innerText = "";
+});
+
 </script>
 
 

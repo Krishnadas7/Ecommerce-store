@@ -47,6 +47,7 @@ const id = new ObjectId();
               });
           } catch (error) {
               console.log(error);
+              res.render('500')
           }
       };
 
@@ -70,6 +71,7 @@ const productView=async (req,res)=>{
         res.render('product-view',{user:req.session.user,product:product,userId:userId})
     } catch (error) {
         console.log(error);
+        res.render('500')
     }
 }
 

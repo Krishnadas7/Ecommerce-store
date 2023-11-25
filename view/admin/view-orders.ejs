@@ -53,7 +53,7 @@
                           </tr>
                         </thead>
                         <tbody>
-                          
+                         <% if(orders){%>
                           <%for(let i=orders.length-1;i>=0;i--){%>
                           
                           
@@ -121,7 +121,13 @@
                         </tr>
                       
                                 <%}%>
-                          
+                              <%}else{%>
+                              <tr>
+                                <td>
+                                  <p>No orders</p>
+                                </td>
+                              </tr>
+                             <% }%>
                           
                                 
                         </tbody>

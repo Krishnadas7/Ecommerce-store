@@ -38,6 +38,7 @@ const { ObjectId } = require("mongodb")
                     });
                 } catch (error) {
                     console.log(error);
+                    res.render('500')
                 }
             };
 
@@ -49,6 +50,7 @@ const loadAddproduct = async (req, res) => {
         res.render('add-product',{category:category})
     } catch (error) {
         console.log(error);
+        res.render('500')
     }
 }
                //   ADD PRODUCT
@@ -83,6 +85,7 @@ const loadAddproduct = async (req, res) => {
                     res.redirect('/admin/add-product');
                 } catch (error) {
                     console.error(error);
+                    res.render('500')
                    
                 }
             };
@@ -99,43 +102,48 @@ const editProduct = async (req, res) => {
         res.render('edit-product', { product })
     } catch (error) {
         console.log(error);
+        res.render('500')
     }
 }
                       // UPDATE PRODUCT                        
 
 
-const updateProduct = async (req, res) => {
-    try {
-         const name=req.body.name
-         const category=req.body.category
-         const stock=req.body.stock
-         const description=req.body.description
-         const price=req.body.price
-         const id=req.body.id
-         const image=[]
-         for (i = 0; i < req.files.length; i++) {
-            image[i] = req.files[i].filename;
-          }
-         const result =await Product.findByIdAndUpdate({_id:id},{$set:{
-            name:name,
-            category:category,
-            description:description,
-            price:price,
-            stock:stock,
-            image:image
-
-         }})
-         if(result){
-            res.redirect('/admin/view-products')
-         }else{
-            res.render('edit-product')
-         }
-
-
-    } catch (error) {
-        console.log(error);
-    }
-}                  
+                      const updateProduct = async (req, res) => {
+                        try {
+                            const { id, name, category, stock, description, price } = req.body;
+                            const existingProduct = await Product.findById(id);
+                    
+                            // Check if new images are uploaded
+                            let newImages = existingProduct.image;
+                            if (req.files.length > 0) {
+                                newImages = req.files.map(file => file.filename);
+                            }
+                    
+                            const result = await Product.findByIdAndUpdate(
+                                { _id: id },
+                                {
+                                    $set: {
+                                        name: name,
+                                        category: category,
+                                        description: description,
+                                        price: price,
+                                        stock: stock,
+                                        image: newImages
+                                    }
+                                }
+                            );
+                    
+                            if (result) {
+                                res.redirect('/admin/view-products');
+                            } else {
+                                res.render('edit-product');
+                            }
+                        } catch (error) {
+                            console.log(error);
+                            res.render('500');
+                        }
+                    };
+                                   
 
         //    LIST AND UNLIST PRODUCT
 
@@ -153,7 +161,8 @@ const updateProduct = async (req, res) => {
         res.redirect('/admin/view-products')
         
     } catch (error) {
-        console.log();
+        console.log(error);
+        res.render('500')
     }
    }
 

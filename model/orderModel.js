@@ -50,13 +50,8 @@ const orderSchema = new mongoose.Schema({
         type:Number,
         required:true
       },
-      returnOrderStatus:{
-        status:{
-          type:String
-        },
-        reason:{
-          type:String
-        }
+      cancelReason:{
+       type:String
         
       },
       updatedAt:{

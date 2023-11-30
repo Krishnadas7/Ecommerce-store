@@ -28,8 +28,11 @@ const { tryCatch } = require("engine/utils");
 // key_id,key_secret
 // rzp_test_49DsJEEbScMJdv,oIo905FGjFAr6eEZfkNhmDEU
 
-var instance = new Razorpay({ key_id: process.env.KEY_ID, key_secret: process.env.KEY_SECRET })
-
+// var instance = new Razorpay({ key_id: process.env.KEY_ID, key_secret: process.env.KEY_SECRET })
+const instance = new Razorpay({
+    key_id: 'rzp_test_49DsJEEbScMJdv',
+    key_secret: 'oIo905FGjFAr6eEZfkNhmDEU'
+});
 const securePassword = async (password) => {
     try {
         const passwordHash = await bcrypt.hash(password, 10)
@@ -529,26 +532,31 @@ const addMoneyWallet = async (req,res)=>{
     try {
         console.log("monry comong");
 
-    const {amount}=req.body
-    console.log('amount',amount);
-    const id=crypto.randomBytes(8).toString('hex')
-    console.log(id);
-    var options={ 
-        amount:amount*100,
-        currency:'INR',
-        receipt:""+id
-    }
-    
-    instance.orders.create(options, (err, order) => {
-        if(err){
-            console.log('err');
-            res.json({status: false})
-        }else{
-            console.log('stts');
-            res.json({ status: true, payment:order })
-        }
-    
-    })
+        const amount = req.body.amount;
+        const parsedAmount = parseInt(amount);
+        console.log('amount', amount);
+        console.log('parsedAmount', parsedAmount);
+        
+        const id = await crypto.randomBytes(8).toString('hex');
+        console.log(id);
+        
+        var options = {
+            amount: parsedAmount * 100,
+            currency: 'INR',
+            receipt: "" + id
+        };
+        
+        console.log('oppp', options);
+        
+        instance.orders.create(options, (err, order) => {
+            if (err) {
+                console.log('err:', err);
+                res.json({ status: false });
+            } else {
+                console.log('stts:', order);
+                res.json({ status: true, payment: order });
+            }
+        });
     
     } catch (error) {
         console.log(error);

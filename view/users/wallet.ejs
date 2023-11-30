@@ -96,7 +96,8 @@
             data: { amount },
             success: (res) => {
                 if(res.status){
-                    console.log('opening razorpay');
+                    console.log('opening razorpay',res.payment);
+                    
                     razorpay(res.payment)
                 }else{
                     // alert('failed')
@@ -160,27 +161,27 @@
             }
   </script>
   <script>
-    function validateForm() {
-      const amountInput = document.getElementById('amount');
-      const errMessage = document.getElementById('err');
+    // function validateForm() {
+    //   const amountInput = document.getElementById('amount');
+    //   const errMessage = document.getElementById('err');
   
-      const amount = parseInt(amountInput.value);
+    //   const amount = parseInt(amountInput.value);
   
-      // Clear previous error message
-      errMessage.innerText = '';
+    //   // Clear previous error message
+    //   errMessage.innerText = '';
   
-      if (isNaN(amount) || amount <= 0 || amount >= 5000) {
-        // Show error message
-        errMessage.innerText = 'Please enter a valid amount';
-      } else {
-        // Valid input, submit the form or perform other actions
-        document.getElementById('wallet-form').submit();
-      }
-    }
+    //   if (isNaN(amount) || amount <= 0 || amount >= 5000) {
+    //     // Show error message
+    //     errMessage.innerText = 'Please enter a valid amount';
+    //   } else {
+    //     // Valid input, submit the form or perform other actions
+    //     document.getElementById('wallet-form').submit();
+    //   }
+    // }
   
-    // Hide error message when user starts typing
-    document.getElementById('amount').addEventListener('input', function () {
-      document.getElementById('err').innerText = '';
-    });
+    // // Hide error message when user starts typing
+    // document.getElementById('amount').addEventListener('input', function () {
+    //   document.getElementById('err').innerText = '';
+    // });
   </script>
 <%-include('../users/mainLayouts/mainfooter.ejs')%>

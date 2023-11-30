@@ -50,7 +50,14 @@
                                       </div>
                                     </td>
                                     <td class="column-2"><%=data.productId.name%></td>
-                                    <td class="column-3">&#8377; <%=data.productId.price%></td>
+                                    <td class="column-3">
+                                       <% if(data.productId.discount>0){%>
+                                            Rs. <%=data.productId.discountedAmount%>
+                                       <% }else{%>
+                                            Rs. <%=data.productId.price%>
+                                       <%}%>
+                                        
+                                    </td>
                                     <td class="column-4">
                                       <div id="numbersdiv" class="wrap-num-product flex-w ">
                                         <a id="minus-button" class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m" onclick="cartCount('<%=data.productId._id%>','<%=userId%>',-1)">-</a>
@@ -214,7 +221,13 @@
             }   
            }).done((data)=>{
             if(data){
-                Swal.fire('Item deleted successfully')
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: 'Item removed successfully',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
                 // swal('Item removed')
                 $("#reloadDiv").load("/view-cart #reloadDiv")
            

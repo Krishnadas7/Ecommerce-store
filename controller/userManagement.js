@@ -17,6 +17,7 @@ const loadUsermanagement=async (req,res)=>{
         res.render('user-management',{user:user})
     } catch (error) {
         console.log(error);
+        res.render('500')
     }
 }
 
@@ -38,6 +39,7 @@ const blockUnblock=async (req,res)=>{
           res.redirect('/admin/user-management')
     } catch (error) {
        console.log(error); 
+       res.render('500')
     }
 }
 

@@ -95,12 +95,46 @@
                                 aria-labelledby="tab-dashboard-link">
                                 <h6 class="text-center fs-1 font-monospace text-decoration-underline ">My
                                     Profile</h6>
+                                    
                                     <%if(address){%>
                        
                                         <% const latestIndex = address.address.length - 1; %>
 
 <% for (let i = latestIndex; i <= latestIndex; i++) { %>
+  
     <div class="col-12 mb-3">
+      <div class="mb-3 d-flex ">
+        <div class="code mt-1" style="
+         background-color: #cdcccc;
+        padding: 3px;
+        font-size: 29px;
+        color: #333;
+        border-radius: 1px;
+        font-style: oblique;">
+            <span id="couponCode"><%= data.referralCode %></span>
+           
+        </div>
+        <!-- Copy Code Button -->
+        <button class="copy-button" onclick="copyCouponCode()" style="
+        
+        padding: 6px;
+        font-size: 16px;
+        cursor: pointer;
+        background-color: #4CAF50;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        width: 81px;
+        margin-left: 17px;
+        height: 47px;
+        margin-top: 21px;">
+            <i class="fa-solid fa-copy" style="color: #d3d9e4; background-color: transparent;"></i>
+        </button>
+        <p style="margin-left: 55px;" class="p-2 rounded">
+          When someone signs up using your referral code, 
+          they receive an instant 
+           100rs bonus added to their wallet as a special welcome gift</p>
+    </div>
         <div class="card border border-dark" id="addressDiv" style="height: 100px; border-radius: 7px; cursor: pointer; margin-left: -8px;">
             <div class="card-body">
                 <p>
@@ -152,6 +186,7 @@
                                             <input type="submit" class="btn" id="submitButton" value="Save>">
                                             <a class="" href="/forgot-password">Reset your password</a>
                                         </form>
+                                       
                                         
                             </div><!-- .End .tab-pane -->
 
@@ -483,6 +518,28 @@ function deleteAddress(addressId){
         console.log(error);
       }
     });
+  }
+</script>
+<script>
+  function copyCouponCode() {
+      const couponCodeElement = document.getElementById('couponCode');
+      const codeToCopy = couponCodeElement.innerText;
+
+      const textarea = document.createElement('textarea');
+      textarea.value = codeToCopy;
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand('copy');
+      document.body.removeChild(textarea);
+
+      // Successfully copied to clipboard
+      Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: 'Copied to clipboard',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
   }
 </script>
 

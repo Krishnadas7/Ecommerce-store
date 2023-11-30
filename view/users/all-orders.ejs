@@ -24,8 +24,8 @@
        <% if(orders.length>0){%>
         <% for (let i = 0; i < orders.length; i++) { %>
       <%for(let j=0;j<orders[i].products.length;j++){%>
-          <tr style="background-color:#f1f3f6; ">
-            <th scope="row"><%= i + 1 %></th>
+          <tr style="background-color:#f1f3f6 ; border: black; ">
+            <th scope="row"><%= j + 1 %></th>
             <td><%= orders[i].date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: '2-digit' }).replace(/\//g, '-') %></td>
             <td>Rs.<%= orders[i].totalAmount %></td>
             <td><%= orders[i].paymentMethod %></td>
@@ -33,10 +33,14 @@
             <!-- <td><%=orders[i].expectedDelivery.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: '2-digit' }).replace(/\//g, '-')%></td> -->
             <td><%= orders[i].trackId %></td>
           
-            <td><%= orders[i].products[j].productId ? orders[i].products[j].productId.name : 'N/A' %></td>
-
+            <td><%= orders[i].products[j].productId ? orders[i].products[j].productId.name : 'N/A' %> <br>Size:7 </td>
              
-            <td><a  href="/order-details?id=<%= orders[i]._id %>">view details</a></td>
+             
+            <td>
+             
+              <a class="btn btn-danger" href="/order-details?id=<%= orders[i]._id %>" style="text-decoration: none; padding: 10px 20px; background-color: #d9534f; color: #fff; border-radius: 5px; box-shadow: 2px 2px 5px #888;">Details</a>
+            </td>
+            
           </tr>
       <%}%>
         <% } %>

@@ -27,17 +27,17 @@
                   <div class="table-responsive">
                     <ul class="navbar-nav  w-100">
                       <li class="nav-item w-100">
-                        <form class="nav-link mt-2 mt-md-0 d-none d-lg-flex search">
+                        <!-- <form class="nav-link mt-2 mt-md-0 d-none d-lg-flex search">
                           <div class="input-group rounded">
-                            <input name="search" value="search" type="search" class="text-white rounded my-2" style=" height: 35px; width: 50%; border: none;" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+                          <input name="search" value="search" type="search" class="text-white rounded my-2" style=" height: 35px; width: 50%; border: none;" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
                             
                             <button type="submit" class=" btn btn-primary justify-content-center mt-2" style="height: 35px;width: 87px;">Search</button>
                           </div>
-                        </form>
+                        </form> -->
                       </li>
                     </ul>
 
-                    <table class="table">
+                    <table class="table" id="userDetails">
                       <thead>
 
 
@@ -108,6 +108,18 @@
         </div>
       </div>
 
+      <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js"></script>
+
+
+
+<script>
+$('#userDetails').DataTable({
+    responsive: true,
+    
+});
+</script>
 
 
       <%-include('../admin/adminhomeLayouts/admin-footer.ejs')%>

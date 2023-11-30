@@ -75,8 +75,10 @@ const addToCart = async (req, res) => {
     }
 };
  function calculateDiscountedPrice(originalPrice, discountPercentage) {
-                    const discountAmount = (discountPercentage / 100) * originalPrice;
-                    return originalPrice - discountAmount;
+    const discountAmount = (discountPercentage / 100) * originalPrice;
+    const discountedPrice = originalPrice - discountAmount;
+    // Use toFixed to format the result to two decimal places
+    return discountedPrice.toFixed(2);
                 }
 
 const getCartProducts = async (req, res) => {
@@ -98,9 +100,14 @@ const getCartProducts = async (req, res) => {
             
                
                 for (const product of cartData.products) {
-                    let total=  calculateDiscountedPrice(product.productId.price, product.productId.discount);
+                    let total = calculateDiscountedPrice(product.productId.price, product.productId.discount);
                     totalPrice += product.quantity * total;
                 }
+                
+                // Use toFixed to format totalPrice to two decimal places
+                totalPrice = totalPrice.toFixed(2);
+                
+                console.log(totalPrice);  // Output: "6600.00"
                 
 
                 res.render('view-cart', {

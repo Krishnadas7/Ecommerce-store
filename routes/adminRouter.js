@@ -170,7 +170,11 @@ adminRouter.post('/category-offers',adminAuth.isLogin,offers.addCategoryOffer)
 adminRouter.post('/remove-Catoffer',adminAuth.isLogin,offers.categoryOfferDelete)
 // ===============SALES REPORT===================
 adminRouter.get('/sales-report',adminAuth.isLogin,reportController.loadSalesReport)
-
+adminRouter.get('/saleSortPage/:id', adminAuth.isLogin, reportController.saleSorting)
+adminRouter.get('/reportDown/:duration/:format', adminAuth.isLogin, reportController.downloadReport)
+// adminRouter.post('/sales-report/portfolio',adminAuth.isLogin,reportController.portfolioFiltering )
+// adminRouter.get('/sales-report/export-report',adminAuth.isLogin,reportController.generateExcelReportsOfAllOrders)
+// adminRouter.get('/sales-report/export-PDF-report',adminAuth.isLogin,reportController.generatePDFReportsOfProfit)
 
 // =====================BANNER ===============================
 adminRouter.get('/add-banner',adminAuth.isLogin,bannerController.loadAddBanner)

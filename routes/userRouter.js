@@ -123,6 +123,7 @@ userRouter.post('/deleteAppliedCoupon',userAuth.isLogin,couponController.deleteA
 userRouter.get('/view-wishlist',userAuth.isLogin,wishlistController.loadWishlist)
 userRouter.post('/add-to-wishlist',userAuth.isLogin,wishlistController.addWishlist)
 userRouter.post('/remove-wishlist',userAuth.isLogin,wishlistController.removeWishlist)
+userRouter.get('/invoice-page/:id',userAuth.isLogin,orderController.invoiceDownload)
 
 
 

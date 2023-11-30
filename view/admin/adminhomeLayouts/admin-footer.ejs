@@ -12,7 +12,107 @@
       </div>
       <!-- page-body-wrapper ends -->
     </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+
+<script>
+  let Online = document.getElementById("online").value;
+  let Wallet =  document.getElementById('wallet').value;
+  let COD = document.getElementById('cod').value;
+  console.log(Online);
+
+  const xTValues = ["Online", "COD", "Wallet"];
+  const yTValues = [Online, Wallet, COD];
+  const TbarColors = [
+    "#b91d47",
+    "#00aba9",
+    "#2b5797"
+  ];
+  
+  new Chart("transactions", {
+    type: "doughnut",
+    data: {
+      labels: xTValues,
+      datasets: [{
+        backgroundColor: TbarColors,
+        data: yTValues
+      }]
+    },
+    
+  });
+  </script>
+
+
+
+<script>
+  window.onload = function() {
+    let Jan = document.getElementById("jan").value;
+    let Feb = document.getElementById("feb").value;
+    let Mar = document.getElementById("mar").value;
+    let Apr = document.getElementById("apr").value;
+    let May = document.getElementById("may").value;
+    let Jun = document.getElementById("jun").value;
+    let Jul = document.getElementById("jul").value;
+    let Aug = document.getElementById("aug").value;
+    let Sep = document.getElementById("sep").value;
+    let Oct = document.getElementById("oct").value;
+    let Nov = document.getElementById("nov").value;
+    let Dec = document.getElementById("dec").value;
+    
+    const xValues = ["Jan", "Feb", "Mar", "Apr", "May",'Jun','Jul',"Aug","Sep","Oct","Nov","Dec"];
+    const yValues = [Jan, Feb,Mar,Apr,May,Jun,Jul,Aug,Sep,Oct,Nov,Dec];
+    new Chart("monthChart", {
+      type: "bar",
+      data: {
+        labels: xValues,
+        datasets: [{
+        backgroundColor: "grey",
+        data: yValues
+      }]
+    },
+    options: {
+      legend: {display: false},
+      scales: {
+        yAxes: [{
+          ticks: {
+            beginAtZero: true
+          }
+        }],
+      }
+    }
+  });
+
+  }
+  
+  </script>
    
+
+    <script src="/admin/vendors/js/vendor.bundle.base.js"></script>
+    <!-- endinject -->
+    <!-- Plugin js for this page -->
+    <script src="/admin/vendors/chart.js/Chart.min.js"></script>
+    <script src="/admin/vendors/progressbar.js/progressbar.min.js"></script>
+    <script src="/admin/vendors/jvectormap/jquery-jvectormap.min.js"></script>
+    <script src="/admin/vendors/jvectormap/jquery-jvectormap-world-mill-en.js"></script>
+    <script src="/admin/vendors/owl-carousel-2/owl.carousel.min.js"></script>
+    <!-- End plugin js for this page -->
+    <script src="/admin/js/main.js"> </script>
+    <!-- inject:js -->
+    <script src="/admin/js/chart.js"></script>
+    <script src="/admin/js/off-canvas.js"></script>
+    <script src="/admin/js/hoverable-collapse.js"></script>
+    <script src="/admin/js/misc.js"></script>
+    <script src="/admin/js/settings.js"></script>
+    <script src="/admin/js/todolist.js"></script>
+    <!-- endinject -->
+    <!-- Custom js for this page -->
+    <script src="/admin/js/dashboard.js"></script>
+    <script type="text/javascript" charset="utf8"
+  src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
+
+
+  <!-- ============================================ -->
+    <script src="https://cdn.jsdelivr.net/npm/cropperjs@1.6.1/dist/cropper.min.js"></script>
     <!-- container-scroller -->
     <!-- plugins:js -->
     <script src="/public/adminAssets/AdminHomepage/vendors/js/vendor.bundle.base.js"></script>
@@ -34,6 +134,7 @@
     <!-- Custom js for this page -->
     <script src="/public/adminAssets/AdminHomepage/js/dashboard.js"></script>
     <!-- End custom js for this page -->
-    
+    <script src="path/to/chart.js"></script>
+
   </body>
 </html>

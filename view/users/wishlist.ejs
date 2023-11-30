@@ -59,7 +59,13 @@
         data:{productId:productId}
        }).done((response)=>{
         if(response.success){
-             Swal.fire("item removed from wishlist")
+            Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: 'Item removed successfully',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
              $("#reloadDiv").load("/view-wishlist #reloadDiv")
         }else{
             Swal.fire("something wrong!!!")

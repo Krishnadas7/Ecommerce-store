@@ -2,6 +2,8 @@
 <%-include('../admin/adminhomeLayouts/admin-sidebar.ejs')%>
 <%-include('../admin/adminhomeLayouts/admin-navbar.ejs')%>
 
+<link rel="stylesheet" href="/path/to/cropper.min.css">
+<script src="/path/to/cropper.min.js"></script>
 
 
 <div class="main-panel">
@@ -12,31 +14,84 @@
           <h4 class="card-title">Add Banners</h4>
           <p class="card-description"> Give banner details </p>
           <form class="forms-sample" action="/admin/add-banner" method="post" enctype="multipart/form-data">
-              <div class="col-lg-3 col-md-6 rounded-image-preview ">
-                  <label for="imageInput1" class="image-label ">Banner Image
-                    <div class="rounded-image-preview">
-                      <img id="imagePreview1"
-                      src=""
-                        alt="Preview" />
-                    </div>
-                    <input name="image" type="file" accept="image/*" id="imageInput1" class="imageInput" >
-                  </label>
+            <div class="col-lg-3 col-md-6 rounded-image-preview">
+              <label for="imageInput1" class="image-label">Banner Image
+                <div class="rounded-image-preview">
+                  <img id="imagePreview1" src="" alt="Preview" />
                 </div>
+                <input name="image" type="file" accept="image/*" id="imageInput1" class="imageInput">
+              </label>
+            </div>
             <div class="form-group">
               <label for="exampleInputName1">Banner Title</label>
               <input type="text" class="form-control" id="exampleInputName1" name="title" placeholder="Name">
             </div>
-            
             <div class="form-group">
               <label for="exampleTextarea1">Description</label>
               <textarea class="form-control" id="exampleTextarea1" name="description" rows="4"></textarea>
             </div>
             <button type="submit" class="btn btn-primary mr-2">Submit</button>
             <button class="btn btn-inverse-danger"><a href="/admin/bannerDetails">Cancel</a></button>
+            <input type="hidden" name="croppedImage" id="croppedImageInput">
           </form>
+          
+          <!-- Cropper Container -->
+          <div id="cropperContainer" style="display:none;">
+            <img id="cropperImage" src="" alt="Croppable Image" />
+            <button id="cropImageBtn">Crop</button>
+          </div>
         </div>
       </div>
     </div>
     </div>
+
+
+   
+    <script>
+      document.getElementById('imageInput1').addEventListener('change', function (e) {
+        var file = e.target.files[0];
+    
+        if (file) {
+          var reader = new FileReader();
+    
+          reader.onload = function (event) {
+            var formData = new FormData();
+            formData.append('image', file);
+            // Show the Cropper container
+            document.getElementById('cropperContainer').style.display = 'block';
+    
+            // Set the Cropper image source
+            document.getElementById('cropperImage').src = event.target.result;
+    
+            // Initialize Cropper after the image has loaded
+            var cropper = new Cropper(document.getElementById('cropperImage'), {
+              aspectRatio: 1, // Set your desired aspect ratio
+              viewMode: 2, // Adjust the viewMode as needed
+            });
+    
+            // Handle Crop button click
+            document.getElementById('cropImageBtn').addEventListener('click', function () {
+              // Get the cropped data (base64)
+              var croppedData = cropper.getCroppedCanvas().toDataURL();
+              formData.append('croppedImage', croppedData);
+    
+              // Update the hidden input field with the cropped image data
+              document.getElementById('croppedImageInput').value = croppedData;
+    
+              // Update the image preview with the cropped image
+              document.getElementById('imagePreview1').src = croppedData;
+    
+              // Hide the Cropper container
+              document.getElementById('cropperContainer').style.display = 'none';
+            });
+          };
+    
+          reader.readAsDataURL(file);
+          document.getElementById('imageInput1').value = croppedData
+        }
+      });
+    
+    
+    </script>
   
 <%-include('../admin/adminhomeLayouts/admin-footer.ejs')%>

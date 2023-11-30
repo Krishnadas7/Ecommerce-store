@@ -2,6 +2,132 @@
 <link rel="stylesheet" href="/public/userAssets/userAccount/assets/css/style.css">
 
 
+<!-- <style>
+  .discount-label {
+    color: #28a745; 
+  }
+
+  .criteria-label {
+    color: #007bff; 
+  }
+</style> -->
+
+<!-- <style>
+  .coupon-card {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Box shadow for the card */
+  }
+
+  .coupon-code {
+    font-size: 24px;
+    color: #333; /* Text color for the coupon code */
+    letter-spacing: 2px; /* Letter spacing for the coupon code */
+  }
+
+  .label-text {
+    font-size: 18px;
+    font-weight: bold;
+  }
+
+  .amount-text {
+    font-size: 18px;
+    color: #333; /* Text color for amounts */
+    font-weight: bold;
+  }
+
+  .btn-copy {
+    font-size: 16px;
+  }
+</style> -->
+ <style>
+  body{
+
+background-color: #eee;
+}
+
+.wrapper{
+
+height: 100vh;
+}
+
+.coupon-div{
+  
+  position: relative;
+  background-color: #9e0be2;
+  padding: 10px;
+  width: 400px;
+  border:none;
+ 
+
+}
+
+.content{
+
+z-index: 10;
+}
+
+.logo{
+
+/* margin-bottom: -60px; */
+}
+
+
+.off{
+
+    line-height: 0px;
+}
+
+.off h1{
+
+font-size: 31px;
+}
+
+.off span{
+
+margin-right: 111px;
+}
+
+
+.plus{
+font-size: 23px;
+}
+
+.code{
+
+/* text-transform: uppercase; */
+padding: 2px;
+/* background-color: #fff; */
+font-size: 19px;
+    width: 130px;
+    color: white;
+    font-family: cursive;
+}
+
+.cross-bg{
+
+height: 100%;
+width: 100%;
+position: absolute;
+border-radius: 20px;
+background-color: #9C27B0;
+
+left: 0px;
+  top: 0px;
+  opacity: 0.4;
+  clip-path: polygon(50% 0%, 90% 20%, 100% 60%, 75% 100%, 25% 100%, 0% 60%, 10% 20%);
+  z-index:1;
+}
+.copy-button {
+      cursor: pointer;
+      /* background-color: #007bff; */
+      color: #fff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      font-size: 14px;
+      margin-top: 10px;
+    }
+</style> 
+
 <div class="bg0 m-t-23 p-b-140 align-items-center"  >
     <div class="container  " style="    margin-bottom: -188px;">
 
@@ -9,7 +135,7 @@
 <nav aria-label="breadcrumb" class="breadcrumb-nav" style="margin-top: 100px;">
     <div class="container">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+            <li class="breadcrumb-item"><a href="">Home</a></li>
             <li class="breadcrumb-item"><a href="#">Shop</a></li>
             <li class="breadcrumb-item active" aria-current="page">Checkout</li>
         </ol>
@@ -21,9 +147,16 @@
 </div>
 <!-- Button trigger modal -->
 <button type="button" style="margin-left: 0px;
-margin-bottom: 12px;" class="btn btn-danger rounded" data-bs-toggle="modal" data-bs-target="#exampleModal">
+ text-decoration: none;
+  padding: 10px 20px;
+   background-color: #d9534f; 
+   color: #fff;
+    border-radius: 5px;
+     box-shadow: 2px 2px 5px #888;
+margin-bottom: 12px;" class="btn btn-danger rounded " data-bs-toggle="modal" data-bs-target="#exampleModal">
   Available offers
 </button>
+
 
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -31,49 +164,51 @@ margin-bottom: 12px;" class="btn btn-danger rounded" data-bs-toggle="modal" data
     <div class="modal-content" style="    margin-top: 177px;
     margin-left: 61px;
     width: 355px;">
-      <div class="modal-header">
+      <div class="modal-header" style="background-color: darkgray; border: none;">
        
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body p-2">
-        <div class="card" style="background-color: cadetblue;">
+      <div class="modal-body p-2" style="background-color: darkgray">
+       
           <% if(coupons.length > 0 ){ %>
             <% coupons.forEach((value)=>{ %>
-              <div class="col-8 col-sm-12 col-xl-8 my-auto">
-                <!-- <p>Use Code:</p> -->
-                <div
-                  class="d-flex d-sm-block d-md-flex align-items-center"
-                >
-                
-                  <h2 class="mb-0 mt-1" style="
-                 
-                  border: 2px dotted #000;
-                  margin-left: 35px;
-                "><%= value.couponCode %></h2>
+              <div class="d-flex justify-content-center m-2 align-items-center">
+                <div class="card coupon-div p-3" style="border-radius: 9px;">
+                    <!-- Existing content for your coupon view -->
+                    <div class="cross-bg"></div>
+                    <div class="content">
+                   
+                        <div class="text-center text-uppercase text-white off p-5">
+                            <p style="font-size: 11px; margin-left: -20px; color: aliceblue;">If you buy&nbsp;<strong>₹ <%= value.criteriaAmount %></strong>&nbsp;worth, You'll get&nbsp;<b>₹ <%= value.discountAmount %> </b> &nbsp;off! </p>
+                        </div>
+                        <div class="text-center text-white" style="margin-top: -30px;">
+                            <span class="plus">+</span>
+                        </div>
+                        <div class="text-center text-white">
+                            <p style="font-size: 11px; margin-left: -7px; color: aliceblue;" class="card-title">Validity:&nbsp;<%= value.activationDate.toLocaleDateString('en-US',
+                                { year: 'numeric', month: 'short', day: '2-digit'
+                                }).replace(/\//g, '-') %>&nbsp; To &nbsp;<%= value.expiryDate.toLocaleDateString('en-US',
+                                { year: 'numeric', month: 'short', day: '2-digit'
+                                }).replace(/\//g, '-') %></p>
+                        </div>
+                        <div class="mb-3 text-center d-flex justify-content-center">
+                            <div class="code text-center mt-1">
+                                <span id="couponCode"><%= value.couponCode %></span>
+                            </div>
+                            <!-- Copy Code Button -->
+                            <button class="copy-button" onclick="copyCouponCode()"><i class="fa-solid fa-copy" style="color: #d3d9e4; background-color: transparent;"></i></button>
+                        </div>
+                    </div>
                 </div>
-                <br>
-                <p style="font-size: 11px; color: aliceblue;">If you buy&nbsp;₹ <%= value.criteriaAmount %>&nbsp;worth, You'll get&nbsp;₹ <%= value.discountAmount %>&nbsp;off! </p>
-                
-                
-              
-
-                <br />
-                <p style="font-size: 11px; color: aliceblue;" class="card-title">Validity:&nbsp;<%= value.activationDate.toLocaleDateString('en-US',
-                  { year: 'numeric', month: 'short', day: '2-digit'
-                  }).replace(/\//g, '-') %>&nbsp; To &nbsp;<%= value.expiryDate.toLocaleDateString('en-US',
-                  { year: 'numeric', month: 'short', day: '2-digit'
-                  }).replace(/\//g, '-') %></p>
-                
-                  
-              </div>
+            </div>
+            
         <%})%>
       <%}%>
-        </div>
+        
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-danger btn-sm" data-bs-dismiss="modal">Okay</button>
-        <!-- <button type="button" class="btn btn-primary">Save changes</button> -->
-      </div>
+      <div class="modal-footer d-flex justify-content-center" style="background-color: darkgray; border: none;">
+        <button type="button" class="btn btn-danger rounded" data-bs-dismiss="modal">CLOSE</button>
+    </div>
     </div>
   </div>
 </div>
@@ -128,7 +263,12 @@ margin-bottom: 12px;" class="btn btn-danger rounded" data-bs-toggle="modal" data
 
 <div class=" text-center w-50 card border-0" >
   
-  <button class="btn btn-primary" style="margin-top: 55px;" data-toggle="modal" data-target="#addAddressModal">+ ADD A NEW ADDRESS</button>
+  <button class="btn btn-primary" style="margin-top: 55px; 
+    background-color: #d9534f; 
+    color: #fff;
+    border-radius: 5px;
+    box-shadow: 2px 2px 5px #888;
+    margin-bottom: 12px;" data-toggle="modal" data-target="#addAddressModal">+ ADD A NEW ADDRESS</button>
    <!-- Add this at the end of your HTML, just before the closing </body> tag -->
 <div class="modal fade" id="addAddressModal" tabindex="-1" role="dialog" aria-labelledby="addAddressModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
@@ -277,12 +417,12 @@ margin-bottom: 12px;" class="btn btn-danger rounded" data-bs-toggle="modal" data
                                             <tr>
                                                 <td><a href="#"><%= data.productId.name %></a></td>
                                                 <% if (data.productId.discount > 0) { %>
-                                                    <td><del>&#8377 <%= data.productId.price %> </del></td>
-                                                    <td>&#8377 <%= data.productId.discountedAmount %></td>
+                                                    <td><del>Rs.<%= data.productId.price %> </del></td>
+                                                    <td> <p style="color: red;">  Rs.<%= data.productId.discountedAmount %></p></td>
                                                     <% productId = data.productId._id %>
                                                     <input type="hidden"  class="productId" name="price" value="<%= data.productId.discountedAmount %>">
                                                 <% } else { %>
-                                                    <td>&#8377 <%= data.productId.price %></td>
+                                                    <td>Rs.<%= data.productId.price %></td>
                                                     <% productId = data.productId._id %>
                                                     <input type="hidden"  class="productId" name="price" value="<%= data.productId.price %>">
                                                 <% } %>    
@@ -291,10 +431,7 @@ margin-bottom: 12px;" class="btn btn-danger rounded" data-bs-toggle="modal" data
                                        
                                         
                   
-                                          <tr class="summary-subtotal">
-                                              <td>Subtotal:</td>
-                                              <td><%=total%></td>
-                                          </tr><!-- End .summary-subtotal -->
+                                          
                                           <tr>
                                               <td>Shipping:</td>
                                               <td>Free shipping</td>
@@ -323,9 +460,19 @@ margin-bottom: 12px;" class="btn btn-danger rounded" data-bs-toggle="modal" data
                                     </label>
                                   </div><!-- End .accordion -->
                                    
-                                  <button type="submit" class="btn btn-outline-primary-2 btn-order btn-block mt-3">
-                                      <span class="btn-text btn btn-primary">Place Order</span>
-                                      <span class="btn-hover-text btn btn-primary">Proceed to Checkout</span>
+                                  <button type="submit" class="btn btn-outline-primary-2 btn-order btn-block mt-3" >
+                                      <span style="
+                                    margin-left: 13px;
+                                      color: #fff;
+                                       border-radius: 5px;
+                                        box-shadow: 2px 2px 5px #888;
+                                   margin-bottom: 12px;" class="btn-text btn btn-primary">Place Order</span>
+                                      <span style="
+                                  
+                                      color: #fff;
+                                       border-radius: 5px;
+                                        box-shadow: 2px 2px 5px #888;
+                                   margin-bottom: 12px;" class="btn-hover-text btn btn-primary">Proceed to Checkout</span>
                                   </button>
                               </div><!-- End .summary -->
                           </div>
@@ -568,5 +715,28 @@ margin-bottom: 12px;" class="btn btn-danger rounded" data-bs-toggle="modal" data
     });
 
 </script>
+<script>
+  function copyCouponCode() {
+      const couponCodeElement = document.getElementById("couponCode");
+      const couponCode = couponCodeElement.innerText;
+
+      navigator.clipboard.writeText(couponCode).then(function () {
+          // Successfully copied to clipboard
+          Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: 'Copied to clipboard',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+      }).catch(function (err) {
+          // Unable to copy to clipboard
+          console.error('Could not copy text: ', err);
+      });
+  }
+</script>
+
+
+
 
 <%-include('../users/mainLayouts/mainfooter.ejs')%>

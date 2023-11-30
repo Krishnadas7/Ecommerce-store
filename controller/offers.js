@@ -8,6 +8,7 @@ const loadOffers=async (req,res)=>{
           res.render('offers')
     } catch (error) {
         console.log(error);
+        res.render('500')
     }
 }
 
@@ -19,11 +20,14 @@ const loadProductOffers=async (req,res)=>{
         res.render('product-offers',{nonOffer:nonOffer,offer:offer})
     } catch (error) {
         console.log(error);
+        res.render('500')
     }
 }
 function calculateDiscountedPrice(originalPrice, discountPercentage) {
     const discountAmount = (discountPercentage / 100) * originalPrice;
-    return originalPrice - discountAmount;
+    // return originalPrice - discountAmount;
+    const discountedPrice = originalPrice - discountAmount;
+    return parseFloat(discountedPrice.toFixed(2));
 }
 
 const addProductOffer=async(req,res)=>{
@@ -43,6 +47,7 @@ const addProductOffer=async(req,res)=>{
        res.redirect('/admin/product-offers')
     } catch (error) {
         console.log(error);
+        res.render('500')
     }
 }
 const removeOffer=async (req,res)=>{
@@ -57,6 +62,7 @@ const removeOffer=async (req,res)=>{
 
     } catch (error) {
         console.log(error);
+        res.render('500')
     }
 }
 const loadCategoryOffer=async (req,res)=>{
@@ -72,6 +78,7 @@ const loadCategoryOffer=async (req,res)=>{
 
     } catch (error) {
         console.log(error);
+        res.render('500')
     }
 }
 
@@ -106,6 +113,7 @@ const addCategoryOffer=async (req,res)=>{
        res.redirect('/admin/category-offers')
     } catch (error) {
         console.log(error);
+        res.render('500')
     }
 }
 
@@ -128,6 +136,7 @@ const categoryOfferDelete=async (req,res)=>{
     res.json({success:true})
     } catch (error) {
         console.log(error);
+        res.render('500')
     }
 }
 

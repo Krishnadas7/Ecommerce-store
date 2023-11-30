@@ -14,6 +14,7 @@ const securePassword = async (password) => {
       return passwordHash
   } catch (error) {
       console.log(error);
+      res.render('500')
   }
 }
 
@@ -23,6 +24,7 @@ const  addAddress=async(req,res)=>{
         res.render('add-address',{user:req.session.user})
     } catch (error) {
         console.log(error);
+        res.render('500')
     }
 }
 
@@ -72,6 +74,7 @@ const insertAddress = async (req, res) => {
       }
     } catch (error) {
       console.log(error);
+      res.render('500')
     
     }
   };
@@ -93,6 +96,7 @@ const insertAddress = async (req, res) => {
       res.render('edit-address',{user:req.session.user,address:addres})
     } catch (error) {
      console.log(error); 
+     res.render('500')
     }
   }
 
@@ -123,6 +127,7 @@ const insertAddress = async (req, res) => {
 
     } catch (error) {
       console.log(error);
+      res.render('500')
     }
   }
 
@@ -135,10 +140,12 @@ const insertAddress = async (req, res) => {
         const userId=userData._id  
         const addressData=await Address.findOne({user:new ObjectId(userId)})  
         const cartData=await Cart.findOne({user:userId}).populate('products.productId')
+      
         const coupons = await Coupon.find({
           status: true,
           expiryDate: { $gte: new Date() }
         })
+
         console.log('addressdata',addressData);
         let address
         let Products
@@ -172,6 +179,7 @@ const insertAddress = async (req, res) => {
         //  ,{user:req.session.user,total:Total,address:address.address,data : cartData.products}
     } catch (error) {
       console.log(error);
+      res.render('500')
     }
   }
 
@@ -233,6 +241,7 @@ const insertAddress = async (req, res) => {
          })
     } catch (error) {
       console.log(error);
+      res.render('500')
     }
   }
 
@@ -311,7 +320,8 @@ const insertAddress = async (req, res) => {
     } catch (error) {
       console.log(error);
       // Send a generic error response
-      res.status(500).json({ error: 'Internal server error' });
+     
+      res.render('500')
     }
   }
   
@@ -331,6 +341,7 @@ const insertAddress = async (req, res) => {
       res.json({delete:true})
     } catch (error) {
       console.log(error);
+      res.render('500')
     }
   }
 

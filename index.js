@@ -13,11 +13,11 @@ app.use('/public',express.static(path.join(__dirname,'public')))
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.use((req, res, next) => {
+app.use((req, res, next) => { 
     res.locals.req = req; 
-    next();
+    next();  
   });    
-
+ 
   
 const disable = (req, res, next) => {
   res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');

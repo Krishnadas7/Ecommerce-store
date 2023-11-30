@@ -12,6 +12,7 @@ const loadCategory=async (req,res)=>{
         res.render('view-category',{category:allcategory})
     } catch (error) {
         console.log(error);
+        res.render('500')
     }
 }
                 // EDIT CATEGORY PAGE
@@ -32,6 +33,7 @@ const editCategory=async (req,res)=>{
        
     } catch (error) {
         console.log(error);
+        res.render('500')
     }
 }
 
@@ -54,6 +56,7 @@ const updateCategory=async (req,res)=>{
             res.redirect('/admin/viewcategory')
     } catch (error) {
         console.log(error);
+        res.render('500')
         }
 }
 
@@ -75,6 +78,7 @@ const postCategory=async (req,res)=>{
         }
     } catch (error) {
         console.log(error);
+        res.render('500')
     }
 }
 
@@ -96,6 +100,7 @@ const listUnlist=async(req,res)=>{
 
     } catch (error) {
         console.log(error);
+        res.render('500')
     }
 }
 

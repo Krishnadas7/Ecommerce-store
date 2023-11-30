@@ -8,24 +8,27 @@ const loadAddBanner =async (req,res)=>{
         res.render('500')
     }
 }
-const postBanner=async (req,res)=>{
+const postBanner = async (req, res) => {
     try {
-        const image=req.file.filename
-        const title=req.body.title
-        const description=req.body.description
+       
+        const image = req.file.filename; 
+        const croppedImage1Buffer = Buffer.from(req.body.croppedImage.replace(/^data:image\/jpeg;base64,/, ''), 'base64');
+      
+        const title = req.body.title;
+        const description = req.body.description;
+
         let banner = new Banner({
             title: title,
             description: description,
-            image:image,
+            image: image,
             status: true
-          });
-      
-          let result = await banner.save();
-          res.redirect('/admin/banner-detials')
-       
+        });
+
+        let result = await banner.save();
+        res.redirect('/admin/banner-detials');
     } catch (error) {
         console.log(error);
-        res.render('500')
+        res.render('500');
     }
 }
 const loadBannerDetails =async (req,res)=>{

@@ -6,7 +6,10 @@ const {ObjectId}=require('mongodb')
 const Order=require('../model/orderModel')
 const userAuth=require('../middlewares/userAuth')
 const Product=require('../model/productModel')
-const { render } = require('../routes/userRouter')
+const path = require('path')
+const fs=require('fs')
+const puppeteer = require('puppeteer')
+const ejs = require('ejs')
 const Razorpay=require('razorpay')
 const crypto=require('crypto')
 const Coupon=require('../model/couponModel')
@@ -33,6 +36,7 @@ const calculateTotalPrice=async (userId)=>{
       return totalPrice
   } catch (error) {
     console.log(error);
+    res.render('500')
   }
 }
 
@@ -42,21 +46,49 @@ const placeOrder=async (req,res)=>{
    
      const name=req.session.user
      const address=req.body.address
-    const price=req.body.price
-    console.log('jkhdjhkdjkhdjkd');
+     const price=req.body.price
      const userData=await User.findOne({name:name})
      const userId=userData._id
      const cartData=await Cart.findOne({user:userId})
      const wallatBalance=userData.wallet
-     const total=parseInt(req.session.Amount)||req.body.Total
-     
+     const total=parseInt(req.session.Amount)||req.body.Total 
      const paymentMethods=req.body.payment
      const uniNum = Math.floor(Math.random() * 900000) + 100000;
      const code = req.body.code;
-     //user limit decreasing
-     console.log('code',code);
-     console.log('body',req.body);
      const couponData = await Coupon.findOne({ couponCode: code });
+   
+        // ======
+        const productIDs = cartData.products.map((productItem) => productItem.productId);
+
+const productPrices = []; // Array to store product prices
+
+const productData = await Cart.find({ "products.productId": { $in: productIDs } })
+  .populate({
+    path: "products.productId",
+    select: "price discountedAmount",
+  })
+  .exec();
+
+if (productData && productData.length > 0) {
+  productData.forEach((order) => {
+    if (order.products && order.products.length > 0) {
+      order.products.forEach((product) => {
+        const price = product.productId.discountedAmount || product.productId.price;
+        productPrices.push(price); // Store the price in the array
+        console.log(price);
+      });
+    } else {
+      console.log("Products array is empty in the order");
+    }
+  });
+} else {
+  console.log("No matching orders found");
+}
+
+console.log(productPrices);
+        // =======
+
+
      if(couponData){
      if(couponData.status==false){
       res.json({couponBlock:true})
@@ -65,11 +97,7 @@ const placeOrder=async (req,res)=>{
 
     for (const item of cartData.products) {
       const productId =item.productId
-      console.log('Constructed Product ID:',typeof productId);
       const product = await Product.findById(productId);
-     console.log('pr',product);
-     console.log('item quantity',item.quantity);
-     console.log('stocj',product.stock);
       if (!product || item.quantity > product.stock) {
         res.json({quantity:true})
         return
@@ -78,10 +106,10 @@ const placeOrder=async (req,res)=>{
    
  let cartProducts
        if(paymentMethods=='online'){
-         cartProducts=cartData.products.map((item)=>({
+         cartProducts=cartData.products.map((item,index)=>({
           productId:item.productId,
           quantity:item.quantity,
-          price:price,
+          price: productPrices[index],
           orderStatus:"NOT",
           statusLevel:1,
           paymentStatus:"pending",
@@ -89,21 +117,17 @@ const placeOrder=async (req,res)=>{
           "returnOrderStatus.reason":"none"
          }))
        }else{
-         cartProducts=cartData.products.map((item)=>({
+         cartProducts=cartData.products.map((item,index)=>({
           productId:item.productId,
           quantity:item.quantity,
           orderStatus:"Placed",
-          price:price,
+          price:productPrices[index],
           statusLevel:1,
           paymentStatus:"pending",
           "returnOrderStatus.status":"none",
           "returnOrderStatus.reason":"none"
          }))
        }
-        
-    
-     
-    //  const total=await calculateTotalPrice(userId)
      const today=new Date()
 
      const deliveryDate = new Date(today);
@@ -114,27 +138,20 @@ const placeOrder=async (req,res)=>{
         deliveryDetails:address,
         price:price,
         userId:userId,
-        userName:name,
-        
+        userName:name,   
         products:cartProducts,
         totalAmount:total,
         paymentMethod:paymentMethods,
         expectedDelivery:deliveryDate,
         date:new Date(),
-        trackId:uniNum
-        
+        trackId:uniNum   
      })
-    
-
-   
     const orderdata= await order.save()
     const orderid=order._id
     
-     if(orderdata){
-      
+     if(orderdata){  
      if(paymentMethods=='COD'){
       const minus= await Coupon.updateOne({couponCode:req.session.code},{$inc:{usersLimit: -1 }})
-     
       const pushing= await Coupon.updateOne({couponCode:req.session.code},{$push:{usedUsers:userId}})
      for(const item of cartData.products){
       const productId = item.productId
@@ -156,14 +173,8 @@ const placeOrder=async (req,res)=>{
       }
     }else{
       const orderId=orderdata._id
-      const totalAmount=orderdata.totalAmount
-    
-
-      // res.json({ codSuccess: true });
-     
+      const totalAmount=orderdata.totalAmount 
      if(paymentMethods=='online') {
-      
-       console.log('not added');
        var options = {
         amount: total*100,  // amount in the smallest currency unit
         currency: "INR",
@@ -230,6 +241,7 @@ const placeOrder=async (req,res)=>{
 
   } catch (error) {
     console.log(error);
+    res.render('500')
   }
 }
 
@@ -292,6 +304,7 @@ const verifyPayment = async(req,res)=>{
 
   }catch(error){
     console.log(error);
+    res.render('500')
   }
 }
 
@@ -300,6 +313,7 @@ const orderSuccess=async (req,res)=>{
     res.render('order-placed',{user:req.session.user})
   } catch (error) {
     console.log(error);
+    res.render('500')
   }
 }
 
@@ -327,13 +341,14 @@ const cancelOrder=async (req,res)=>{
    
     const proId=req.query.productId
     const orderId=req.query.orderId
-    console.log('ppppp',proId,orderId);
+    
     const cancelreason=req.body.reason
     const refund=req.body.refund
     const total=req.body.totalprice
 
+
     const order=await Order.findOne({_id:orderId})
-   console.log('body',total);
+    
    if (!order) {
     return res.status(404).json({ success: false, message: 'Order not found' });
   }
@@ -363,11 +378,20 @@ const productInfo= order.products.find(
         productInfo.orderStatus = "Cancelled";
         productInfo.paymentStatus="Refunded"
         productInfo.cancelReason = cancelreason
+        
        productInfo.updatedAt = Date.now()
        const data = await order.save();
 
          const quantity=productInfo.quantity
        const productId=productInfo.productId
+      const price=productInfo.price
+      const minusAmount=quantity*price
+
+    const totalInc=await Order.updateOne({_id:orderId},
+      {$inc:
+         {totalAmount:-minusAmount}
+      })
+      
 
       const updateQuantity=await Product.findByIdAndUpdate({_id:productId},
        {$inc:{stock:quantity}})
@@ -378,39 +402,30 @@ const productInfo= order.products.find(
       (product)=>product.productId===proId )
        productInfo.orderStatus = "Cancelled";
        productInfo.paymentStatus="Refunded"
+       productInfo.cancelReason = cancelreason
       productInfo.updatedAt = Date.now()
        const result = await order.save();
        const quantity=productInfo.quantity
          const productId=productInfo.productId
+
+
+         const price=productInfo.price
+      const minusAmount=quantity*price
+
+    const totalInc=await Order.updateOne({_id:orderId},
+      {$inc:
+         {totalAmount:-minusAmount}
+      })
        
          const updateQuantity=await Product.findByIdAndUpdate({_id:productId},
         {$inc:{stock:quantity}})
+
         
-          res.redirect("/order-details");
-        
+          res.redirect("/order-details");     
   }
-
-
-
-
-//  const productInfo= order.products.find(
-//       (product)=>product.productId===proId )
-//      productInfo.orderStatus = "Cancelled";
-//     productInfo.updatedAt = Date.now()
-//     const result = await order.save();
-    
-//   const quantity=productInfo.quantity
-//   const productId=productInfo.productId
-
-//   const updateQuantity=await Product.findByIdAndUpdate({_id:productId},
-//     {$inc:{stock:quantity}})
-//     if(order.paymentMethod!=='COD'){
-       
-//     }
-    
-    // res.json({cancel:true})
   } catch (error) {
     console.log(error);
+    res.render('500')
   }
 }
 
@@ -431,6 +446,7 @@ const allOrders =async (req,res)=>{
     })  
   } catch (error) {
     console.log(error);
+    res.render('500')
   }
 }
 const loadOrderDetails=async (req,res)=>{
@@ -463,6 +479,7 @@ const loadOrderDetails=async (req,res)=>{
     })
   } catch (error) {
     console.log(error);
+    res.render('500')
   }
 }
 
@@ -510,6 +527,7 @@ const returnOrder=async(req,res)=>{
     }
   } catch (error) {
     console.log(error);
+    res.render('500')
   }
 }
 
@@ -564,6 +582,50 @@ const checkoutAddress=async (req,res)=>{
 
   } catch (error) {
     console.log(error);
+    res.render('500')
+  }
+}
+
+const invoiceDownload=async (req,res)=>{
+  try {
+    const id=req.params.id
+    const name=req.session.user
+    const userData= await User.findOne({name:name})
+    const orderData=await Order.findOne({_id:id}).populate('products.productId')
+    const userId=userData._id
+    console.log('userdat',userData);
+    console.log('ordrdata',orderData);
+    console.log('userId',userId);
+    const date= new Date()
+
+    data={
+      order:orderData,
+      user:userData,
+      date
+    }
+
+    const filepathName = path.resolve(__dirname, "../view/users/invoice.ejs");
+
+    const html = fs.readFileSync(filepathName).toString();
+    const ejsData = ejs.render(html, data);
+
+    const browser = await puppeteer.launch({ headless: "new"});
+    const page = await browser.newPage();
+    await page.setContent(ejsData, { waitUntil: "networkidle0"});
+    const pdfBytes = await page.pdf({ format: "letter" });
+    await browser.close();
+
+    res.setHeader("Content-Type", "application/pdf");
+    res.setHeader(
+      "Content-Disposition",
+      "attachment; filename= order invoice.pdf"
+    );
+    res.send(pdfBytes);
+
+
+  } catch (error) {
+    console.log(error);
+    res.render('500')
   }
 }
 
@@ -571,7 +633,7 @@ module.exports={
   
   orderSuccess,
     placeOrder,
-    
+    invoiceDownload,
     cancelOrder,
     allOrders,
     loadOrderDetails,

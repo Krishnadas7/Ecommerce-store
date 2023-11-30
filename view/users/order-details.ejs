@@ -1,21 +1,31 @@
 <%-include('../users/mainLayouts/mainheader.ejs')%>
 
 <link rel="stylesheet" href="/public/userAssets/userAccount/assets/css/style.css">
-<div class="container mt-8" style="background-color: gainsboro;" >
+<div class="container mt-5" style="background-color: gainsboro;" >
     <div class="row justify-content-center">
-      <div class="col-md-8 " style="margin-top: 155px;" >
+      <div class="col-md-10 " style="margin-top: 155px;" >
         <div class="card border-0 shadow">
           <div class="card-body text-center">
             <i class="bi bi-check2-circle-fill order-icon"></i>
             <h1 class="order-title mt-4">Order Details</h1>
             <p class="card-text">Thank you for your order! We have received it and will process it shortly.</p>
             <p class="order-id">Your order ID is: <strong>
+              
                 <%=order.trackId%>
               </strong></p>
           </div>
         </div>
         <div class="card mt-4 border-0 shadow">
           <div class="card-body">
+            <div class="position-absolute" style="  
+              position: absolute;
+            margin-top: 10px;
+            font-family: serif;
+            right: 0;
+            margin-top: 28px">
+              <a class="btn btn-danger" href="/invoice-page/<%=order._id%>" style="text-decoration: none; padding: 10px 20px; background-color: #d9534f; color: #fff; border-radius: 5px; box-shadow: 2px 2px 5px #888;">Download INVOICE</a>
+
+            </div>
             <h2 class="mb-4">Order Details</h2>
             <% if (order && order.products && order.products.length> 0) {
               order.products.forEach((products) => { %>
@@ -28,7 +38,7 @@
                       <th scope="col">Product Name</th>
                       <th scope="col">Price</th>
                       <th scope="col">Quantity</th>
-                      <!-- <th scope="col">Total Price</th> -->
+                      <th scope="col">Total Price</th>
                       <th scope="col">Status</th>
                       <th scope="col"><span class="m-l-100"><b>Action</b></span></th>
                     </tr>
@@ -40,12 +50,23 @@
                       <%=products.productId.name%>
                     </td>
                     <td class="align-middle">
-                      Rs.<%=products.productId.price%>
+                     <% if(products.productId.discount>0){%>
+                        Rs.<%=products.productId.discountedAmount%>
+                     <% }else{%>
+                        Rs.<%=products.productId.price%>
+                      <%  }%>
+                      
                     </td>
                     <td class="align-middle">
                       <%=products.quantity%>
                     </td>
-                   
+                     <td>
+                       <% if(products.productId.discount>0){%>
+                       <p style="margin-top: 40px;"> Rs.<%=products.quantity*products.productId.discountedAmount%></p>
+                      <%}else{%>
+                      <p style="margin-top: 40px;"> Rs.<%=products.quantity*products.productId.price%></p>
+                      <%}%>
+                     </td>
                    
                       <td class="align-middle status-cell">
                         <span class="product-status"><%= products.orderStatus %></span>
@@ -60,7 +81,8 @@
                           <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#returnModal<%= products._id %>">
                             Return
                           </button>
-    </button>
+                      
+    
 
     <div class="modal fade" id="returnModal<%= products._id %>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
       <!-- ... (modal content) ... -->
@@ -100,48 +122,53 @@
     </div>   
   </div>
   <% } %>
-</td>
 
 <% if (products.orderStatus !== 'Delivered' && products.orderStatus !== 'Returned') { %>
-  <td class="align-middle">
-    <% if (products.orderStatus == 'Cancelled') { %>
-      <button style="margin-left: -137px;" disabled class="btn btn-danger">Cancel</button>
+  <% if (products.orderStatus == 'Cancelled') { %>
+  
+   
+      <button  disabled class="btn btn-danger">Cancel</button>
     <% } else { %>
-      <button style="margin-left: -137px;" type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#cancelModal<%= products._id %>">
+      <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#cancelModal<%= products._id %>">
         Cancel
       </button>
-      <!-- Modal -->
-      <div class="modal fade" id="cancelModal<%= products._id %>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-              <form action="/cancel-order?productId=<%= products.productId._id %>&orderId=<%= order._id %>" method="post">
-                <input type="hidden" name="totalprice" value="<%= order.totalAmount %>" >
-                <div class="mb-3 p-5">
-                  <% if (order.paymentMethod == 'online' || order.paymentMethod == 'wallet') { %>
-                    <select name="refund" class="form-select form-select-lg" aria-label=".form-select-lg example">
-                      <option selected>Refund option</option>
-                      <option value="wallet">Wallet</option>
-                    </select>
-                  <% } %>
-                  <textarea name="reason" class="form-control" id="message-text" placeholder="eg: size is not match"></textarea>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-primary" data-bs-dismiss="modal">No</button>
-                  <button type="submit" class="btn btn-danger">Cancel</button>
-                </div>
-              </form>
-            </div>
-          </div>
-        </div>
-      </div>
+      
       <% } %>
-    </td>
+    
   <% } %>
+</td>
 </tr>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="cancelModal<%= products._id %>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form action="/cancel-order?productId=<%= products.productId._id %>&orderId=<%= order._id %>" method="post">
+          <input type="hidden" name="totalprice" value="<%= order.totalAmount %>" >
+          <div class="mb-3 p-5">
+            <% if (order.paymentMethod == 'online' || order.paymentMethod == 'wallet') { %>
+              <select name="refund" class="form-select form-select-lg" aria-label=".form-select-lg example">
+                <option selected>Refund option</option>
+                <option value="wallet">Wallet</option>
+              </select>
+            <% } %>
+            <textarea name="reason" class="form-control" id="message-text" placeholder="eg: size is not match"></textarea>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">No</button>
+            <button type="submit" class="btn btn-danger">Cancel</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
 
 
 
@@ -199,7 +226,7 @@
 </div>
 <% if (order && order.products && order.products.length> 0) {%>
  <% order.products.forEach((products) => { %>
-  <%  if(products.orderStatus!='Cancelled'){%>
+  <%  if(products.orderStatus!='Cancelled' && products.orderStatus!='Returned'){%>
 <div class="col-md-6">
   <h5>Delivery Date:</h5>
   <p>
@@ -269,7 +296,7 @@
     .table th {
       background-color: #7FB8D4;
       /* Orange color */
-      color: #ffffff;
+      color:black;
     }
 
     .continue-btn {

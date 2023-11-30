@@ -45,16 +45,16 @@
                     </div>
         
                     <!-- Start Date Input -->
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                         <label for="startDate">Start Date:</label>
                         <input class="form-control" type="date" name="startDate" id="startDate" required>
-                    </div>
+                    </div> -->
         
                     <!-- Expiry Date Input -->
-                    <div class="form-group">
+                    <!-- <div class="form-group">
                         <label for="expiryDate">Expiry Date:</label>
                         <input class="form-control" type="date" name="expiryDate" id="expiryDate" required>
-                    </div>
+                    </div> -->
         
                     <!-- Submit Button -->
                     <button class="btn btn-primary" type="submit" >Add Offer</button>
@@ -83,7 +83,7 @@
             <th scope="col">Product</th>
             <th scope="col">Name</th>
             <th scope="col">Price</th>
-            <th scope="col">Offer Price</th>
+            <th scope="col">Offer Percentage</th>
           </tr>
         </thead>
         <tbody>
@@ -101,7 +101,7 @@
                 <p >Rs.&nbsp;&nbsp;<b><%=offer[i].price%></b></p>
             </td>
             <td>
-                <p >Rs.&nbsp;&nbsp;<b><%=offer[i].discount%></b></p>
+                <p >&nbsp;&nbsp;<b><%=offer[i].discount%>%</b></p>
             </td>
             <td>
               <a class="btn btn-danger" onclick="removeOffer('<%=offer[i]._id%>')" >REmove Offer</a>

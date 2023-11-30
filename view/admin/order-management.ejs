@@ -113,6 +113,7 @@
   
   
                                       </div>
+                                      <%if(product.orderDetails.orderStatus!="Delivered"){%>
                                       <hr class="  " style="background:#555555">
                                       <h4 class="text-center py-4">Change Order Status</h4>
   
@@ -136,6 +137,8 @@
   
   
                                       </div>
+                                      <%}%>
+
                                   </div>
                               </div>
                               <%}else{%>

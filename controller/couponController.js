@@ -8,6 +8,7 @@ const loadAddCoupon=async (req,res)=>{
         res.render('add-coupon')
     } catch (error) {
         console.log(error);
+        res.render('500')
     }
 }
 const viewCoupon=async (req,res)=>{
@@ -16,6 +17,7 @@ const viewCoupon=async (req,res)=>{
         res.render('view-coupon',{coupons:coupons})
     } catch (error) {
         console.log(error);
+        res.render('500')
     }
 }
 
@@ -38,12 +40,12 @@ const addCoupon = async (req, res) => {
         res.json({disMinus:true})
       }else if(req.body.criteriaAmount <= 0){
         res.json({amountMinus:true})
-      }else if(active > req.body.expDate && req.body.expDate < Today){
+      }else if(active > req.body.expDate || active < Today){
         res.json({expDate:true})
       }else if(req.body.userLimit <= 0){
         res.json({limit:true})
-      }else if(req.body.criteriaAmount<=req.body.discount){
-        res.json({greater:true,message:'discount amount must be greather than criteria amount'})
+      }else if(req.body.discount>=req.body.criteriaAmount){
+        res.json({greater:true})
       }else{
         const data = new Coupon({
           couponName: req.body.name,
@@ -59,6 +61,7 @@ const addCoupon = async (req, res) => {
       }
     } catch (error) {
       console.log(error.message);
+      res.render('500')
     }
   };
 
@@ -82,7 +85,13 @@ const addCoupon = async (req, res) => {
             
 
             for (const product of cartData.products) {
+              
+              if(product.productId.discount>0){
+                totalPrice += product.quantity * product.productId.discountedAmount;
+              }else{
                 totalPrice += product.quantity * product.productId.price;
+              }
+               
             }
           }
         }
@@ -129,6 +138,7 @@ const addCoupon = async (req, res) => {
       }
     } catch (error) {
       console.log(error.message);
+      res.render('500')
     }
   };
 
@@ -149,6 +159,7 @@ const addCoupon = async (req, res) => {
       }
     } catch (error) {
       console.log(error.message);
+      res.render('500')
     }
   }
   const blockCoupons = async (req, res) => {
@@ -165,6 +176,7 @@ const addCoupon = async (req, res) => {
       res.redirect("/admin/view-coupon");
     } catch (error) {
       console.log(error.message);
+      res.render('500')
     }
   };
   const showEditPage = async (req, res) => {
@@ -173,6 +185,7 @@ const addCoupon = async (req, res) => {
       res.render("edit-coupon", { coupon: couponData });
     } catch (error) {
       console.log(error.message);
+      res.render('500')
     }
   };
   const updateCoupon = async (req, res) => {
@@ -213,6 +226,7 @@ const addCoupon = async (req, res) => {
       }
     } catch (error) {
       console.log(error.message);
+      res.render('500')
     }
   };
 

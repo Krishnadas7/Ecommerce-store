@@ -16,6 +16,7 @@ const loadWishlist=async (req,res)=>{
         res.render('wishlist',{user:req.session.user,data:wishlist})
     } catch (error) {
         console.log(error);
+        res.render('500')
     }
 }
 
@@ -51,7 +52,8 @@ const addWishlist = async (req, res) => {
     }
   } catch (error) {
     console.log(error);
-    res.status(500).json({ error: "Internal Server Error" });
+    
+    res.render('500')
   }
 };
 const removeWishlist=async (req,res)=>{
@@ -80,6 +82,7 @@ const removeWishlist=async (req,res)=>{
         return res.json({ success: false, message: 'Product not found in the wishlist' });
   } catch (error) {
     console.log(error);
+    res.render('500')
   }
 }
 

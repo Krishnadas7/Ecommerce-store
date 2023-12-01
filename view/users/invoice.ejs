@@ -194,8 +194,8 @@
                             <td class="col-md-9"><%= i+1 %></td>
                             <td class="col-md-9"><%= orders.productId.name %></td>
                             <td class="col-md-9"><%= orders.quantity %></td>
-                            <td class="col-md-9">  <%= orders.price %>.00</td> 
-                            <td class="col-md-9">₹ <%= orders.quantity*orders.price %>.00</td>
+                            <td class="col-md-9">  <%= orders.price.toFixed(2) %>.00</td> 
+                            <td class="col-md-9">₹ <%= orders.quantity*orders.price.toFixed(2) %>.00</td>
                           </tr>
                           <% } %>
                           <% } ) %>
@@ -222,7 +222,7 @@
                   </td>
                   <td class="text-left text-danger">
                     <h2>
-                        <strong><i class="fa fa-inr"></i> <%= order.totalAmount %>.00</strong>
+                        <strong><i class="fa fa-inr"></i> <%= order.totalAmount.toFixed(2) %>.00</strong>
                     </h2>
                   </td>
                 </tr>

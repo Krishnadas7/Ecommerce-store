@@ -36,7 +36,7 @@
                                         </h3><!-- End .product-title -->
                                     </div><!-- End .product -->
                                 </td>
-                                <td class="price-col">Rs.<%= data[i].products[j].price %></td>
+                                <td class="price-col">Rs.<%= data[i].products[j].price.toFixed(2) %></td>
                                 <td class="stock-col"><span class="in-stock">In stock</span></td>
                                 <td class="action-col">
                                    <a class="btn btn-danger text-white rounded" onclick="productRemove('<%= data[i].products[j]._id %>')">Remove</a>

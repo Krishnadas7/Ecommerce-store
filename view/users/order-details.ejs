@@ -51,9 +51,9 @@
                     </td>
                     <td class="align-middle">
                      <% if(products.productId.discount>0){%>
-                        Rs.<%=products.productId.discountedAmount%>
+                        Rs.<%=products.productId.discountedAmount.toFixed(2)%>
                      <% }else{%>
-                        Rs.<%=products.productId.price%>
+                        Rs.<%=products.productId.price.toFixed(2)%>
                       <%  }%>
                       
                     </td>
@@ -62,9 +62,9 @@
                     </td>
                      <td>
                        <% if(products.productId.discount>0){%>
-                       <p style="margin-top: 40px;"> Rs.<%=products.quantity*products.productId.discountedAmount%></p>
+                       <p style="margin-top: 40px;"> Rs.<%=products.quantity*products.productId.discountedAmount.toFixed(2)%></p>
                       <%}else{%>
-                      <p style="margin-top: 40px;"> Rs.<%=products.quantity*products.productId.price%></p>
+                      <p style="margin-top: 40px;"> Rs.<%=products.quantity*products.productId.price.toFixed(2)%></p>
                       <%}%>
                      </td>
                    

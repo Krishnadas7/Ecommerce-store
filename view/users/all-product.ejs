@@ -240,15 +240,15 @@
                                    <% if(data.discount>0){%>
                                     <div class="d-flex">
                                     <span class="stext-105 cl3 ml-4">
-                                        <del>$<%= data.price %> </del>  
+                                        <del>$<%= data.price.toFixed(2) %> </del>  
                                     </span>
                                     <span class="stext-105 cl3 " style="margin-left: 130px;">
-                                     <p style="color: #ff5733;">  <b> $<%= data.discountedAmount %>  </b> </p>
+                                     <p style="color: #ff5733;">  <b> $<%= data.discountedAmount.toFixed(2) %>  </b> </p>
                                     </span>
                                 </div>
                                <% }else{%>
                                 <span class="stext-105 cl3 ml-4">
-                                    $<%= data.price %>  
+                                    $<%= data.price.toFixed(2) %>  
                                 </span>
                               <% }%>
                                 </div>

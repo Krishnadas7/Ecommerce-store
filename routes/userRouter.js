@@ -61,7 +61,7 @@ userRouter.get('/', userControllers.loadHome)
 
 // =============================LOAD PRODUCT PAGE======================================================
 
-userRouter.get('/all-product', userAuth.isLogin, allProduct.loadallProduct)
+userRouter.get('/all-product',allProduct.loadallProduct)
 userRouter.get('/product-view', userAuth.isLogin, allProduct.productView)
 // ================================FILTER===================================
 

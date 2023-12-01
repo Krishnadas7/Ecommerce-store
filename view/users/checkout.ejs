@@ -411,12 +411,12 @@ margin-bottom: 12px;" class="btn btn-danger rounded " data-bs-toggle="modal" dat
               <tr>
                 <td><a href="#" style="text-decoration: none; color: #333;"><%= data.productId.name %></a></td>
                 <% if (data.productId.discount > 0) { %>
-                  <td><del style="color: #999;">Rs.<%= data.productId.price %></del></td>
-                  <td><p style="color: red; margin: 0;">Rs.<%= data.productId.discountedAmount %></p></td>
+                  <td><del style="color: #999;">Rs.<%= data.productId.price.toFixed(2) %></del></td>
+                  <td><p style="color: red; margin: 0;">Rs.<%= data.productId.discountedAmount.toFixed(2) %></p></td>
                   <% productId = data.productId._id %>
                   <input type="hidden" class="productId" name="price" value="<%= data.productId.discountedAmount %>">
                 <% } else { %>
-                  <td>Rs.<%= data.productId.price %></td>
+                  <td>Rs.<%= data.productId.price.toFixed(2) %></td>
                   <% productId = data.productId._id %>
                   <input type="hidden" class="productId" name="price" value="<%= data.productId.price %>">
                 <% } %>

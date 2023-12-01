@@ -46,7 +46,7 @@ const loadallProduct = async (req, res) => {
       product: products,
       currentPage: page,
       pages: totalPages,
-      user: req.session.user
+      message:'uses is not'
     });
   } catch (error) {
     console.log(error);

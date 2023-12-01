@@ -63,7 +63,7 @@
                         <span class="mtext-106 cl2">
                             <%if(product.discount>0){%>
 								<div class="d-flex">
-                            <p style="color: red;"> Rs.<%=product.discountedAmount%> </p>
+                            <p style="color: red;"> Rs.<%=product.discountedAmount.toFixed(2)%> </p>
 							<p style="margin-left: 45px;"><del>Rs. <%=product.price%></del> </p>
 						</div>
 							<%}else{%>

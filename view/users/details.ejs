@@ -70,7 +70,7 @@
                           >
                         </h6>
                       </td>
-                      <td>₹ <%= data.productId.price%></td>
+                      <td>₹ <%= data.productId.price.toFixed(2)%></td>
                     </tr>
                     <% }) %> <%}%>
                     <tr class="summary-subtotal">
@@ -106,7 +106,7 @@
 
                     <tr class="summary-total">
                       <td>Total:</td>
-                      <td><b><%= orders.totalAmount %></b></td>
+                      <td><b><%= orders.totalAmount.toFixed(2) %></b></td>
                     </tr>
                     <!-- End .summary-total -->
                   </tbody>

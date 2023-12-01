@@ -14,7 +14,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));  
 
 app.use((req, res, next) => { 
-    res.locals.req = req; 
+    res.locals.req = req;  
     next();   
   });    
            

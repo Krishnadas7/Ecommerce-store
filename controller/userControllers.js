@@ -13,6 +13,8 @@ const Order = require('../model/orderModel')
 const Coupon = require('../model/couponModel')
 const Refferal = require('../model/refferalModel')
 const Banner = require('../model/banner')
+const Category=require('../model/categoryModel')
+
 
 const dotenv = require('dotenv')
 dotenv.config()
@@ -353,23 +355,29 @@ const loginVerify = async (req, res) => {
 // ===================LOAD HOME====================================
 
 const loadHome = async (req, res) => {
-  const products = await Product.find({
-    blocked: false
-  })
 
   try {
+    console.log('lkj');
+    const products = await Product.find({ blocked: false }).populate('category').limit(8);
+
+    console.log('products',products);
+    
+    const category=await Category.find({isListed:true})
+    console.log('catee',category);
     const banners = await Banner.find({ status: true })
     if (req.session.user) {
       res.render('home', {
         user: req.session.user,
         products: products,
-        banners: banners
+        banners: banners,
+        cat:category
       })
     } else {
       res.render('home', {
         message: 'user logged',
         products: products,
-        banners: banners
+        banners: banners,
+        cat:category
       })
     }
   } catch (error) {}

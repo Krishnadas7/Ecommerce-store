@@ -40,7 +40,7 @@
                         <td><p class="text-success">+<%=data.transactionType%></p></td>
                     <% } %>
                     
-                    <td>Rs.<%=data.transactionAmount%></td>
+                    <td>Rs.<%=data.transactionAmount.toFixed(2)%></td>
                  
                 </tr>
             <% })%>

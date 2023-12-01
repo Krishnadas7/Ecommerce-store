@@ -71,13 +71,10 @@
                       <td class="align-middle status-cell">
                         <span class="product-status"><%= products.orderStatus %></span>
                       </td>
-
-
-
-                       <!-- ... (previous code) ... -->
-
+                      
                        <td class="align-middle">
                         <% if (products.orderStatus == 'Delivered') { %>
+                          <p style="color: red;">Return Policy: within 2 days of delivery.</p>
                           <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#returnModal<%= products._id %>">
                             Return
                           </button>
@@ -152,7 +149,7 @@
         <form action="/cancel-order?productId=<%= products.productId._id %>&orderId=<%= order._id %>" method="post">
           <input type="hidden" name="totalprice" value="<%= order.totalAmount %>" >
           <div class="mb-3 p-5">
-            <% if (order.paymentMethod == 'online' || order.paymentMethod == 'wallet') { %>
+            <% if (order.paymentMethod == 'online' || order.paymentMethod == 'wallet'||order.paymentMethod == 'COD') { %>
               <select name="refund" class="form-select form-select-lg" aria-label=".form-select-lg example">
                 <option selected>Refund option</option>
                 <option value="wallet">Wallet</option>
@@ -216,21 +213,19 @@
 <div class="row">
 <div class="col-md-6">
   <h5>Delivery By:</h5>
-  
   <p>
-    
     <%=order.date.toLocaleDateString('en-US', { year: 'numeric' , month: 'short' ,
     day: '2-digit' }).replace(/\//g,'-')%>
   </p>
-  
 </div>
+
 <% if (order && order.products && order.products.length> 0) {%>
  <% order.products.forEach((products) => { %>
   <%  if(products.orderStatus!='Cancelled' && products.orderStatus!='Returned'){%>
 <div class="col-md-6">
   <h5>Delivery Date:</h5>
   <p>
-    
+ 
    Delivery with in (3 or 4 days)
   </p>
 </div>

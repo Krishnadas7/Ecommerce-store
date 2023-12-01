@@ -177,7 +177,7 @@
                     'numeric', month: 'short', day: '2-digit' }).replace(/\//g,
                     '-') %></td>
                   <td class="col-md-9"><%= data.userName %></td>
-                  <td class="col-md-9"><%= data.products.price %></td>
+                  <td class="col-md-9"><%= data.products.price * data.products.quantity %></td>
                 </tr>
                 
                 

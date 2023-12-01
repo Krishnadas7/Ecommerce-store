@@ -1,16 +1,15 @@
+const errorHandler = (err, req, res, next) => {
+  console.log("err:", err.name);
 
+  if (err.name === 'CastError' || err.name === 'MulterError') {
+      console.log(err);
+      // Handle CastError and MulterError specifically
+      res.status(404).render('404');
+  } else {
+      // For other errors, log and render a generic 500 error
+      console.log(err);
+      res.status(500).render('500');
+  }
+};
 
-const handleErrors = (err, req, res, next) => {
-    console.error(err.stack);
-  
-    // Check if the error is a 404 error
-    if (err.status === 404) {
-      // res.status(404).render('404', { error: err });
-      return res.redirect('/404');
-    } else {
-      // For other errors, you can render a generic error page or handle them as needed
-      res.status(500).render('error', { error: err });
-    }
-  };
-  
-  module.exports = handleErrors;
+module.exports = errorHandler;

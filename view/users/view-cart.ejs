@@ -30,31 +30,32 @@
                             <tr class="table_head ">
                                 
                                
-                                <th class="column-1">Product</th>
+                                <th class="column-1"></th>
                                 <th class="column-2">Name</th>
                                 <th class="column-3">Price</th>
                                 <th class="column-4">Quantity</th>
-                                <th class="column-5"></th>
+                                <th class="column-5">Total</th>
                                 <th class="column-6"></th>
                             
                             </tr>
                         </td>
-                            
+                        <tbody>
                            
                             <%cart.forEach((data,index)=>{%>
-                                <tbody>
+                                
                                 <tr class="table_row">
                                     <td class="column-1">
-                                      <div class="how-itemcart1">
+                                      <div class="how-itemcart1" style="margin-left: -33px;">
                                         <img src="/public/adminAssets/product-images/<%=data.productId.image[0]%>" alt="IMG">
                                       </div>
                                     </td>
-                                    <td class="column-2"><%=data.productId.name%></td>
+                                    <td class="column-2"><p style="margin-left: -8px;
+                                        max-width: 94px;"><%=data.productId.name%></p></td>
                                     <td class="column-3">
                                        <% if(data.productId.discount>0){%>
-                                            Rs. <%=data.productId.discountedAmount%>
+                                            Rs. <%=data.productId.discountedAmount.toFixed(2)%>
                                        <% }else{%>
-                                            Rs. <%=data.productId.price%>
+                                            Rs. <%=data.productId.price.toFixed(2)%>
                                        <%}%>
                                         
                                     </td>
@@ -65,11 +66,22 @@
                                         <a class="btn-num-product-down cl8 hov-btn3 trans-04 flex-c-m" onclick="cartCount('<%=data.productId._id%>','<%=userId%>', 1)">+</a>
                                       </div>
                                     </td>
-                                    <td>
+                                    <td class="column-5">
+                                       <% if(data.productId.discount>0){%>
+                                            Rs.<%=data.quantity*data.productId.discountedAmount.toFixed(2)%>
+                                       <% }else{%>
+                                           Rs. <%=data.quantity*data.productId.price.toFixed(2)%>
+                                       <% }%>
+                                       
+                                    </td>
+                                    <td class="column-6">
                                       <a onclick="removeProduct('<%=data.productId._id%>')">
                                         <img style="width: 26px;
                                         margin: 19px;
                                         margin-left: 61px;
+                                        display: block;
+                                       max-width: none;
+                                       height: auto;
                                     " src="/public/userAssets/icons/3844424_can_delete_remove_trash_icon.png" alt="">
                                       </a>
                                     </td>
@@ -92,7 +104,16 @@
                                        <h3> Your cart is empty!</h3>
                                    Explore our wide selection and find something you like
                                        </div>
-                                       <a style="margin-left: 231px" class="rounded btn btn-primary mt-2" href="/all-product">Go shopping</a>
+                                       <a style="margin-left: 231px;
+                                        
+                                        text-decoration: none;
+                                        padding: 10px 20px;
+                                        background-color: #d9534f; 
+                                        color: #fff;
+                                        border-radius: 5px;
+                                        box-shadow: 2px 2px 5px #888;
+                                        margin-bottom: 12px;
+                                       " class="rounded btn btn-primary mt-2" href="/all-product">Go shopping</a>
                                             <!-- <p class="h1">Cart is empty</p> -->
                                         
                                         

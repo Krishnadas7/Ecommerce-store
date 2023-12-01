@@ -1,33 +1,33 @@
-const mongoose = require("mongoose");
+const mongoose = require('mongoose')
 
 const userAddressSchema = new mongoose.Schema({
   user: {
     type: mongoose.Types.ObjectId,
-    ref: "User",
-    required: true,
+    ref: 'User',
+    required: true
   },
   address: [
     {
       name: {
         type: String,
         required: true,
-        trim: true,
+        trim: true
       },
       mobile: {
         type: Number,
         required: true,
-        trim: true,
+        trim: true
       },
 
       email: {
         type: String,
         required: true,
-        trim: true,
+        trim: true
       },
       housename: {
         type: String,
         required: true,
-        trim: true,
+        trim: true
       },
       city: {
         type: String,
@@ -43,10 +43,10 @@ const userAddressSchema = new mongoose.Schema({
       pin: {
         type: String,
         required: true,
-        trim: true,
-      },
-    },
-  ],
-});
+        trim: true
+      }
+    }
+  ]
+})
 
-module.exports = mongoose.model("Address", userAddressSchema);
+module.exports = mongoose.model('Address', userAddressSchema)

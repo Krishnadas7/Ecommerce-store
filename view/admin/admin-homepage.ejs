@@ -14,7 +14,7 @@
             <div class="row">
               <div class="col-8 col-sm-12 col-xl-8 my-auto">
                 <div class="d-flex d-sm-block d-md-flex align-items-center">
-                  <h2 class="mb-0">₹&nbsp;<%= totalRevenue %>.00</h2>
+                  <h2><%= totalRevenue !== undefined ? totalRevenue : 0 %>.00</h2>
                   <!-- <p class="text-success ml-2 mb-0 font-weight-medium">+3.5%</p> -->
                 </div>
                 <!-- <h6 class="text-muted font-weight-normal">Active FurniCube users</h6> -->

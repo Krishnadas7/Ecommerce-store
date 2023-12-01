@@ -364,23 +364,22 @@ margin-bottom: 12px;" class="btn btn-danger rounded " data-bs-toggle="modal" dat
                   <%  if(address!=='undefined'){%>
                   <% address.forEach((address)=>{%>
                   
-                    <div class="d-flex rounded shadow p-3 mt-3 border border-black card text-white" 
-                    style="
-                      
-                      margin-right: 234px; " >
-                        <div class="card-body"> </div>
-                            
-                        <p> <input class="form-check-input ml-1"
-                             type="radio"
-                             name="address"
-                             value="<%= address.name %>,<%= address.mobile %>,<%= address.email %>,<%= address.housename %>,<%= address.city %>,<%= address.state %>,<%= address.pin %>  "
-                                 id=""  >
-                            
-                              <b class="m-l-30"> <%=address.name%> &nbsp; &nbsp; &nbsp; &nbsp; <%=address.mobile%>  </b></p>
-                            <p class="m-l-30">
-                               <%=address.housename%>   <%=address.state%>  <%=address.state%> - PIN:-<%=address.pin%> 
-                            </p>
-                       </div>
+                    <div style="display: flex; border: 1px solid #000; border-radius: 10px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); padding: 15px; margin-top: 20px; margin-right: 234px;">
+                      <div style="padding: 10px;">
+                        <!-- Additional content can go here if needed -->
+                      </div>
+                      <div>
+                        <p>
+                          <input style="margin-left: 5px;" type="radio" name="address" value="<%= address.name %>,<%= address.mobile %>,<%= address.email %>,<%= address.housename %>,<%= address.city %>,<%= address.state %>,<%= address.pin %>" id="">
+                          <b style="margin-left: 30px;"><%= address.name %> &nbsp; &nbsp; &nbsp; &nbsp; <%= address.mobile %></b>
+                        </p>
+                        <p style="margin-left: 30px;">
+                          <%= address.housename %> <%= address.city %> <%= address.state %> - PIN:-<%= address.pin %>
+                        </p>
+                      </div>
+                    </div>
+                    
+                    
                     <%})%>
                   <% }%>
                 <%}else{%>
@@ -394,90 +393,68 @@ margin-bottom: 12px;" class="btn btn-danger rounded " data-bs-toggle="modal" dat
 
                     </div><!-- End .col-lg-9 -->
                     
-                    <aside class="col-lg-3 col-md-6 mb-4" style="background-color: #e5dddd; border-radius: 10px;">
-                      <div class="card"  style="background-color: #e5dddd;">
-                          <div class="card-body">
-                              <div class="summary border-0 rounded-3" >
-
-                                
-                                  <h3 class="summary-title">Your Order</h3><!-- End .summary-title -->
-                  
-                                  <table class="table table-summary">
-                                      <thead>
-                                          <tr>
-                                              <th>Product</th>
-                                              <th>Total</th>
-                                          </tr>
-                                      </thead>
-                  
-                                      <tbody>
-                                        <% var productId; %>
-                                        <% product.forEach((data) => { %>
-                                        
-                                            <tr>
-                                                <td><a href="#"><%= data.productId.name %></a></td>
-                                                <% if (data.productId.discount > 0) { %>
-                                                    <td><del>Rs.<%= data.productId.price %> </del></td>
-                                                    <td> <p style="color: red;">  Rs.<%= data.productId.discountedAmount %></p></td>
-                                                    <% productId = data.productId._id %>
-                                                    <input type="hidden"  class="productId" name="price" value="<%= data.productId.discountedAmount %>">
-                                                <% } else { %>
-                                                    <td>Rs.<%= data.productId.price %></td>
-                                                    <% productId = data.productId._id %>
-                                                    <input type="hidden"  class="productId" name="price" value="<%= data.productId.price %>">
-                                                <% } %>    
-                                            </tr>
-                                        <% }); %>
-                                       
-                                        
-                  
-                                          
-                                          <tr>
-                                              <td>Shipping:</td>
-                                              <td>Free shipping</td>
-                                          </tr>
-                                          <tr class="summary-total">
-                                              <td>Total:</td>
-                                              <td id="total1"><%=total%></td>
-                                          </tr><!-- End .summary-total -->
-                                      </tbody>
-                                  </table><!-- End .table table-summary -->
-                  
-                                  <div class="accordion-summary mt-3" id="accordion-payment">
-                                      <label class="d-flex">
-                                          <input type="radio" required id="COD" name="payment" value="COD">&nbsp;&nbsp;
-                                          Cash on Delivery
-                                      </label>
-                  
-                                      <label class="d-flex">
-                                          <input type="radio" required id="online" name="payment" value="online">&nbsp;&nbsp;
-                                          Online
-                                      </label>
-
-                                      <label class="d-flex">
-                                        <input type="radio" required id="wallet" name="payment" value="wallet">&nbsp;&nbsp;
-                                        Wallet
-                                    </label>
-                                  </div><!-- End .accordion -->
-                                   
-                                  <button type="submit" class="btn btn-outline-primary-2 btn-order btn-block mt-3" >
-                                      <span style="
-                                    margin-left: 13px;
-                                      color: #fff;
-                                       border-radius: 5px;
-                                        box-shadow: 2px 2px 5px #888;
-                                   margin-bottom: 12px;" class="btn-text btn btn-primary">Place Order</span>
-                                      <span style="
-                                  
-                                      color: #fff;
-                                       border-radius: 5px;
-                                        box-shadow: 2px 2px 5px #888;
-                                   margin-bottom: 12px;" class="btn-hover-text btn btn-primary">Proceed to Checkout</span>
-                                  </button>
-                              </div><!-- End .summary -->
-                          </div>
-                      </div>
-                  </aside><!-- End .col-lg-3 -->
+                   <aside class="col-lg-3 col-md-6 mb-4" style="background-color: #e5dddd; border-radius: 10px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);">
+  <div class="card" style="background-color: #e5dddd;">
+    <div class="card-body">
+      <div class="summary border-0 rounded-3">
+        <h3 class="summary-title">Your Order</h3>
+        <table class="table table-summary">
+          <thead>
+            <tr>
+              <th>Product</th>
+              <th>Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <% var productId; %>
+            <% product.forEach((data) => { %>
+              <tr>
+                <td><a href="#" style="text-decoration: none; color: #333;"><%= data.productId.name %></a></td>
+                <% if (data.productId.discount > 0) { %>
+                  <td><del style="color: #999;">Rs.<%= data.productId.price %></del></td>
+                  <td><p style="color: red; margin: 0;">Rs.<%= data.productId.discountedAmount %></p></td>
+                  <% productId = data.productId._id %>
+                  <input type="hidden" class="productId" name="price" value="<%= data.productId.discountedAmount %>">
+                <% } else { %>
+                  <td>Rs.<%= data.productId.price %></td>
+                  <% productId = data.productId._id %>
+                  <input type="hidden" class="productId" name="price" value="<%= data.productId.price %>">
+                <% } %>
+              </tr>
+            <% }); %>
+            <tr>
+              <td>Shipping:</td>
+              <td>Free shipping</td>
+            </tr>
+            <tr class="summary-total">
+              <td>Total:</td>
+              <td id="total1"><%=total%></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="accordion-summary mt-3" id="accordion-payment">
+          <label class="d-flex">
+            <input type="radio" required id="COD" name="payment" value="COD">&nbsp;&nbsp;
+            Cash on Delivery
+          </label>
+          <label class="d-flex">
+            <input type="radio" required id="online" name="payment" value="online">&nbsp;&nbsp;
+            Online
+          </label>
+          <label class="d-flex">
+            <input type="radio" required id="wallet" name="payment" value="wallet">&nbsp;&nbsp;
+            Wallet
+          </label>
+        </div>
+        <button type="submit" class="btn btn-outline-primary-2 btn-order btn-block mt-3" style=" border-color: #3498db; color: #fff; border-radius: 5px; box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); margin-bottom: 12px; margin-left: 19px;">
+          <span class="btn-text btn btn-primary" style="margin-left: 13px;">Place Order</span>
+          <span class="btn-hover-text btn btn-primary">Proceed to Checkout</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</aside>
+<!-- End .col-lg-3 -->
                 </div><!-- End .row -->
             </form>
         </div><!-- End .container -->

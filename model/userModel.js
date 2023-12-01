@@ -1,72 +1,67 @@
-const mongoose=require('mongoose')
-const userSchema=new mongoose.Schema({
-    name:{
-        type:String,
-        required:true
+const mongoose = require('mongoose')
+const userSchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      required: true
     },
-    email:{
-        type:String,
-        required:true
+    email: {
+      type: String,
+      required: true
+    },
+    mobile: {
+      type: String,
+      required: true
+    },
+    password: {
+      type: String,
+      required: true
+    },
 
+    isverified: {
+      type: Boolean,
+      default: true
     },
-    mobile:{
-        type:String,
-        required:true  
-    },
-    password:{
-        type:String,
-        required:true
-    },
-    
-    isverified:{
-        type:Boolean,
-        default:true
-    },
-    token:{
-     type:String,
-     default:''
+    token: {
+      type: String,
+      default: ''
     },
     createdAt: {
-        type: Date,
-        default: Date.now,
-      },
-      isListed:{
-        type:Boolean,
-        default:false
+      type: Date,
+      default: Date.now
+    },
+    isListed: {
+      type: Boolean,
+      default: false
     },
     wallet: {
-        type: Number,
-        default: 0
+      type: Number,
+      default: 0
     },
-      walletHistory: [{
+    walletHistory: [
+      {
         transactionDate: {
-            type: Date,
+          type: Date
         },
         transactionDetails: {
-            type: String
+          type: String
         },
         transactionType: {
-            type: String
+          type: String
         },
         transactionAmount: {
-            type: Number
-        },
-        
-    }],
+          type: Number
+        }
+      }
+    ],
     referralCode: {
-         type: String,
-          unique: true 
-        },
-},
-    {
-        timestamps:true
+      type: String,
+      unique: true
     }
-
-    // ,
-    // is_admin:{
-    //     type:Number,
-  //     default:0
-    // }
+  },
+  {
+    timestamps: true
+  }
 )
 
-module.exports=mongoose.model('User',userSchema)
+module.exports = mongoose.model('User', userSchema)

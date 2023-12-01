@@ -1,657 +1,626 @@
-const { log, count } = require("console");
+const { log, count } = require('console')
 const bcrypt = require('bcrypt')
 const User = require('../model/userModel')
-const nodemailer = require("nodemailer")
-const otpGenerator = require("otp-generator");
+const nodemailer = require('nodemailer')
+const otpGenerator = require('otp-generator')
 const randomstring = require('randomstring')
 const config = require('../config/config')
 const Product = require('../model/productModel')
 const Cart = require('../model/cartModel')
-const Address=require('../model/addressModel')
-const { ObjectId } = require("mongodb")
-const Order=require('../model/orderModel')
-const Coupon=require('../model/couponModel')
-const Refferal=require('../model/refferalModel')
-const Banner=require('../model/banner')
+const Address = require('../model/addressModel')
+const { ObjectId } = require('mongodb')
+const Order = require('../model/orderModel')
+const Coupon = require('../model/couponModel')
+const Refferal = require('../model/refferalModel')
+const Banner = require('../model/banner')
 
-const dotenv=require('dotenv')
+const dotenv = require('dotenv')
 dotenv.config()
 
 const mongoose = require('mongoose')
-function isValidObjectId(id) {
-    return mongoose.Types.ObjectId.isValid(id);
-    
+function isValidObjectId (id) {
+  return mongoose.Types.ObjectId.isValid(id)
 }
-const Razorpay=require('razorpay')
-const crypto=require('crypto');
-const { tryCatch } = require("engine/utils");
-// key_id,key_secret
-// rzp_test_49DsJEEbScMJdv,oIo905FGjFAr6eEZfkNhmDEU
+const Razorpay = require('razorpay')
+const crypto = require('crypto')
+const { tryCatch } = require('engine/utils')
 
-// var instance = new Razorpay({ key_id: process.env.KEY_ID, key_secret: process.env.KEY_SECRET })
+
 const instance = new Razorpay({
-    key_id: 'rzp_test_49DsJEEbScMJdv',
-    key_secret: 'oIo905FGjFAr6eEZfkNhmDEU'
-});
-const securePassword = async (password) => {
-    try {
-        const passwordHash = await bcrypt.hash(password, 10)
-        return passwordHash
-    } catch (error) {
-        console.log(error);
+  key_id:process.env.KEY_ID,
+  key_secret: process.env.KEY_SECRET
+})
 
-        res.render('500')
-        res.render('500')
-    }
+// ==============SECURE PASSWORD============================
+
+const securePassword = async password => {
+  try {
+    const passwordHash = await bcrypt.hash(password, 10)
+    return passwordHash
+  } catch (error) {
+    res.render('500')
+  }
 }
+// ===================OTP GENERATION====================================
 
 const generateOTP = () => {
-    return Math.floor(100000 + Math.random() * 900000).toString();
-};
-
+  return Math.floor(100000 + Math.random() * 900000).toString()
+}
 
 const sendVerifyMail = async (name, email, otp) => {
-    try {
-        const transporter = nodemailer.createTransport({
-            host: 'smtp.gmail.com',
-            port: 587,
-            secure: false,
-            requireTLS: true,
-            auth: {
-                user: config.userEmail,
-                pass: config.userPassword
-            }
-        });
-        const mailoptions = {
-            from: "skrishnadas38@gmail.com",
-            to: email,
-            subject: "Verification Mail",
-            html: '<div style="text-align: center; background-color: Ivory; height: 200px;">' +
-                '<h2 style="color:red;">Welcome to Branded</h2>' +
-                '<h3>Hello, <b>' + name + '</b>Thank you for joining us. Your OTP is : </h3>' +
-                '<div style="vertical-align: center;"><h1 style="color: blue;">' + otp + '</h1></div>' +
-                '</div>'
-        }
-
-        transporter.sendMail(mailoptions, (error, info) => {
-            if (error) {
-                console.log(error)
-            } else {
-                console.log("Email has been send", info.response);
-            }
-        })
-    } catch (error) {
-        console.log("error", error.message);
-        res.render('500')
-    }
-}
-
-
-// reset password sendmail
-const sendResetPasswordMail = async (name, email, token) => {
-    try {
-        const transporter = nodemailer.createTransport({
-            host: 'smtp.gmail.com',
-            port: 587,
-            secure: false,
-            requireTLS: true,
-            auth: {
-                user: config.userEmail,
-                pass: config.userPassword
-            }
-        });
-        const mailoptions = {
-            from: config.userEmail,
-            to: email,
-            subject: "For reset password",
-            html: '<p>Hii ' + name + ', please click here to  <a href="http://127.0.0.1:3000/reset-password?token=' + token + '"> Reset  </a> your password'
-        }
-
-        transporter.sendMail(mailoptions, (error, info) => {
-            if (error) {
-                console.log(error)
-            } else {
-                console.log("Email has been send", info.response);
-            }
-        })
-    } catch (error) {
-        console.log("error", error.message);
-        res.render('500')
-    }
-}
-
-
-//resend OTP
-const resendOtp = (req, res) => {
-    try {
-        const currentTime = Date.now() / 1000;
-
-        if (req.session.otp.expire != null) {
-            if (currentTime > req.session.otp.expire) {
-                console.log("expire", req.session.otp.expire);
-                const newDigit = otpGenerator.generate(6, {
-                    digits: true,
-                    alphabets: false,
-                    specialChars: false,
-                    upperCaseAlphabets: false,
-                    lowerCaseAlphabets: false
-                });
-                req.session.otp.code = newDigit;
-                const newExpiry = currentTime + 30
-
-                req.session.otp.expire = newExpiry
-                sendVerifyMail(req.session.name, req.session.email, req.session.otp.code);
-                res.render("otp-verification", { message: `New OTP send to ${req.session.email}` });
-            } else {
-                res.render("otp-verification", { message: `OTP send to ${req.session.email}, resend after 30 second` });
-            }
-        }
-        else {
-            res.send("Already registered")
-        }
-    }
-    catch (error) {
-        console.log(error.message);
-        res.render('500')
-    }
-}
-
-
-
-
-const loadSignup = async (req, res) => {
-    try {
-        res.render('signup')
-    } catch (error) {
-        console.log(error);
-        res.render('500')
-    }
-}
-
-const insertUser = async (req, res) => {
-    try {
-        const otpDigit = otpGenerator.generate(6, {
-            digits: true,
-            alphabets: false,
-            specialChars: false,
-            upperCaseAlphabets: false,
-            lowerCaseAlphabets: false
-        });
-
-        const creationTime = Date.now() / 1000;
-        const expirationTime = creationTime + 30;
-
-
-
-        const userCheck = await User.findOne({ email: req.body.email })
-        if (userCheck) {
-            res.render("signup",{message:'user already exist'});
-        }
-        else {
-            const userMob=await User.findOne({mobile:req.body.mobile})
-            if(userMob){
-                res.render("signup",{message:'Mobile number already exist'});
-            }else{
-           
-            const spassword = await securePassword(req.body.password);
-             req.session.refferalCode=req.body.refferalCode
-            req.session.name = req.body.name;
-            req.session.email = req.body.email;
-            req.session.mobile = req.body.mobile
-            if (req.body.name && req.body.email) {
-                if (req.body.password === req.body.confirmpassword) {
-                    req.session.password = spassword;
-                    req.session.otp = {
-                        code: otpDigit,
-                        expire: expirationTime
-                    }
-                    // if (referringUser) {
-                    //     const referral = new Refferal({
-                    //       referredUserId: req.session.name._id,
-                    //       referringUserId: referringUser._id,
-                    //     });
-                    //     await referral.save();
-                    sendVerifyMail(req.session.name, req.session.email, req.session.otp.code);
-
-                    res.render("otp-verification");
-                } else {
-                    res.render("signup", { message: "Password doesn't match" })
-                }
-            }
-            else {
-                res.render("signup", { message: "Please enter all details" })
-            }
-        }
-        }
-    }
-    catch (error) {
-        console.log(error);
-        res.render('500')
-    }
-}
-
-
-const loadLogin = async (req, res) => {
-    try {
-        res.render('login')
-    } catch (error) {
-        console.log(error.message);
-        res.render('500')
-    }
-}
-// load  otp page
-
-const showverifyOTPPage = async (req, res) => {
-    try {
-        res.render('otp-verification');
-    } catch (error) {
-        console.log(error);
-        res.render('500')
-    }
-}
-
-// post otp
-const verifyOTP = async (req, res) => {
-
-    try {
-        function generateReferralCode() {
-            const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-            let referralCode = '';
-          
-            for (let i = 0; i < 8; i++) {
-              const randomIndex = Math.floor(Math.random() * characters.length);
-              referralCode += characters.charAt(randomIndex);
-            }
-           console.log('refff',typeof referralCode);
-            return referralCode;
-          }
-        let referralCode=req.session.refferalCode
-        const referringUser = await User.findOne({ referralCode });
-        const currentTime = Date.now() / 1000
-        if (req.body.otp === req.session.otp.code && currentTime <= req.session.otp.expire) {
-
-            const user = await User({
-                name: req.session.name,
-                email: req.session.email,
-                mobile: req.session.mobile,
-                password: req.session.password,
-                referralCode: generateReferralCode(),
-                isverified: 1,
-               
-            });
-            await user.save();
-            const userId=user._id
-            console.log('iddddddddddd',userId);
-            if (referringUser) {
-                const referral = new Refferal({
-                    referralUserId: userId,
-                  referringUserId: referringUser._id,
-                });
-                await referral.save();
-          
-                const result=await User.findOneAndUpdate({_id:userId},
-                    {
-                      $inc:{wallet:referral.amount},
-                      $push:{
-                        walletHistory:{
-                          transactionDate:new Date(),
-                          transactionDetails:"your Refferal is credited",
-                          transactionType:"Credit",
-                          transactionAmount:referral.amount
-                        }
-                      }
-                    }
-                    )
-                // Add the referral amount to the user's wallet or perform any desired action
-                user.wallet += referral.amount;
-                await user.save();
-              }
-            // const result = await user.save();
-            res.redirect("/login")
-        }
-        else {
-            res.render("otp-verification", { message: "Invalid OTP" });
-        }
-    } catch (error) {
-        console.log(error);
-        res.render('500')
-    }
-}
-
-
-
-
-
-const loginVerify = async (req, res) => {
-    try {
-        const email = req.body.email
-        const password = req.body.password
-        const userData = await User.findOne({ email: email })
-
-        if (userData) {
-
-            if (userData.isListed == false) {
-                const passwordMatch = await bcrypt.compare(password, userData.password)
-
-                if (passwordMatch) {
-
-                    if (userData.isverified === false) {
-                        req.session.User = userData
-
-                        res.render('login', { message: "please verify your email" })
-                    } else {
-                        req.session.user = userData.name
-
-                        res.redirect('/')
-                    }
-
-                } else {
-
-                    res.render('login', { message: "password is incorrect" })
-                }
-            } else {
-                res.render('login', { message: 'Blocked' })
-            }
-        } else {
-
-            res.render('login', { message: "incorrect your email address" })
-        }
-
-    } catch (error) {
-        console.log(error.message);
-        res.render('500')
-    }
-}
-const loadHome = async (req, res) => {
-    const products = await Product
-    .find({
-        blocked: false 
-    })
-
-    try {
-        const banners = await Banner.find({status: true})
-        if (req.session.user) {
-            res.render('home', { user: req.session.user ,products:products,banners:banners})
-        } else {
-            res.render('home', { message: "user logged",products:products,banners:banners })
-        }
-
-
-    } catch (error) {
-
-    }
-}
-const logOut = async (req, res) => {
-    try {
-        req.session.destroy()
-        res.redirect('/')
-    } catch (error) {
-        console.log(error);
-        res.render('500')
-    }
-}
-
-// forgot password
-
-const forgotLoad = async (req, res) => {
-    try {
-        res.render('forgot')
-    } catch (error) {
-        console.log(error);
-        res.render('500')
-    }
-}
-
-const forgotPassword = async (req, res) => {
-    try {
-        const email = req.body.email
-        const userData = await User.findOne({ email: email })
-        if (userData) {
-
-            if (userData.isverified === 0) {
-                res.render('forgot', { message: "Please verify your email" })
-            } else {
-                const randomString = randomstring.generate()
-                const updatedData = await User.updateOne({ email: email }, { $set: { token: randomString } })
-                sendResetPasswordMail(userData.name, userData.email, randomString)
-                res.render('forgot', { message: "Please check your mail to reset your password" })
-            }
-        } else {
-            res.render('forgot', { message: "Please enter correct email" })
-        }
-    } catch (error) {
-        console.log(error);
-        res.render('500')
-    }
-}
-const resetLoad = async (req, res) => {
-    try {
-        const token = req.query.token
-
-        const tokenData = await User.findOne({ token: token })
-        if (tokenData) {
-            res.render('reset-password', { user_id: tokenData._id })
-        } else {
-            res.render('404', { message: 'token invalid' })
-        }
-
-    } catch (error) {
-        console.log(error);
-        res.render('500')
-    }
-}
-
-const resetPassword = async (req, res) => {
-    try {
-        const password = req.body.password
-        const user_id = req.body.user_id
-        const spassword = await securePassword(password)
-        const updatedData = await User.findByIdAndUpdate({ _id: user_id }, { $set: { password: spassword, token: '' } })
-
-        res.redirect('/login')
-    } catch (error) {
-        console.log(error);
-        res.render('500')
-    }
-}
-// load user profile
-
-const viewProfile = async (req, res) => {
-    try {
-
-        const name = req.session.user
-        const user = await User.findOne({ name: name })
-        const userId=user._id
-        const userData = await User.findOne({ _id:userId });
-        const address=await Address.findOne({user:userId})
-        const orderData=await Order.find({userId:userId})  
-        const coupons = await Coupon.find({
-            status: true,
-            expiryDate: { $gte: new Date() }
-          })
-
-        res.render('profile', {
-             user: req.session.user,
-             data:user,
-             address:address,
-             name,
-             orders:orderData,
-             coupons:coupons
-             
-            })
-
-    } catch (error) {
-        console.log(error);
-        res.render('500')
-        
-    }
-}
-
-const loadContact = async (req, res) => {
-    try {
-        const user = req.session.User
-        res.render('contact', { user: user })
-    } catch (error) {
-        console.log(error);
-        res.render('500')
-    }
-}
-
-
-// const loadAddress=async (req,res)=>{
-//     try {
-//         const userId=req.body.id
-//         console.log(req.body);
-
-//     } catch (error) {
-//         console.log(error);
-//     }
-// }
-
-// ===========================WALLET===================================
-
-const loadWallet=async (req,res)=>{
   try {
-    const name=req.session.user
-    const userData=await User.findOne({name:name})
-    const userId=userData._id
-     
-    const wallet=await User.findOne({_id:userId})
+    const transporter = nodemailer.createTransport({
+      host: 'smtp.gmail.com',
+      port: 587,
+      secure: false,
+      requireTLS: true,
+      auth: {
+        user: config.userEmail,
+        pass: config.userPassword
+      }
+    })
+    const mailoptions = {
+      from: 'skrishnadas38@gmail.com',
+      to: email,
+      subject: 'Verification Mail',
+      html:
+        '<div style="text-align: center; background-color: Ivory; height: 200px;">' +
+        '<h2 style="color:red;">Welcome to Branded</h2>' +
+        '<h3>Hello, <b>' +
+        name +
+        '</b>Thank you for joining us. Your OTP is : </h3>' +
+        '<div style="vertical-align: center;"><h1 style="color: blue;">' +
+        otp +
+        '</h1></div>' +
+        '</div>'
+    }
 
-    res.render('wallet',{
-        user:req.session.user,
-        wallet:wallet
+    transporter.sendMail(mailoptions, (error, info) => {
+      if (error) {
+      } else {
+      }
     })
   } catch (error) {
-    console.log(error);
     res.render('500')
   }
 }
 
-const addMoneyWallet = async (req,res)=>{
-    try {
-        console.log("monry comong");
+// ====================RESET MAIL===================================
 
-        const amount = req.body.amount;
-        const parsedAmount = parseInt(amount);
-        console.log('amount', amount);
-        console.log('parsedAmount', parsedAmount);
-        
-        const id = await crypto.randomBytes(8).toString('hex');
-        console.log(id);
-        
-        var options = {
-            amount: parsedAmount * 100,
-            currency: 'INR',
-            receipt: "" + id
-        };
-        
-        console.log('oppp', options);
-        
-        instance.orders.create(options, (err, order) => {
-            if (err) {
-                console.log('err:', err);
-                res.json({ status: false });
-            } else {
-                console.log('stts:', order);
-                res.json({ status: true, payment: order });
-            }
-        });
-    
-    } catch (error) {
-        console.log(error);
-        res.render('500')
+const sendResetPasswordMail = async (name, email, token) => {
+  try {
+    const transporter = nodemailer.createTransport({
+      host: 'smtp.gmail.com',
+      port: 587,
+      secure: false,
+      requireTLS: true,
+      auth: {
+        user: config.userEmail,
+        pass: config.userPassword
+      }
+    })
+    const mailoptions = {
+      from: config.userEmail,
+      to: email,
+      subject: 'For reset password',
+      html:
+        '<p>Hii ' +
+        name +
+        ', please click here to  <a href="http://127.0.0.1:3000/reset-password?token=' +
+        token +
+        '"> Reset  </a> your password'
     }
+
+    transporter.sendMail(mailoptions, (error, info) => {
+      if (error) {
+        res.render('500')
+      } else {
+        console.log('Email has been send', info.response)
+      }
+    })
+  } catch (error) {
+    res.render('500')
+  }
 }
 
-const verifyWalletpayment = async(req,res)=>{
-    try{
-  
-      console.log("entered into post verify wallet payment");
-  
-      const name=req.session.user
-      const userData=await User.findOne({name:name})
-      const userId=userData._id
-  
-      const details = req.body;
-      const amount = parseInt(details.order.amount)/100
-          let hmac = crypto.createHmac('sha256',process.env.KEY_SECRET)
-  
-  
-          hmac.update(
-            details.payment.razorpay_order_id + '|' + details.payment.razorpay_payment_id
+// ==================RESEND OTP=====================================
+
+const resendOtp = (req, res) => {
+  try {
+    const currentTime = Date.now() / 1000
+
+    if (req.session.otp.expire != null) {
+      if (currentTime > req.session.otp.expire) {
+        const newDigit = otpGenerator.generate(6, {
+          digits: true,
+          alphabets: false,
+          specialChars: false,
+          upperCaseAlphabets: false,
+          lowerCaseAlphabets: false
+        })
+        req.session.otp.code = newDigit
+        const newExpiry = currentTime + 30
+
+        req.session.otp.expire = newExpiry
+        sendVerifyMail(
+          req.session.name,
+          req.session.email,
+          req.session.otp.code
         )
-        hmac = hmac.digest('hex')
-        if(hmac == details.payment.razorpay_signature){
-            
-          const walletHistory = {
-            transactionDate: new Date(),
-            transactionDetails: 'Deposited via Razorpay',
-            transactionType: 'Credit',
-            transactionAmount: amount,
-            currentBalance: !isNaN(userId.wallet) ? userId.wallet + amount : amount
-        }
-            await User.findByIdAndUpdate(
-                {_id: userId},
-                {
-                    $inc:{
-                        wallet: amount
-                    },
-                    $push:{
-                        walletHistory
-                    }
-                }
-            );
-            console.log('udddd')
-            res.json({status: true})
-        }else{
-            res.json({status: false})
-        }
-  
-  
-    }catch(error){
-      console.log(error);
-      res.render('500')
+        res.render('otp-verification', {
+          message: `New OTP send to ${req.session.email}`
+        })
+      } else {
+        res.render('otp-verification', {
+          message: `OTP send to ${req.session.email}, resend after 30 second`
+        })
+      }
+    } else {
+      res.send('Already registered')
     }
+  } catch (error) {
+    res.render('500')
   }
+}
 
-  const loadHistory=async (req,res)=>{
-    try {
-        const name = req.session.user
-        const userData=await User.findOne({name:name})
-        const userId=userData._id
-        const details=await User.findOne({_id:userId})
-        
-        res.render('wallet-history',{user:req.session.user,wallet:details})
-    } catch (error) {
-        console.log(error);
-        res.render('500')
+// =================LOAD SIGNUP======================================
+
+const loadSignup = async (req, res) => {
+  try {
+    res.render('signup')
+  } catch (error) {
+    res.render('500')
+  }
+}
+
+// ====================INSERT USER===================================
+
+const insertUser = async (req, res) => {
+  try {
+    const otpDigit = otpGenerator.generate(6, {
+      digits: true,
+      alphabets: false,
+      specialChars: false,
+      upperCaseAlphabets: false,
+      lowerCaseAlphabets: false
+    })
+
+    const creationTime = Date.now() / 1000
+    const expirationTime = creationTime + 30
+
+    const userCheck = await User.findOne({ email: req.body.email })
+    if (userCheck) {
+      res.render('signup', { message: 'user already exist' })
+    } else {
+      const userMob = await User.findOne({ mobile: req.body.mobile })
+      if (userMob) {
+        res.render('signup', { message: 'Mobile number already exist' })
+      } else {
+        const spassword = await securePassword(req.body.password)
+        req.session.refferalCode = req.body.refferalCode
+        req.session.name = req.body.name
+        req.session.email = req.body.email
+        req.session.mobile = req.body.mobile
+        if (req.body.name && req.body.email) {
+          if (req.body.password === req.body.confirmpassword) {
+            req.session.password = spassword
+            req.session.otp = {
+              code: otpDigit,
+              expire: expirationTime
+            }
+
+            sendVerifyMail(
+              req.session.name,
+              req.session.email,
+              req.session.otp.code
+            )
+
+            res.render('otp-verification')
+          } else {
+            res.render('signup', { message: "Password doesn't match" })
+          }
+        } else {
+          res.render('signup', { message: 'Please enter all details' })
+        }
+      }
     }
+  } catch (error) {
+    res.render('500')
   }
+}
 
+// =================LOAD LOGIN======================================
+
+const loadLogin = async (req, res) => {
+  try {
+    res.render('login')
+  } catch (error) {
+    res.render('500')
+  }
+}
+
+// ====================OTP VERIFY PAGE===================================
+
+const showverifyOTPPage = async (req, res) => {
+  try {
+    res.render('otp-verification')
+  } catch (error) {
+    res.render('500')
+  }
+}
+
+// ====================VERIFY OTP===================================
+
+const verifyOTP = async (req, res) => {
+  try {
+    function generateReferralCode () {
+      const characters =
+        'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+      let referralCode = ''
+
+      for (let i = 0; i < 8; i++) {
+        const randomIndex = Math.floor(Math.random() * characters.length)
+        referralCode += characters.charAt(randomIndex)
+      }
+      return referralCode
+    }
+    let referralCode = req.session.refferalCode
+    const referringUser = await User.findOne({ referralCode })
+    const currentTime = Date.now() / 1000
+    if (
+      req.body.otp === req.session.otp.code &&
+      currentTime <= req.session.otp.expire
+    ) {
+      const user = await User({
+        name: req.session.name,
+        email: req.session.email,
+        mobile: req.session.mobile,
+        password: req.session.password,
+        referralCode: generateReferralCode(),
+        isverified: 1
+      })
+      await user.save()
+      const userId = user._id
+      if (referringUser) {
+        const referral = new Refferal({
+          referralUserId: userId,
+          referringUserId: referringUser._id
+        })
+        await referral.save()
+
+        const result = await User.findOneAndUpdate(
+          { _id: userId },
+          {
+            $inc: { wallet: referral.amount },
+            $push: {
+              walletHistory: {
+                transactionDate: new Date(),
+                transactionDetails: 'your Refferal is credited',
+                transactionType: 'Credit',
+                transactionAmount: referral.amount
+              }
+            }
+          }
+        )
+        user.wallet += referral.amount
+        await user.save()
+      }
+      res.redirect('/login')
+    } else {
+      res.render('otp-verification', { message: 'Invalid OTP' })
+    }
+  } catch (error) {
+    res.render('500')
+  }
+}
+
+// =====================LOGIN VERIFY==================================
+
+const loginVerify = async (req, res) => {
+  try {
+    const email = req.body.email
+    const password = req.body.password
+    const userData = await User.findOne({ email: email })
+
+    if (userData) {
+      if (userData.isListed == false) {
+        const passwordMatch = await bcrypt.compare(password, userData.password)
+
+        if (passwordMatch) {
+          if (userData.isverified === false) {
+            req.session.User = userData
+
+            res.render('login', { message: 'please verify your email' })
+          } else {
+            req.session.user = userData.name
+
+            res.redirect('/')
+          }
+        } else {
+          res.render('login', { message: 'password is incorrect' })
+        }
+      } else {
+        res.render('login', { message: 'Blocked' })
+      }
+    } else {
+      res.render('login', { message: 'incorrect your email address' })
+    }
+  } catch (error) {
+    res.render('500')
+  }
+}
+
+// ===================LOAD HOME====================================
+
+const loadHome = async (req, res) => {
+  const products = await Product.find({
+    blocked: false
+  })
+
+  try {
+    const banners = await Banner.find({ status: true })
+    if (req.session.user) {
+      res.render('home', {
+        user: req.session.user,
+        products: products,
+        banners: banners
+      })
+    } else {
+      res.render('home', {
+        message: 'user logged',
+        products: products,
+        banners: banners
+      })
+    }
+  } catch (error) {}
+}
+
+// ==================LOGOUT=====================================
+
+const logOut = async (req, res) => {
+  try {
+    req.session.destroy()
+    res.redirect('/')
+  } catch (error) {
+    res.render('500')
+  }
+}
+
+const forgotLoad = async (req, res) => {
+  try {
+    res.render('forgot')
+  } catch (error) {
+    res.render('500')
+  }
+}
+
+// =====================FORGOT PASSWORD==================================
+
+const forgotPassword = async (req, res) => {
+  try {
+    const email = req.body.email
+    const userData = await User.findOne({ email: email })
+    if (userData) {
+      if (userData.isverified === 0) {
+        res.render('forgot', { message: 'Please verify your email' })
+      } else {
+        const randomString = randomstring.generate()
+        const updatedData = await User.updateOne(
+          { email: email },
+          { $set: { token: randomString } }
+        )
+        sendResetPasswordMail(userData.name, userData.email, randomString)
+        res.render('forgot', {
+          message: 'Please check your mail to reset your password'
+        })
+      }
+    } else {
+      res.render('forgot', { message: 'Please enter correct email' })
+    }
+  } catch (error) {
+    res.render('500')
+  }
+}
+
+// ====================RESET LOAD===================================
+
+const resetLoad = async (req, res) => {
+  try {
+    const token = req.query.token
+
+    const tokenData = await User.findOne({ token: token })
+    if (tokenData) {
+      res.render('reset-password', { user_id: tokenData._id })
+    } else {
+      res.render('404', { message: 'token invalid' })
+    }
+  } catch (error) {
+    res.render('500')
+  }
+}
+
+// ==================RESET PASSWORD=====================================
+
+const resetPassword = async (req, res) => {
+  try {
+    const password = req.body.password
+    const user_id = req.body.user_id
+    const spassword = await securePassword(password)
+    const updatedData = await User.findByIdAndUpdate(
+      { _id: user_id },
+      { $set: { password: spassword, token: '' } }
+    )
+
+    res.redirect('/login')
+  } catch (error) {
+    res.render('500')
+  }
+}
+
+// ===================VIEW PROFILE====================================
+
+const viewProfile = async (req, res) => {
+  try {
+    const name = req.session.user
+    const user = await User.findOne({ name: name })
+    const userId = user._id
+    const userData = await User.findOne({ _id: userId })
+    const address = await Address.findOne({ user: userId })
+    const orderData = await Order.find({ userId: userId })
+    const coupons = await Coupon.find({
+      status: true,
+      expiryDate: { $gte: new Date() }
+    })
+
+    res.render('profile', {
+      user: req.session.user,
+      data: user,
+      address: address,
+      name,
+      orders: orderData,
+      coupons: coupons
+    })
+  } catch (error) {
+    res.render('500')
+  }
+}
+
+// =====================LOAD CONTACT==================================
+
+const loadContact = async (req, res) => {
+  try {
+    const user = req.session.User
+    res.render('contact', { user: user })
+  } catch (error) {
+    res.render('500')
+  }
+}
+
+// ===========================WALLET===================================
+
+const loadWallet = async (req, res) => {
+  try {
+    const name = req.session.user
+    const userData = await User.findOne({ name: name })
+    const userId = userData._id
+
+    const wallet = await User.findOne({ _id: userId })
+
+    res.render('wallet', {
+      user: req.session.user,
+      wallet: wallet
+    })
+  } catch (error) {
+    res.render('500')
+  }
+}
+
+// ===================ADD WALLET====================================
+
+const addMoneyWallet = async (req, res) => {
+  try {
+    const amount = req.body.amount
+    const parsedAmount = parseInt(amount)
+
+    const id = await crypto.randomBytes(8).toString('hex')
+
+    var options = {
+      amount: parsedAmount * 100,
+      currency: 'INR',
+      receipt: '' + id
+    }
+
+    instance.orders.create(options, (err, order) => {
+      if (err) {
+        res.json({ status: false })
+      } else {
+        res.json({ status: true, payment: order })
+      }
+    })
+  } catch (error) {
+    res.render('500')
+  }
+}
+
+// =====================VERIFYING==================================
+
+const verifyWalletpayment = async (req, res) => {
+  try {
+    const name = req.session.user
+    const userData = await User.findOne({ name: name })
+    const userId = userData._id
+
+    const details = req.body
+    const amount = parseInt(details.order.amount) / 100
+    let hmac = crypto.createHmac('sha256', process.env.KEY_SECRET)
+
+    hmac.update(
+      details.payment.razorpay_order_id +
+        '|' +
+        details.payment.razorpay_payment_id
+    )
+    hmac = hmac.digest('hex')
+    if (hmac == details.payment.razorpay_signature) {
+      const walletHistory = {
+        transactionDate: new Date(),
+        transactionDetails: 'Deposited via Razorpay',
+        transactionType: 'Credit',
+        transactionAmount: amount,
+        currentBalance: !isNaN(userId.wallet) ? userId.wallet + amount : amount
+      }
+      await User.findByIdAndUpdate(
+        { _id: userId },
+        {
+          $inc: {
+            wallet: amount
+          },
+          $push: {
+            walletHistory
+          }
+        }
+      )
+      res.json({ status: true })
+    } else {
+      res.json({ status: false })
+    }
+  } catch (error) {
+    res.render('500')
+  }
+}
+
+// =================LOAD HISTORY======================================
+
+const loadHistory = async (req, res) => {
+  try {
+    const name = req.session.user
+    const userData = await User.findOne({ name: name })
+    const userId = userData._id
+    const details = await User.findOne({ _id: userId })
+
+    res.render('wallet-history', { user: req.session.user, wallet: details })
+  } catch (error) {
+    res.render('500')
+  }
+}
 
 module.exports = {
-    loadSignup,
-    loadLogin,
-    insertUser,
-    loginVerify,
-    loadHome,
-    logOut,
-    verifyOTP,
-    showverifyOTPPage,
-    resendOtp,
-    forgotLoad,
-    forgotPassword,
-    resetLoad,
-    resetPassword,
-    viewProfile,
-    loadContact,
-    loadWallet,
-    addMoneyWallet,
-    verifyWalletpayment,
-    loadHistory
-
-
-    
-    // loadAddress
+  loadSignup,
+  loadLogin,
+  insertUser,
+  loginVerify,
+  loadHome,
+  logOut,
+  verifyOTP,
+  showverifyOTPPage,
+  resendOtp,
+  forgotLoad,
+  forgotPassword,
+  resetLoad,
+  resetPassword,
+  viewProfile,
+  loadContact,
+  loadWallet,
+  addMoneyWallet,
+  verifyWalletpayment,
+  loadHistory
 }

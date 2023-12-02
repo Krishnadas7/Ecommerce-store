@@ -303,8 +303,23 @@ const deleteAddress = async (req, res) => {
     res.render('500')
   }
 }
+const changeName=async (req,res)=>{
+  try {
+    
+    const name =req.session.user
+    const userData=await User.findOne({name:name})
+   
+    userData.name = req.body.name;
+    await userData.save();
+    res.json({success:true})
+   
+  } catch (error) {
+    console.log(error);
+  }
+}
 
 module.exports = {
+  changeName,
   addAddress,
   insertAddress,
   editAddress,

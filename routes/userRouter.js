@@ -10,7 +10,7 @@ const cartController = require('../controller/cartController')
 const Count = require('../middlewares/cartMiddleware')
 const couponController = require('../controller/couponController')
 const wishlistController = require('../controller/wishlistController')
-const errHandler=require('../middlewares/errorMiddleware')
+// const errHandler=require('../middlewares/errorMiddleware')
 // view engine setup
 userRouter.set('view engine', 'ejs')
 userRouter.set('views', './view/users')
@@ -83,7 +83,7 @@ userRouter.post(
 
 // load user profile page
 userRouter.get('/profile', userAuth.isLogin, userControllers.viewProfile)
-
+// userRouter.post('/name-change',userAuth.isLogin,userProfile.changeName)
 // ================================USERPROFILE===================================
 
 userRouter.get('/new-address', userAuth.isLogin, userProfile.addAddress)
@@ -168,6 +168,6 @@ userRouter.get(
   userAuth.isLogin,
   orderController.invoiceDownload
 )
-userRouter.use(errHandler)
+// userRouter.use(errHandler)
 
 module.exports = userRouter

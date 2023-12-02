@@ -9,7 +9,7 @@ const couponController = require('../controller/couponController')
 const offers = require('../controller/offers')
 const reportController = require('../controller/reportController')
 const bannerController = require('../controller/bannerController')
-const errHandler=require('../middlewares/errorMiddleware')
+// const errHandler=require('../middlewares/errorMiddleware')
 
 const session = require('express-session')
 const config = require('../config/config')
@@ -284,7 +284,7 @@ adminRouter.post(
   bannerUpload.single('image'),
   bannerController.updateBanner
 )
-adminRouter.use(errHandler)
+// adminRouter.use(errHandler)
 // =============================ERROR PAGE==============================================
 adminRouter.get('/*', adminControllers.errorrPage)
 

@@ -1,5 +1,5 @@
 const Admin = require('../model/adminModel')
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcryptjs')
 const Order = require('../model/orderModel')
 const Product = require('../model/productModel')
 const User = require('../model/userModel')

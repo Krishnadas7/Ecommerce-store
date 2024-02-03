@@ -182,7 +182,7 @@
     <li class="step0 text-right <%= order.products[0].statusLevel >= 4 ? 'active' : '' %>" id="step4">Delivered</li>
 </ul>
 </div>
-<%}else{%>
+<%}else if(products.orderStatus==='Returned'){%>
 <div class="progress-track col-12">
   <ul id="progressbar">
     <li
@@ -190,17 +190,36 @@
       style="width: 50%; font-size: 1rem"
       id="step1"
     >
-      Order placed
+      Return placed
     </li>
     <li
       class="step0 active text-right text-danger"
       style="width: 50%; font-size: 1rem"
       id="step4"
     >
-      Cancelled
+      Returned
     </li>
   </ul>
 </div>
+<%}else{%>
+  <div class="progress-track col-12">
+    <ul id="progressbar">
+      <li
+        class="step0 active"
+        style="width: 50%; font-size: 1rem"
+        id="step1"
+      >
+        Order placed
+      </li>
+      <li
+        class="step0 active text-right text-danger"
+        style="width: 50%; font-size: 1rem"
+        id="step4"
+      >
+        Cancelled
+      </li>
+    </ul>
+  </div>
 <%}%>
 
 </div>
@@ -221,7 +240,7 @@
 
 <% if (order && order.products && order.products.length> 0) {%>
  <% order.products.forEach((products) => { %>
-  <%  if(products.orderStatus!='Cancelled' && products.orderStatus!='Returned'){%>
+  <%  if(products.orderStatus!='Cancelled' && products.orderStatus!='Returned' && products.orderStatus!='Delivered'){%>
 <div class="col-md-6">
   <h5>Delivery Date:</h5>
   <p>

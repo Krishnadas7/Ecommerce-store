@@ -1,5 +1,5 @@
 const { log, count } = require('console')
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcryptjs')
 const User = require('../model/userModel')
 const nodemailer = require('nodemailer')
 const otpGenerator = require('otp-generator')
@@ -14,6 +14,7 @@ const Coupon = require('../model/couponModel')
 const Refferal = require('../model/refferalModel')
 const Banner = require('../model/banner')
 const Category=require('../model/categoryModel')
+const Contact=require('../model/contactModel')
 
 
 const dotenv = require('dotenv')
@@ -59,7 +60,8 @@ const sendVerifyMail = async (name, email, otp) => {
       auth: {
         user: config.userEmail,
         pass: config.userPassword
-      }
+      },
+      debug: true,
     })
     const mailoptions = {
       from: 'skrishnadas38@gmail.com',
@@ -79,11 +81,12 @@ const sendVerifyMail = async (name, email, otp) => {
 
     transporter.sendMail(mailoptions, (error, info) => {
       if (error) {
+        console.log('errorr',error);
       } else {
       }
     })
   } catch (error) {
-    res.render('500')
+    // res.render('500')
   }
 }
 
@@ -117,7 +120,6 @@ const sendResetPasswordMail = async (name, email, token) => {
       if (error) {
         res.render('500')
       } else {
-        console.log('Email has been send', info.response)
       }
     })
   } catch (error) {
@@ -186,7 +188,6 @@ const insertUser = async (req, res) => {
       upperCaseAlphabets: false,
       lowerCaseAlphabets: false
     })
-
     const creationTime = Date.now() / 1000
     const expirationTime = creationTime + 30
 
@@ -357,13 +358,10 @@ const loginVerify = async (req, res) => {
 const loadHome = async (req, res) => {
 
   try {
-    console.log('lkj');
     const products = await Product.find({ blocked: false }).populate('category').limit(8);
 
-    console.log('products',products);
     
     const category=await Category.find({isListed:true})
-    console.log('catee',category);
     const banners = await Banner.find({ status: true })
     if (req.session.user) {
       res.render('home', {
@@ -610,8 +608,25 @@ const loadHistory = async (req, res) => {
     res.render('500')
   }
 }
+const postContact=async (req,res)=>{
+  try {
+    const name=req.session.user
+    const userData= await User.findOne({name:name})
+    const userId=userData._id
+    const contact=new Contact({
+    userId:userId,
+    email:req.body.email,
+    message:req.body.message
+    })
+    await contact.save()
+    res.json({success:true})
+  } catch (error) {
+    res.render('500')
+  }
+}
 
 module.exports = {
+  postContact,
   loadSignup,
   loadLogin,
   insertUser,

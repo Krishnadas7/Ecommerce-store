@@ -5,7 +5,8 @@ const path=require('path')
 const dotenv=require('dotenv')
 dotenv.config()
 
-mongoose.connect(process.env.MONGO_DB);
+mongoose.connect('mongodb://127.0.0.1:27017/ecommerce');
+
  
  
 app.use('/public',express.static(path.join(__dirname,'public')))

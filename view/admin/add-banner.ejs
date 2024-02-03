@@ -47,51 +47,6 @@
 
 
    
-    <script>
-      document.getElementById('imageInput1').addEventListener('change', function (e) {
-        var file = e.target.files[0];
     
-        if (file) {
-          var reader = new FileReader();
-    
-          reader.onload = function (event) {
-            var formData = new FormData();
-            formData.append('image', file);
-            // Show the Cropper container
-            document.getElementById('cropperContainer').style.display = 'block';
-    
-            // Set the Cropper image source
-            document.getElementById('cropperImage').src = event.target.result;
-    
-            // Initialize Cropper after the image has loaded
-            var cropper = new Cropper(document.getElementById('cropperImage'), {
-              aspectRatio: 1, // Set your desired aspect ratio
-              viewMode: 2, // Adjust the viewMode as needed
-            });
-    
-            // Handle Crop button click
-            document.getElementById('cropImageBtn').addEventListener('click', function () {
-              // Get the cropped data (base64)
-              var croppedData = cropper.getCroppedCanvas().toDataURL();
-              formData.append('croppedImage', croppedData);
-    
-              // Update the hidden input field with the cropped image data
-              document.getElementById('croppedImageInput').value = croppedData;
-    
-              // Update the image preview with the cropped image
-              document.getElementById('imagePreview1').src = croppedData;
-    
-              // Hide the Cropper container
-              document.getElementById('cropperContainer').style.display = 'none';
-            });
-          };
-    
-          reader.readAsDataURL(file);
-          document.getElementById('imageInput1').value = croppedData
-        }
-      });
-    
-    
-    </script>
   
 <%-include('../admin/adminhomeLayouts/admin-footer.ejs')%>

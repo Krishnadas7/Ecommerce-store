@@ -40,7 +40,15 @@ const loadallProduct = async (req, res) => {
       .limit(perPage);
 
     console.log('Current Page:', page);
-
+    if(req.session.user){
+    res.render('all-product', {
+      category: categoryDetails,
+      product: products,
+      currentPage: page,
+      pages: totalPages,
+     user:req.session.user
+    });
+  }else{
     res.render('all-product', {
       category: categoryDetails,
       product: products,
@@ -48,6 +56,7 @@ const loadallProduct = async (req, res) => {
       pages: totalPages,
       message:'uses is not'
     });
+  }
   } catch (error) {
     console.log(error);
     res.render('500');

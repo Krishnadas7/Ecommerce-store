@@ -452,11 +452,18 @@ const allOrders = async (req, res) => {
         model: 'Product',
         select: 'name'
       })
-
+if(req.session.user){
     res.render('all-orders', {
       user: req.session.user,
       orders: orderData
     })
+  }else{
+    res.render('all-orders', {
+      // user: req.session.user,
+      orders: orderData,
+      message:'user logged'
+    })
+  }
   } catch (error) {
     res.render('500')
   }
@@ -612,6 +619,7 @@ const invoiceDownload = async (req, res) => {
     const id = req.params.id
     const name = req.session.user
     const userData = await User.findOne({ name: name })
+    console.log('userdata');
     const orderData = await Order.findOne({ _id: id }).populate(
       'products.productId'
     )
@@ -625,23 +633,24 @@ const invoiceDownload = async (req, res) => {
       date
     }
 
-    const filepathName = path.resolve(__dirname, '../view/users/invoice.ejs')
+    // const filepathName = path.resolve(__dirname, '../view/users/invoice.ejs')
 
-    const html = fs.readFileSync(filepathName).toString()
-    const ejsData = ejs.render(html, data)
+    // const html = fs.readFileSync(filepathName).toString()
+    // const ejsData = ejs.render(html, data)
 
-    const browser = await puppeteer.launch({ headless: 'new' })
-    const page = await browser.newPage()
-    await page.setContent(ejsData, { waitUntil: 'networkidle0' })
-    const pdfBytes = await page.pdf({ format: 'letter' })
-    await browser.close()
+    // const browser = await puppeteer.launch({ headless: 'new' })
+    // const page = await browser.newPage()
+    // await page.setContent(ejsData, { waitUntil: 'networkidle0' })
+    // const pdfBytes = await page.pdf({ format: 'letter' })
+    // await browser.close()
 
-    res.setHeader('Content-Type', 'application/pdf')
-    res.setHeader(
-      'Content-Disposition',
-      'attachment; filename= order invoice.pdf'
-    )
-    res.send(pdfBytes)
+    // res.setHeader('Content-Type', 'application/pdf')
+    // res.setHeader(
+    //   'Content-Disposition',
+    //   'attachment; filename= order invoice.pdf'
+    // )
+    // res.send(pdfBytes)
+    res.render('invoice',{order: orderData,user: userData,date:date})
   } catch (error) {
     res.render('500')
   }

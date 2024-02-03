@@ -10,7 +10,7 @@ const cartController = require('../controller/cartController')
 const Count = require('../middlewares/cartMiddleware')
 const couponController = require('../controller/couponController')
 const wishlistController = require('../controller/wishlistController')
-// const errHandler=require('../middlewares/errorMiddleware')
+const errHandler=require('../middlewares/errorMiddleware')
 // view engine setup
 userRouter.set('view engine', 'ejs')
 userRouter.set('views', './view/users')
@@ -168,6 +168,7 @@ userRouter.get(
   userAuth.isLogin,
   orderController.invoiceDownload
 )
-// userRouter.use(errHandler)
+userRouter.post('/contact',userAuth.isLogin,userControllers.postContact)
+userRouter.use(errHandler)
 
 module.exports = userRouter

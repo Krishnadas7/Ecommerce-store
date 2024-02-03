@@ -20,11 +20,11 @@
                     <th>Code</th>
                     <th>Discount Amount</th>
                     <th>Amount<br>Criteria</th>
-                    <th>Activation<br>Date</th>
-                    <th>Expiry Date</th>
+                    <!-- <th>Activation<br>Date</th> -->
+                    <!-- <th>Expiry Date</th> -->
                     <th>User Limit</th>
                     <th>Used Users</th>
-                    <th>Edit</th>
+                    <!-- <th>Edit</th> -->
                     <th>Action</th>
                     <a href="/admin/add-coupon" class="btn btn-outline-primary btn-rounded">Add Coupons</a>
                   </tr>
@@ -38,12 +38,8 @@
                       <td><%= coupons.couponCode %></td>
                       <td><%= coupons.discountAmount %></td>
                       <td><%= coupons.criteriaAmount %></td>
-                      <td><%= coupons.activationDate.toLocaleDateString('en-US', { year:
-                          'numeric', month: 'short', day: '2-digit'
-                          }).replace(/\//g, '-') %></td>
-                          <td><%= coupons.expiryDate.toLocaleDateString('en-US', { year:
-                              'numeric', month: 'short', day: '2-digit'
-                              }).replace(/\//g, '-') %></td>
+                   
+                        
                               
                       <td><%= coupons.usersLimit %></td>
                       <td><%= coupons.usedUsers.length %></td>

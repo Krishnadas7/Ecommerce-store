@@ -57,7 +57,7 @@ userRouter.post(
 userRouter.get('/resend-otp', userAuth.isLogout, userControllers.resendOtp)
 
 // homepage rendering
-userRouter.get('/', userControllers.loadHome)
+userRouter.get('/',  userControllers.loadHome)
 
 // =============================LOAD PRODUCT PAGE======================================================
 

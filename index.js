@@ -17,7 +17,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use((req, res, next) => { 
     res.locals.req = req;  
     next();   
-  });    
+  });     
            
   
 const disable = (req, res, next) => {

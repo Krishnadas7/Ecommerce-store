@@ -4,7 +4,7 @@ const { ObjectId } = require('mongodb')
 const Cart = require('../model/cartModel')
 const Products = require('../model/productModel')
 const Category = require('../model/categoryModel')
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcryptjs')
 const Coupon = require('../model/couponModel')
 
 // =============SECURE PASSWORD=============================

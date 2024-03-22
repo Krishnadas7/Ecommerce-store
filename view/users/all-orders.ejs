@@ -10,7 +10,7 @@
 <table class="table">
     <thead class="thead-dark" style="background-color: black;">
       <tr>
-        <th>No.</th>
+        <th></th>
         <th>Order Date</th>
         <th>Amount</th>
         <th>Payment</th>
@@ -26,7 +26,7 @@
         <% for (let i = 0; i < orders.length; i++) { %>
       <%for(let j=0;j<orders[i].products.length;j++){%>
           <tr style="background-color:#f1f3f6 ; border: black; ">
-            <th scope="row"><%= j + 1 %></th>
+            <th scope="row"></th>
             <td><%= orders[i].date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: '2-digit' }).replace(/\//g, '-') %></td>
             <td>Rs.<%= orders[i].totalAmount.toFixed(2) %></td>
             <td><%= orders[i].paymentMethod %></td>

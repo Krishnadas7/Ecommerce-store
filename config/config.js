@@ -1,6 +1,6 @@
 const sessionSecret='sanu'
 const userEmail='skrishnadas38@gmail.com'
-const userPassword="fchb mtlq sjwa siiq"
+const userPassword="jfne dimd aggq uwix"
 
 module.exports={
     sessionSecret,

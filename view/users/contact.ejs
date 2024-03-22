@@ -11,27 +11,28 @@
 
 	<!-- Content page -->
 	<section class="bg0 p-t-104 p-b-116">
-		<div class="container">
+		<div class="container" id="reloadDiv">
 			<div class="flex-w flex-tr">
 				<div class="size-210 bor10 p-lr-70 p-t-55 p-b-70 p-lr-15-lg w-full-md">
-					<form>
+					<form id="contactForm">
 						<h4 class="mtext-105 cl2 txt-center p-b-30">
 							Send Us A Message
 						</h4>
-
+					
 						<div class="bor8 m-b-20 how-pos4-parent">
-							<input class="stext-111 cl2 plh3 size-116 p-l-62 p-r-30" type="text" name="email" placeholder="Your Email Address">
+							<input class="stext-111 cl2 plh3 size-116 p-l-62 p-r-30" type="text" name="email" id="email" placeholder="Your Email Address">
 							<img class="how-pos4 pointer-none" src="/public/userAssets/images/icons/icon-email.png" alt="ICON">
 						</div>
-
+					
 						<div class="bor8 m-b-30">
-							<textarea class="stext-111 cl2 plh3 size-120 p-lr-28 p-tb-25" name="msg" placeholder="How Can We Help?"></textarea>
+							<textarea class="stext-111 cl2 plh3 size-120 p-lr-28 p-tb-25" name="message" id="message" placeholder="How Can We Help?"></textarea>
 						</div>
-
-						<button class="flex-c-m stext-101 cl0 size-121 bg3 bor1 hov-btn3 p-lr-15 trans-04 pointer">
+					
+						<button type="button" onclick="submitForm()" class="flex-c-m stext-101 cl0 size-121 bg3 bor1 hov-btn3 p-lr-15 trans-04 pointer">
 							Submit
 						</button>
 					</form>
+					
 				</div>
 
 				<div class="size-210 bor10 flex-w flex-col-m p-lr-93 p-tb-30 p-lr-15-lg w-full-md">
@@ -78,7 +79,7 @@
 							</span>
 
 							<p class="stext-115 cl1 size-213 p-t-18">
-								contact@example.com
+								shuecrops01@.com
 							</p>
 						</div>
 					</div>
@@ -89,7 +90,47 @@
 	</div>
 </div>
 
+<script>
+	function submitForm() {
+		var email = $("#email").val();
+		var message = $("#message").val();
+		
 	
+		var formData = {
+			email: email,
+			message: message,
+			
+		};
+	
+		$.ajax({
+			type: "POST",
+			url: "/contact", // Replace with your server-side endpoint
+			data: formData,
+			dataType: "json",
+			success: function(response) {
+				if(response.success){
+					Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: 'message was received wait for reply',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
+					$("#reloadDiv").load("/contact #reloadDiv")
+				}else{
+					alert('failed')
+				}
+				// Handle success response
+				// console.log(response);
+			},
+			error: function(error) {
+				// Handle error
+				console.error(error);
+			}
+		});
+	}
+	
+	</script>
 <!-- 	
 	
 	<div class="map">

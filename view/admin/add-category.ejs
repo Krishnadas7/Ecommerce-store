@@ -54,7 +54,7 @@
     var categoryName = document.getElementById('exampleInputName1').value;
 
     // Check if the category name is empty or contains only letters
-    if (categoryName.trim() === '' || !/^[a-zA-Z]+$/.test(categoryName)) {
+    if (categoryName.trim() === '') {
       document.getElementById('err').innerText = 'Category name is required and should only contain letters.';
       return false; // Prevent form submission
     }

@@ -5,7 +5,16 @@ const path=require('path')
 const dotenv=require('dotenv')
 dotenv.config()
 
-mongoose.connect(process.env.MONGO_DB);
+const dbConnect = async ()=>{
+  try{
+    await mongoose.connect(process.env.MONGO_DB);
+  }catch(error){
+    console.log(error);
+    
+  }
+  
+}
+
 
  
  
@@ -51,4 +60,5 @@ app.use('*',(req,res)=>{
 
 app.listen(process.env.PORT,()=>{
     console.log('server connected');
+    dbConnect()
 })     
